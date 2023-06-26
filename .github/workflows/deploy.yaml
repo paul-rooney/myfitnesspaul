@@ -30,11 +30,6 @@ jobs:
           node-version: 18
           cache: "npm"
 
-      - name: Set up environment variables
-        run: echo "Setting up environment variables"
-        env:
-          VITE_SUPABASE_ANON: ${{ secrets.VITE_SUPABASE_ANON }}
-
       - name: Install dependencies
         run: npm install
 
@@ -52,5 +47,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1
-        env:
-          VITE_SUPABASE_ANON: ${{ secrets.VITE_SUPABASE_ANON }}
