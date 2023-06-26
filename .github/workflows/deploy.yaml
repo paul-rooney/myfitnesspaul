@@ -33,7 +33,7 @@ jobs:
       - name: Set up environment variables
         run: echo "Setting up environment variables"
         env:
-          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON }}
+          SUPABASE_ANON: ${{ secrets.SUPABASE_ANON }}
 
       - name: Install dependencies
         run: npm install
@@ -53,4 +53,4 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v1
         env:
-          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON }}
+          SUPABASE_ANON: ${{ secrets.SUPABASE_ANON }}
