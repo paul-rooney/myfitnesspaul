@@ -41,9 +41,6 @@ h6 {
 h1 {
 }
 h2 {
-    color: var(--stone-10);
-    font-size: var(--font-size-fluid-2);
-    letter-spacing: var(--font-letterspacing-0);
 }
 h3 {
 }
@@ -58,8 +55,6 @@ header {
 }
 
 nav {
-    display: flex;
-    gap: var(--size-4);
 }
 nav ul,
 nav ol {
@@ -67,14 +62,6 @@ nav ol {
 nav li {
 }
 nav a {
-    align-items: center;
-    display: inline-flex;
-    font-size: var(--font-size-0);
-    letter-spacing: var(--font-letterspacing-2);
-    scroll-snap-align: start;
-    text-decoration: none;
-    text-transform: uppercase;
-    white-space: nowrap;
 }
 nav a:visited {
 }
@@ -99,11 +86,6 @@ search {
 }
 
 footer {
-    background-color: var(--stone-2);
-    display: flex;
-    flex-direction: column;
-    flex-shrink: 0;
-    min-block-size: fit-content;
 }
 
 address {
@@ -129,23 +111,12 @@ p {
 
 ol,
 ul {
-    list-style-type: none;
-    margin: 0;
-    padding-inline-start: 0;
 }
 ol {
 }
 ul {
 }
 li {
-    background-color: var(--stone-2);
-    border: var(--border-size-1) solid var(--stone-5);
-    border-radius: var(--radius-2);
-    box-shadow: var(--shadow-1);
-    padding: var(--size-2);
-}
-li + li {
-    margin-block-start: var(--size-1);
 }
 ol ol,
 ol ul,
@@ -217,12 +188,6 @@ mark {
 /* If you specify a font size, consider using the `em` unit so that it works
 universally, e.g. for both `h1 small` and `p small` */
 small {
-    font-family: var(--font-mono);
-    /* font-size: var(--font-size-00); */
-    font-size: 0.5em;
-    font-weight: var(--font-weight-5);
-    letter-spacing: var(--font-letterspacing-3);
-    text-transform: uppercase;
 }
 sub {
 }
@@ -323,7 +288,6 @@ form {
 }
 
 label {
-    font-size: var(--font-size-0);
 }
 
 ::placeholder {
@@ -336,6 +300,7 @@ input,
 textarea,
 select,
 button {
+    font-family: inherit, var(--font-mono);
 }
 
 /* `textarea` and `input` elements that share a similar look and similar styling
@@ -358,12 +323,6 @@ input[type="time"] {
     border: 0;
     border-block-end: var(--border-size-2) solid var(--gray-3);
     padding: var(--size-2);
-
-    background-color: var(--stone-4);
-    border-radius: var(--radius-1);
-    border-block-start: var(--border-size-1) solid var(--stone-6) !important;
-    border-block-end: var(--border-size-1) solid var(--stone-0) !important;
-    box-shadow: var(--inner-shadow-1);
 }
 /* - individual styling */
 textarea {
@@ -428,12 +387,6 @@ datalist {
 
 button,
 input[type="submit"] {
-    align-self: end;
-    background-color: var(--jungle-6);
-    border: 0;
-    border-radius: var(--radius-1);
-    box-shadow: var(--shadow-2);
-    padding: var(--size-2) var(--size-3);
 }
 button:disabled,
 input[type="submit"]:disabled {
@@ -485,7 +438,6 @@ details[open] {
 summary {
 }
 details[open] summary {
-    margin-block-start: var(--size-2);
 }
 
 dialog {

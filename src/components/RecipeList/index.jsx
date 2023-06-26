@@ -229,7 +229,7 @@ const RecipeList = () => {
                                                         <p
                                                             key={identifier}
                                                             className={macronutrients.carbohydrate === primaryMacronutrient ? styles.highlightCarbohydrate : macronutrients.fat === primaryMacronutrient ? styles.highlightFat : styles.highlightProtein}
-                                                            style={{ backgroundColor: "var(--gray-6)", borderRadius: "var(--radius-2)", color: "var(--gray-0)", fontSize: "var(--font-size-0)", marginBlock: "0", padding: "0 var(--size-2)" }}
+                                                            style={{ backgroundColor: "var(--gray-6)", borderRadius: "var(--radius-2)", color: "var(--gray-0)", fontSize: "var(--font-size-0)", marginBlock: "0", padding: "var(--size-1) var(--size-2)" }}
                                                         >
                                                             {ingredients.display_name}
                                                         </p>

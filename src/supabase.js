@@ -1,6 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 
-export const supabase = createClient("https://kdvwicccjdercqtrqemp.supabase.co", import.meta.env.VITE_SUPABASE_SERVICE_KEY);
+export const supabase = createClient("https://kdvwicccjdercqtrqemp.supabase.co", import.meta.env.VITE_SUPABASE_ANON);
 
 export const signInWithEmail = async ({ email, password }) => {
     try {
