@@ -35,10 +35,6 @@ jobs:
         with:
           node-version: 18
           cache: 'npm'
-      - name: Set up environment variables
-        run: echo "Setting up environment variables"
-        env:
-          VITE_SUPABASE_ANON: ${{ secrets.VITE_SUPABASE_ANON }}
       - name: Install dependencies
         run: npm install
       - name: Build
@@ -48,10 +44,8 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
-          # Upload dist/docs repository
-          path: './docs'
+          # Upload dist repository
+          path: './dist'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1
-        env:
-          VITE_SUPABASE_ANON: ${{ secrets.VITE_SUPABASE_ANON }}
