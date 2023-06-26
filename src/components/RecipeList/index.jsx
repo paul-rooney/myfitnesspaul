@@ -200,27 +200,27 @@ const RecipeList = () => {
                                                 </button>
                                             </div>
                                         </header>
+                                        <Cluster space="var(--size-2)">
+                                            <Stack>
+                                                <span className={styles.label}>kcal</span>
+                                                {ingredients.reduce((acc, ingredient) => ingredient.recipes_macronutrients.kcal + acc, 0) / servings}
+                                            </Stack>
+                                            <Stack>
+                                                <span className={styles.label}>Carbohydrate</span>
+                                                {Math.round(ingredients.reduce((acc, ingredient) => ingredient.recipes_macronutrients.carbohydrate + acc, 0) / servings)}
+                                            </Stack>
+                                            <Stack>
+                                                <span className={styles.label}>Fat</span>
+                                                {Math.round(ingredients.reduce((acc, ingredient) => ingredient.recipes_macronutrients.fat + acc, 0) / servings)}
+                                            </Stack>
+                                            <Stack>
+                                                <span className={styles.label}>Protein</span>
+                                                {Math.round(ingredients.reduce((acc, ingredient) => ingredient.recipes_macronutrients.protein + acc, 0) / servings)}
+                                            </Stack>
+                                        </Cluster>
                                     </summary>
                                     {ingredients && (
                                         <Stack>
-                                            <Cluster space="var(--size-2)">
-                                                <Stack>
-                                                    <span className={styles.label}>kcal</span>
-                                                    {ingredients.reduce((acc, ingredient) => ingredient.recipes_macronutrients.kcal + acc, 0) / servings}
-                                                </Stack>
-                                                <Stack>
-                                                    <span className={styles.label}>Carbohydrate</span>
-                                                    {Math.round(ingredients.reduce((acc, ingredient) => ingredient.recipes_macronutrients.carbohydrate + acc, 0) / servings)}
-                                                </Stack>
-                                                <Stack>
-                                                    <span className={styles.label}>Fat</span>
-                                                    {Math.round(ingredients.reduce((acc, ingredient) => ingredient.recipes_macronutrients.fat + acc, 0) / servings)}
-                                                </Stack>
-                                                <Stack>
-                                                    <span className={styles.label}>Protein</span>
-                                                    {Math.round(ingredients.reduce((acc, ingredient) => ingredient.recipes_macronutrients.protein + acc, 0) / servings)}
-                                                </Stack>
-                                            </Cluster>
                                             <Cluster space="var(--size-1)">
                                                 {ingredients.map(({ ingredient_identifier: identifier, ingredients, recipes_macronutrients: macronutrients }) => {
                                                     const primaryMacronutrient = Math.max(macronutrients.carbohydrate, macronutrients.fat, macronutrients.protein);
