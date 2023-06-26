@@ -1,0 +1,536 @@
+@import "https://unpkg.com/open-props";
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+Universal
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+/* Apply styling to all elements (including their `::before` and `::after`
+pseudo-elements). One common use of this selector is to apply a custom
+`box-sizing`. */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+Root
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+:root {
+}
+html {
+}
+body {
+    font-family: "Plus Jakarta Sans", "Hind";
+    font-weight: 500;
+}
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+Content sectioning
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: "Plus Jakarta Sans", "Tenor Sans";
+}
+h1 {
+}
+h2 {
+    color: var(--stone-10);
+    font-size: var(--font-size-fluid-2);
+    letter-spacing: var(--font-letterspacing-0);
+}
+h3 {
+}
+h4 {
+}
+h5 {
+}
+h6 {
+}
+
+header {
+}
+
+nav {
+    display: flex;
+    gap: var(--size-4);
+}
+nav ul,
+nav ol {
+}
+nav li {
+}
+nav a {
+    align-items: center;
+    display: inline-flex;
+    font-size: var(--font-size-0);
+    letter-spacing: var(--font-letterspacing-2);
+    scroll-snap-align: start;
+    text-decoration: none;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+nav a:visited {
+}
+nav a:hover {
+}
+nav a:active {
+}
+
+main {
+}
+
+article {
+}
+
+section {
+}
+
+aside {
+}
+
+search {
+}
+
+footer {
+    background-color: var(--stone-2);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    min-block-size: fit-content;
+}
+
+address {
+}
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+Text block content
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+/* Overall styling, e.g. vertical spacing */
+p,
+ol,
+ul,
+pre,
+blockquote,
+figure,
+hr,
+dl {
+}
+
+p {
+}
+
+ol,
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding-inline-start: 0;
+}
+ol {
+}
+ul {
+}
+li {
+    background-color: var(--stone-2);
+    border: var(--border-size-1) solid var(--stone-5);
+    border-radius: var(--radius-2);
+    box-shadow: var(--shadow-1);
+    padding: var(--size-2);
+}
+li + li {
+    margin-block-start: var(--size-1);
+}
+ol ol,
+ol ul,
+ul ul,
+ul ol {
+}
+li li {
+}
+
+pre {
+}
+pre code {
+}
+pre samp {
+}
+
+blockquote {
+}
+
+figure {
+}
+figcaption {
+}
+
+hr {
+}
+
+dl {
+}
+dt {
+}
+dd {
+}
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+Inline text semantics
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+a {
+}
+a:visited {
+}
+a:hover {
+}
+a:active {
+}
+
+strong {
+}
+b {
+}
+
+em {
+}
+i {
+}
+
+q {
+}
+cite {
+}
+
+s {
+}
+
+mark {
+}
+
+/* If you specify a font size, consider using the `em` unit so that it works
+universally, e.g. for both `h1 small` and `p small` */
+small {
+    font-family: var(--font-mono);
+    /* font-size: var(--font-size-00); */
+    font-size: 0.5em;
+    font-weight: var(--font-weight-5);
+    letter-spacing: var(--font-letterspacing-3);
+    text-transform: uppercase;
+}
+sub {
+}
+sup {
+}
+
+code {
+}
+
+dfn {
+}
+abbr {
+}
+abbr[title] {
+}
+
+var {
+}
+kbd {
+}
+kbd kbd {
+}
+samp {
+}
+
+u {
+}
+
+data {
+}
+time {
+}
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+Demarcating edits
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+del {
+}
+ins {
+}
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+Embedded content
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+img {
+}
+svg {
+}
+video {
+}
+canvas {
+}
+audio {
+}
+object {
+}
+
+noscript {
+}
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+Table content
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+table {
+}
+caption {
+}
+col:first-child {
+}
+thead {
+}
+tbody {
+}
+tfoot {
+}
+tr {
+}
+th {
+}
+td {
+}
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+Forms
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+fieldset {
+}
+fieldset:disabled {
+}
+legend {
+}
+
+form {
+}
+
+label {
+    font-size: var(--font-size-0);
+}
+
+::placeholder {
+}
+:focus::placeholder {
+}
+
+/* Overall styling, e.g. vertical spacing */
+input,
+textarea,
+select,
+button {
+}
+
+/* `textarea` and `input` elements that share a similar look and similar styling
+capabilities */
+/* - common styling */
+textarea,
+input,
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="tel"],
+input[type="number"],
+input[type="search"],
+input[type="url"],
+input[type="date"],
+input[type="datetime-local"],
+input[type="month"],
+input[type="week"],
+input[type="time"] {
+    border: 0;
+    border-block-end: var(--border-size-2) solid var(--gray-3);
+    padding: var(--size-2);
+
+    background-color: var(--stone-4);
+    border-radius: var(--radius-1);
+    border-block-start: var(--border-size-1) solid var(--stone-6) !important;
+    border-block-end: var(--border-size-1) solid var(--stone-0) !important;
+    box-shadow: var(--inner-shadow-1);
+}
+/* - individual styling */
+textarea {
+}
+input[type="text"] {
+}
+input[type="password"] {
+}
+input[type="email"] {
+}
+input[type="tel"] {
+}
+input[type="number"] {
+}
+input[type="search"] {
+}
+input[type="url"] {
+}
+input[type="date"] {
+}
+input[type="datetime-local"] {
+}
+input[type="month"] {
+}
+input[type="week"] {
+}
+input[type="time"] {
+}
+/* Tick boxes */
+input[type="checkbox"],
+input[type="radio"] {
+}
+input[type="checkbox"]:checked,
+input[type="radio"]:checked {
+}
+input[type="checkbox"] {
+}
+input[type="checkbox"]:checked {
+}
+input[type="radio"] {
+}
+input[type="radio"]:checked {
+}
+/* Other input fields, some with limited styling capabilities */
+input[type="file"] {
+}
+input[type="color"] {
+}
+input[type="range"] {
+}
+
+select {
+}
+optgroup {
+}
+option {
+}
+option:checked {
+}
+datalist {
+}
+
+button,
+input[type="submit"] {
+    align-self: end;
+    background-color: var(--jungle-6);
+    border: 0;
+    border-radius: var(--radius-1);
+    box-shadow: var(--shadow-2);
+    padding: var(--size-2) var(--size-3);
+}
+button:disabled,
+input[type="submit"]:disabled {
+}
+button.secondary {
+}
+button.secondary:disabled {
+}
+
+/* This matches forms or form elements that are invalid *and* have been
+interacted with. Note that:
+1) You may need to add the `interacted` class to forms yourself
+2) You may need to add the `touched` class to form fields yourself
+3) `:user-invalid` is a working draft and not yet supported by most browsers
+4) `:-moz-ui-invalid` is non-standard and only works in Firefox
+Form validation error messages will appear (in capable browsers) regardless of
+this styling. You can omit 1) and 2) and still have working forms. Perfect
+example of progressive enhancement. */
+/* Applies to invalid forms */
+form.interacted:invalid {
+}
+/* Applies to invalid form fields. You would need to repeat your declarations
+for the following three groups of selectors individually. Browsers completely
+ignore any rule that contains a selector they do not know. */
+form.interacted :invalid,
+form .touched:invalid {
+}
+:user-invalid {
+}
+:-moz-ui-invalid {
+}
+
+output {
+}
+
+progress {
+}
+meter {
+}
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+Interactive elements
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+details {
+}
+details[open] {
+}
+summary {
+}
+details[open] summary {
+    margin-block-start: var(--size-2);
+}
+
+dialog {
+}
+dialog::backdrop {
+}
+
+/* Some form fields, `details`, elements with `tabindex`, and possibly other
+elements can be focussed. You should use `:focus-visible` instead of `:focus`
+whenever possible. As the former is not yet widely supported, you need to do it
+as follows:
+1) Set styling on focus
+2) If browser supports `:focus-visible`, revert/unset the styling from 1)
+3) If the element matches `:focus-visible`, apply the styling again */
+:focus {
+}
+:focus:not(:focus-visible) {
+}
+:focus-visible {
+}
+
+[inert],
+[inert] * {
+}
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+Media queries
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+@media (prefers-reduced-motion: reduce) {
+}
+
+@media (prefers-color-scheme: dark) {
+}
+
+@media (orientation: portrait) {
+}
+
+@media (orientation: landscape) {
+}
+
+@media print {
+}
+
+/*
+This file evolved from Natural Selection:
+https://github.com/frontaid/natural-selection
+*/

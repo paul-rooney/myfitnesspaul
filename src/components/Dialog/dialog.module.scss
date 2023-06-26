@@ -1,0 +1,112 @@
+html:has(dialog[open]) {
+    overflow: hidden;
+}
+
+.dialog:not([open]) {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.dialog {
+    background-color: var(--stone-1);
+    border: var(--border-size-1) solid var(--stone-5);
+    border-radius: var(--radius-2);
+    box-shadow: var(--shadow-6);
+    color: var(--stone-10);
+    display: grid;
+    inline-size: 100%;
+    margin: auto !important;
+    max-block-size: min(80vh, 100%);
+    max-block-size: min(80dvb, 100%);
+    max-inline-size: min(90vw, var(--size-content-3));
+    overflow: hidden;
+    padding: 0;
+    position: fixed;
+    inset: 0;
+    z-index: var(--layer-important);
+
+    &::backdrop {
+        backdrop-filter: blur(25px);
+        transition: backdrop-filter 0.5s ease;
+    }
+
+    .form {
+        align-items: start;
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+        max-block-size: 80vh;
+        max-block-size: 80dvb;
+
+        .header,
+        .footer {
+            padding: var(--size-3);
+        }
+
+        .header {
+            grid-row: 1;
+            
+            .heading {
+                font-weight: var(--font-weight-5);
+                margin-block: 0;
+            }
+        }
+        
+        .article {
+            box-shadow: var(--inner-shadow-2);
+            grid-row: 2;
+            max-block-size: 100%;
+            overflow-y: auto;
+            overscroll-behavior-y: contain;
+            padding: var(--size-3);
+        }
+
+        .footer {
+            background-color: var(--stone-3);
+            grid-row: 3;
+
+            .menu {
+                margin-block: 0;
+                padding-inline-start: 0;
+
+                .cancelButton,
+                .confirmButton {
+                    background-color: var(--red-8);
+                    block-size: var(--size-6);
+                    border: var(--border-size-1) solid var(--red-8);
+                    border-radius: var(--radius-1);
+                    box-shadow: var(--shadow-1);
+                    color: var(--red-0);
+                    font-family: var(--font-mono);
+                    font-size: var(--font-size-0);
+                    letter-spacing: var(--font-letterspacing-1);
+                    text-transform: uppercase;
+
+                    & svg {
+                        stroke-width: 4;
+                    }
+                }
+
+                .cancelButton {
+                    background-color: var(--stone-8);
+                    border: var(--border-size-1) solid var(--stone-8);
+                    color: var(--stone-0);
+                }
+            }
+        }
+    }
+}
+
+.dialog [data-operation="delete"] .footer {
+    background-color: var(--red-7) !important;
+
+    .cancelButton {
+        background-color: var(--stone-6) !important;
+        border: var(--border-size-1) solid var(--stone-6) !important;
+        color: var(--stone-12) !important;
+    }
+    
+    .confirmButton {
+        background-color: var(--red-12) !important;
+        border: var(--border-size-1) solid var(--red-12) !important;
+    }
+}

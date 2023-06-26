@@ -1,0 +1,117 @@
+.box {
+    display: block;
+    overflow: auto;
+}
+
+.center {
+    display: block;
+    box-sizing: content-box;
+    margin-inline: auto;
+}
+
+.cluster {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.cover {
+    display: flex;
+    flex-direction: column;
+}
+
+.frame {
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    & > img,
+    & > video {
+        inline-size: 100%;
+        block-size: 100%;
+        object-fit: cover;
+    }
+}
+  
+.grid {
+    display: grid;
+    align-content: start;
+    grid-template-columns: 100%;
+}
+
+.icon {
+    & > svg {
+        height: 0.75em;
+        height: 1cap;
+        width: 0.75em;
+        width: 1cap;
+
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+}
+
+.imposter {
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    transform: translate(-50%, -50%);
+    translate: -50% -50%;
+}
+
+.reel {
+    --color-light: white;
+    --color-dark: black;
+
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-color: var(--color-light) var(--color-dark);
+      
+    & > img {
+        block-size: 100%;
+        flex-basis: auto;
+        inline-size: auto;
+    }
+      
+    &::-webkit-scrollbar {
+        block-size: 1rem;
+    }
+      
+    &::-webkit-scrollbar-track {
+        background-color: var(--color-dark);
+    }
+      
+    &::-webkit-scrollbar-thumb {
+        background-color: var(--color-dark);
+        background-image: linear-gradient(var(--color-dark) 0, var(--color-dark) 0.25rem, var(--color-light) 0.25rem, var(--color-light) 0.75rem, var(--color-dark) 0.75rem);
+    }
+}
+  
+.sidebar {
+    display: flex;
+    flex-wrap: wrap;
+    
+    & > * {
+        flex-grow: 1;
+    }
+}
+
+.stack {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.switcher {
+    display: flex;
+    flex-wrap: wrap;
+    
+    & > * {
+      flex-grow: 1;
+    }
+}
+  
