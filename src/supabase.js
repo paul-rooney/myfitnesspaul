@@ -1,6 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 
-export const supabase = createClient("https://kdvwicccjdercqtrqemp.supabase.co", import.meta.env.VITE_SUPABASE_ANON);
+export const supabase = createClient("https://kdvwicccjdercqtrqemp.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtkdndpY2NjamRlcmNxdHJxZW1wIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODY2NTM2OTgsImV4cCI6MjAwMjIyOTY5OH0.84JOOirsgjuY0T7x-KBzvOkNFGgWt7g8NcQN6OSyv6I");
 
 export const signInWithEmail = async ({ email, password }) => {
     try {
