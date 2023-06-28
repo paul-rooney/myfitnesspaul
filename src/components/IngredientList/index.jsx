@@ -123,21 +123,10 @@ const IngredientList = () => {
         <>
             <h2 className={styles.heading}>Ingredients</h2>
 
-            <FilterIngredientsForm
-                ingredients={ingredients}
-                setFilteredIngredients={setFilteredIngredients}
-            />
+            <FilterIngredientsForm ingredients={ingredients} setFilteredIngredients={setFilteredIngredients} />
 
-            <button
-                className={styles.addButton}
-                data-operation="create"
-                onClick={clickHandler}
-            >
-                <Icon
-                    space=".5ch"
-                    direction="ltr"
-                    icon="plus"
-                >
+            <button className={styles.addButton} data-operation="create" onClick={clickHandler}>
+                <Icon space=".5ch" direction="ltr" icon="plus">
                     Add ingredient
                 </Icon>
             </button>
@@ -151,10 +140,7 @@ const IngredientList = () => {
                             return 0;
                         })
                         .map(({ brand_name, carbohydrate, display_name, fat, id, kcal, protein }) => (
-                            <li
-                                className={styles.li}
-                                key={id}
-                            >
+                            <li className={styles.li} key={id}>
                                 <details className={styles.details}>
                                     <summary className={styles.summary}>
                                         <header className={styles.header}>
@@ -163,31 +149,16 @@ const IngredientList = () => {
                                                 <span className={styles.displayName}>{display_name}</span>
                                             </Stack>
                                             <Cluster space="var(--size-1)">
-                                                <button
-                                                    className={styles.editButton}
-                                                    data-id={id}
-                                                    data-operation="update"
-                                                    onClick={clickHandler}
-                                                >
+                                                <button className={styles.editButton} data-id={id} data-operation="update" onClick={clickHandler}>
                                                     <Icon icon="edit-3" />
                                                 </button>
-                                                <button
-                                                    className={styles.deleteButton}
-                                                    data-id={id}
-                                                    data-operation="delete"
-                                                    onClick={clickHandler}
-                                                >
+                                                <button className={styles.deleteButton} data-id={id} data-operation="delete" onClick={clickHandler}>
                                                     <Icon icon="trash-2" />
                                                 </button>
                                             </Cluster>
                                         </header>
                                     </summary>
-                                    <MacronutrientValues
-                                        kcal={kcal}
-                                        c={carbohydrate}
-                                        f={fat}
-                                        p={protein}
-                                    />
+                                    <MacronutrientValues kcal={kcal} c={carbohydrate} f={fat} p={protein} />
                                 </details>
                             </li>
                         ))
@@ -196,14 +167,8 @@ const IngredientList = () => {
                 )}
             </ul>
             <CreateIngredientDialog handleSubmit={submitHandler} />
-            <UpdateIngredientDialog
-                ingredient={ingredientToUpdate}
-                handleSubmit={submitHandler}
-            />
-            <DeleteIngredientDialog
-                ingredient={ingredientToDelete}
-                handleSubmit={submitHandler}
-            />
+            <UpdateIngredientDialog ingredient={ingredientToUpdate} handleSubmit={submitHandler} />
+            <DeleteIngredientDialog ingredient={ingredientToDelete} handleSubmit={submitHandler} />
         </>
     );
 };
