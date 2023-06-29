@@ -18,13 +18,13 @@ const IngredientList = () => {
     useEffect(() => {
         if (ingredients.length > 0) return;
 
-        if (localStorage.getItem("ingredients")) {
-            setIngredients(JSON.parse(localStorage.getItem("ingredients")));
-            return;
-        }
+        // if (localStorage.getItem("ingredients")) {
+        //     setIngredients(JSON.parse(localStorage.getItem("ingredients")));
+        //     return;
+        // }
 
         getRows("ingredients").then((data) => {
-            localStorage.setItem("ingredients", JSON.stringify(data));
+            // localStorage.setItem("ingredients", JSON.stringify(data));
             setIngredients(data);
         });
     }, []);
@@ -112,7 +112,7 @@ const IngredientList = () => {
         }
 
         getRows("ingredients").then((data) => {
-            localStorage.setItem("ingredients", JSON.stringify(data));
+            // localStorage.setItem("ingredients", JSON.stringify(data));
             setIngredients(data);
         });
 

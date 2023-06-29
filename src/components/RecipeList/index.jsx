@@ -42,13 +42,13 @@ const RecipeList = () => {
     useEffect(() => {
         if (ingredients.length > 0) return;
 
-        if (localStorage.getItem("ingredients")) {
-            setIngredients(JSON.parse(localStorage.getItem("ingredients")));
-            return;
-        }
+        // if (localStorage.getItem("ingredients")) {
+        //     setIngredients(JSON.parse(localStorage.getItem("ingredients")));
+        //     return;
+        // }
 
         getRows("ingredients").then((data) => {
-            localStorage.setItem("ingredients", JSON.stringify(data));
+            // localStorage.setItem("ingredients", JSON.stringify(data));
             setIngredients(data);
         });
     }, []);
@@ -56,12 +56,12 @@ const RecipeList = () => {
     useEffect(() => {
         if (recipes.length > 0) return;
 
-        if (localStorage.getItem("recipes")) {
-            const storedRecipes = JSON.parse(localStorage.getItem("recipes"));
-            setRecipes(storedRecipes);
-            setFilteredRecipes(storedRecipes); // Add this line to initialize filteredRecipes
-            return;
-        }
+        // if (localStorage.getItem("recipes")) {
+        //     const storedRecipes = JSON.parse(localStorage.getItem("recipes"));
+        //     setRecipes(storedRecipes);
+        //     setFilteredRecipes(storedRecipes); // Add this line to initialize filteredRecipes
+        //     return;
+        // }
 
         getRecipes().then((data) => {
             const dataWithMacronutrientTotals = data.map((item) => ({
@@ -72,7 +72,7 @@ const RecipeList = () => {
                 total_protein: Math.round(item.recipes_ingredients.reduce((acc, ingredient) => ingredient.recipes_macronutrients.protein + acc, 0) / item.servings),
             }));
 
-            localStorage.setItem("recipes", JSON.stringify(dataWithMacronutrientTotals));
+            // localStorage.setItem("recipes", JSON.stringify(dataWithMacronutrientTotals));
             setRecipes(dataWithMacronutrientTotals);
             setFilteredRecipes(dataWithMacronutrientTotals);
         });
@@ -96,7 +96,7 @@ const RecipeList = () => {
                         total_protein: Math.round(item.recipes_ingredients.reduce((acc, ingredient) => ingredient.recipes_macronutrients.protein + acc, 0) / item.servings),
                     }));
 
-                    localStorage.setItem("recipes", JSON.stringify(dataWithMacronutrientTotals));
+                    // localStorage.setItem("recipes", JSON.stringify(dataWithMacronutrientTotals));
                     setRecipes(dataWithMacronutrientTotals);
                     setFilteredRecipes(dataWithMacronutrientTotals);
                 });
