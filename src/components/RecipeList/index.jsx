@@ -10,60 +10,9 @@ import usePagination from "../../hooks/usePagination";
 // import Nutribot from "../Nutribot";
 // import FilterRecipesWidget from "./FilterRecipesWidget";
 
-function getRandomCombinations(objects, range1, range2, n) {
-    // Shuffle the objects array
-    const shuffledObjects = shuffleArray(objects);
-
-    const combinations = [];
-    const uniqueCombinations = new Set();
-    const stack = [{ arr: [], kcalSum: 0, proteinSum: 0, index: 0 }];
-
-    while (stack.length > 0 && uniqueCombinations.size < n) {
-        const { arr, kcalSum, proteinSum, index } = stack.pop();
-        const currentObject = shuffledObjects[index];
-
-        const newKcalSum = kcalSum + currentObject.kcal;
-        const newProteinSum = proteinSum + currentObject.protein;
-
-        if (newKcalSum >= range1[0] && newKcalSum <= range1[1] && newProteinSum >= range2[0] && newProteinSum <= range2[1]) {
-            const combination = [...arr, currentObject];
-            const combinationString = JSON.stringify(combination);
-
-            if (!uniqueCombinations.has(combinationString)) {
-                uniqueCombinations.add(combinationString);
-                combinations.push(combination);
-            }
-        }
-
-        if (newKcalSum > range1[1] || newProteinSum > range2[1] || index >= shuffledObjects.length - 1) {
-            continue;
-        }
-
-        stack.push({
-            arr: [...arr, currentObject],
-            kcalSum: newKcalSum,
-            proteinSum: newProteinSum,
-            index: index + 1,
-        });
-        stack.push({ arr, kcalSum, proteinSum, index: index + 1 });
-    }
-
-    return combinations.slice(0, n);
-}
-
-// Function to shuffle an array using Fisher-Yates algorithm
-function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-}
-
 const RecipeList = ({ ingredients, recipes, setRecipes }) => {
     const [filteredRecipes, setFilteredRecipes] = useState([]);
     const [newRecipe, setNewRecipe] = useState({});
-    const [mealPlan, setMealPlan] = useState([]);
 
     const itemsPerPage = 10;
     const totalPages = Math.ceil(recipes.length / itemsPerPage);
@@ -97,7 +46,6 @@ const RecipeList = ({ ingredients, recipes, setRecipes }) => {
                         total_protein: Math.round(item.recipes_ingredients.reduce((acc, ingredient) => ingredient.recipes_macronutrients.protein + acc, 0) / item.servings),
                     }));
 
-                    // localStorage.setItem("recipes", JSON.stringify(dataWithMacronutrientTotals));
                     setRecipes(dataWithMacronutrientTotals);
                     setFilteredRecipes(dataWithMacronutrientTotals);
                 });
@@ -170,65 +118,10 @@ const RecipeList = ({ ingredients, recipes, setRecipes }) => {
         form.reset();
     };
 
-    const generateMealPlan = async () => {
-        const numbers = recipes.map((recipe) => ({
-            id: recipe.id,
-            display_name: recipe.display_name,
-            kcal: recipe.total_kcal,
-            protein: recipe.total_protein,
-        }));
-
-        const range1 = [1400, 1550];
-        const range2 = [120, 160];
-        const combination = getRandomCombinations(numbers, range1, range2, 7);
-
-        console.log(combination);
-
-        if (combination) {
-            setMealPlan(combination);
-        } else {
-            console.log("Nothing returned");
-        }
-    };
-
     return (
         <>
             <h2 className={styles.heading}>Recipes</h2>
-            <button className={styles.addButton} data-operation="create" onClick={generateMealPlan}>
-                <Icon space=".5ch" direction="ltr" icon="plus">
-                    Generate meal plan
-                </Icon>
-            </button>
-
-            {mealPlan.length > 0
-                ? mealPlan.map((day, index) => (
-                      <div style={{ fontSize: "var(--font-size-0)" }}>
-                          <Stack key={index} space="var(--size-2)">
-                              <h3>Day {index + 1}</h3>
-                              {day.map((meal) => (
-                                  <Stack key={`${meal.id}-${index}`} space="var(--size-1)">
-                                      <span style={{ color: "var(--jungle-10)", fontWeight: "600" }}>{meal.display_name}</span>
-                                      <Cluster>
-                                          <span>kcal: {meal.kcal}</span>
-
-                                          <span>Protein: {meal.protein}</span>
-                                      </Cluster>
-                                  </Stack>
-                              ))}
-                              <Cluster>
-                                  <Stack>
-                                      <span>Total kcal:</span>
-                                      {day.reduce((acc, meal) => meal.kcal + acc, 0)}
-                                  </Stack>
-                                  <Stack>
-                                      <span>Total protein:</span>
-                                      {day.reduce((acc, meal) => meal.protein + acc, 0)}
-                                  </Stack>
-                              </Cluster>
-                          </Stack>
-                      </div>
-                  ))
-                : null}
+            
             <button className={styles.addButton} data-operation="create" onClick={clickHandler}>
                 <Icon space=".5ch" direction="ltr" icon="plus">
                     Add recipe

@@ -12,7 +12,7 @@ const SnapTabs = ({ ingredients, setIngredients, recipes, setRecipes }) => {
                     <article id="log" className={styles.article}>
                         <Box>
                             <Stack>
-                                <Logbook />
+                                <Logbook recipes={recipes} />
                             </Stack>
                         </Box>
                     </article>
