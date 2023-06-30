@@ -9,33 +9,24 @@ const SnapTabs = ({ ingredients, setIngredients, recipes, setRecipes }) => {
         <>
             <div className={styles.tabs}>
                 <section className={`${styles.section} ${styles.scroll}`}>
-                    <article
-                        id="log"
-                        className={styles.article}
-                    >
+                    <article id="log" className={styles.article}>
                         <Box>
                             <Stack>
                                 <Logbook />
                             </Stack>
                         </Box>
                     </article>
-                    <article
-                        id="ingredients"
-                        className={styles.article}
-                    >
-                        <Box>
-                            <Stack>
-                                <IngredientList ingredients={ingredients} setIngredients={setIngredients} />
-                            </Stack>
-                        </Box>
-                    </article>
-                    <article
-                        id="recipes"
-                        className={styles.article}
-                    >
+                    <article id="recipes" className={styles.article}>
                         <Box>
                             <Stack>
                                 <RecipeList ingredients={ingredients} setIngredients={setIngredients} recipes={recipes} setRecipes={setRecipes} />
+                            </Stack>
+                        </Box>
+                    </article>
+                    <article id="ingredients" className={styles.article}>
+                        <Box>
+                            <Stack>
+                                <IngredientList ingredients={ingredients} setIngredients={setIngredients} />
                             </Stack>
                         </Box>
                     </article>
@@ -44,29 +35,16 @@ const SnapTabs = ({ ingredients, setIngredients, recipes, setRecipes }) => {
             <footer className={`${styles.footer} ${styles.scroll}`}>
                 <Box>
                     <nav className={styles.nav}>
-                        <a
-                            className={styles.a}
-                            href="#log"
-                        >
+                        <a className={styles.a} href="#log">
                             Log
                         </a>
-                        <a
-                            className={styles.a}
-                            href="#ingredients"
-                        >
-                            Ingredients
-                        </a>
-                        <a
-                            className={styles.a}
-                            href="#recipes"
-                        >
+                        <a className={styles.a} href="#recipes">
                             Recipes
                         </a>
-                        <a
-                            className={styles.a}
-                            href="#settings"
-                            style={{ marginInlineStart: "auto" }}
-                        >
+                        <a className={styles.a} href="#ingredients">
+                            Ingredients
+                        </a>
+                        <a className={styles.a} href="#settings" style={{ marginInlineStart: "auto" }}>
                             Settings
                         </a>
                     </nav>

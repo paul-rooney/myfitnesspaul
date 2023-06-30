@@ -19,7 +19,7 @@ const IngredientList = ({ ingredients, setIngredients }) => {
 
         setFilteredIngredients(ingredients);
         listen("ingredients", setIngredients);
-    }, [ingredients]);
+    }, [ingredients, setIngredients]);
 
     const clickHandler = async (event) => {
         const { id, operation } = event.target.closest("button").dataset;

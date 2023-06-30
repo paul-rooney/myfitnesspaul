@@ -22,7 +22,7 @@ Root
 html {
 }
 body {
-    font-family: "Plus Jakarta Sans", "Hind";
+    font-family: "Barlow Condensed", "Inter", "Plus Jakarta Sans", "Hind";
     font-weight: 500;
 }
 
@@ -36,7 +36,7 @@ h3,
 h4,
 h5,
 h6 {
-    font-family: "Plus Jakarta Sans", "Tenor Sans";
+    font-family: "Barlow Condensed", "Inter", "Plus Jakarta Sans", "Tenor Sans";
 }
 h1 {
 }
