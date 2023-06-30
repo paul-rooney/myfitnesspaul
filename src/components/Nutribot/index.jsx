@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Stack } from "../../primitives";
-import { getRows } from "../../supabase";
+import { readRows } from "../../supabase";
 
 const Nutribot = () => {
     const [isThinking, setIsThinking] = useState(false);
@@ -17,7 +17,7 @@ const Nutribot = () => {
     ]);
 
     useEffect(() => {
-        getRows(
+        readRows(
             "recipes",
             `display_name,
             servings,

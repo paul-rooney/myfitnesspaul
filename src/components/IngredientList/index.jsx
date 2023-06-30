@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Cluster, Icon, Stack } from "../../primitives";
-import { supabase, getRows, insertRow, updateRow, deleteRow } from "../../supabase";
+import { listen, insertRow, updateRow, deleteRow } from "../../supabase";
 import FilterIngredientsForm from "./FilterIngredientsForm";
 import MacronutrientValues from "./MacronutrientValues";
 import CreateIngredientDialog from "./CreateIngredientDialog";
@@ -9,39 +9,17 @@ import DeleteIngredientDialog from "./DeleteIngredientDialog";
 import styles from "./ingredient-list.module.scss";
 import { stripNonAlphanumeric } from "../../utilities";
 
-const IngredientList = () => {
-    const [ingredients, setIngredients] = useState([]);
-    const [filteredIngredients, setFilteredIngredients] = useState(ingredients);
+const IngredientList = ({ ingredients, setIngredients }) => {
+    const [filteredIngredients, setFilteredIngredients] = useState([]);
     const [ingredientToUpdate, setIngredientToUpdate] = useState({});
     const [ingredientToDelete, setIngredientToDelete] = useState({});
 
     useEffect(() => {
-        if (ingredients.length > 0) return;
+        if (!ingredients) return;
 
-        // if (localStorage.getItem("ingredients")) {
-        //     setIngredients(JSON.parse(localStorage.getItem("ingredients")));
-        //     return;
-        // }
-
-        getRows("ingredients").then((data) => {
-            // localStorage.setItem("ingredients", JSON.stringify(data));
-            setIngredients(data);
-        });
-    }, []);
-
-    useEffect(() => {
-        listen();
-    }, []);
-
-    const listen = () => {
-        supabase
-            .channel("any")
-            .on("postgres_changes", { event: "*", schema: "public" }, (payload) => {
-                console.log("Payload received: ", payload);
-                getRows("ingredients").then((data) => setIngredients(data));
-            })
-            .subscribe();
-    };
+        setFilteredIngredients(ingredients);
+        listen("ingredients", setIngredients);
+    }, [ingredients]);
 
     const clickHandler = async (event) => {
         const { id, operation } = event.target.closest("button").dataset;
@@ -111,11 +89,6 @@ const IngredientList = () => {
                 break;
         }
 
-        getRows("ingredients").then((data) => {
-            // localStorage.setItem("ingredients", JSON.stringify(data));
-            setIngredients(data);
-        });
-
         form.reset();
     };
 
@@ -139,7 +112,7 @@ const IngredientList = () => {
                             if (a.display_name < b.display_name) return -1;
                             return 0;
                         })
-                        .map(({ brand_name, carbohydrate, display_name, fat, id, kcal, protein }) => (
+                        .map(({ brand_name, carbohydrate, display_name, fat, id, kcal, protein, avg_unit_weight }) => (
                             <li className={styles.li} key={id}>
                                 <details className={styles.details}>
                                     <summary className={styles.summary}>
@@ -158,7 +131,7 @@ const IngredientList = () => {
                                             </Cluster>
                                         </header>
                                     </summary>
-                                    <MacronutrientValues kcal={kcal} c={carbohydrate} f={fat} p={protein} />
+                                    <MacronutrientValues kcal={kcal} c={carbohydrate} f={fat} p={protein} unit={avg_unit_weight} />
                                 </details>
                             </li>
                         ))

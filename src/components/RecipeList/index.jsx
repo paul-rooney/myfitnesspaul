@@ -1,82 +1,23 @@
-import { useEffect, useMemo, useState } from "react";
-import { Box, Cluster, Icon, Stack } from "../../primitives";
-import { getRows, insertRow, updateRow, deleteRow, supabase } from "../../supabase";
+import { useEffect, useState } from "react";
+import { Cluster, Icon, Stack } from "../../primitives";
+import { insertRow, supabase } from "../../supabase";
 import styles from "./recipe-list.module.scss";
-import { debounce, groupBy, stripNonAlphanumeric } from "../../utilities";
-import Nutribot from "../Nutribot";
+import { stripNonAlphanumeric } from "../../utilities";
+// import Nutribot from "../Nutribot";
 import CreateRecipeDialog from "./CreateRecipeDialog";
 import CreateRecipesIngredientsDialog from "./CreateRecipesIngredientsDialog";
-import FilterRecipesWidget from "./FilterRecipesWidget";
+// import FilterRecipesWidget from "./FilterRecipesWidget";
 
-const getRecipes = async () => {
-    const { data, error } = await supabase.from("recipes").select(`
-        id,
-        display_name,
-        servings,
-        recipes_ingredients (
-            ingredients!recipes_ingredients_ingredient_id_fkey (
-                display_name
-            ),
-            ingredient_identifier,
-            quantity,
-            unit,
-            recipes_macronutrients (
-                kcal,
-                carbohydrate,
-                fat,
-                protein
-            )
-        )
-    `);
-
-    return data ?? error;
-};
-
-const RecipeList = () => {
-    const [ingredients, setIngredients] = useState([]);
-    const [recipes, setRecipes] = useState([]);
+const RecipeList = ({ ingredients, recipes, setRecipes }) => {
     const [filteredRecipes, setFilteredRecipes] = useState([]);
     const [newRecipe, setNewRecipe] = useState({});
     const [mealPlan, setMealPlan] = useState([]);
 
     useEffect(() => {
-        if (ingredients.length > 0) return;
+        if (!recipes) return;
 
-        // if (localStorage.getItem("ingredients")) {
-        //     setIngredients(JSON.parse(localStorage.getItem("ingredients")));
-        //     return;
-        // }
-
-        getRows("ingredients").then((data) => {
-            // localStorage.setItem("ingredients", JSON.stringify(data));
-            setIngredients(data);
-        });
-    }, []);
-
-    useEffect(() => {
-        if (recipes.length > 0) return;
-
-        // if (localStorage.getItem("recipes")) {
-        //     const storedRecipes = JSON.parse(localStorage.getItem("recipes"));
-        //     setRecipes(storedRecipes);
-        //     setFilteredRecipes(storedRecipes); // Add this line to initialize filteredRecipes
-        //     return;
-        // }
-
-        getRecipes().then((data) => {
-            const dataWithMacronutrientTotals = data.map((item) => ({
-                ...item,
-                total_kcal: item.recipes_ingredients.reduce((acc, ingredient) => ingredient.recipes_macronutrients.kcal + acc, 0) / item.servings,
-                total_carbohydrate: Math.round(item.recipes_ingredients.reduce((acc, ingredient) => ingredient.recipes_macronutrients.carbohydrate + acc, 0) / item.servings),
-                total_fat: Math.round(item.recipes_ingredients.reduce((acc, ingredient) => ingredient.recipes_macronutrients.fat + acc, 0) / item.servings),
-                total_protein: Math.round(item.recipes_ingredients.reduce((acc, ingredient) => ingredient.recipes_macronutrients.protein + acc, 0) / item.servings),
-            }));
-
-            // localStorage.setItem("recipes", JSON.stringify(dataWithMacronutrientTotals));
-            setRecipes(dataWithMacronutrientTotals);
-            setFilteredRecipes(dataWithMacronutrientTotals);
-        });
-    }, []);
+        setFilteredRecipes(recipes);
+    }, [recipes]);
 
     useEffect(() => {
         listen();
@@ -90,7 +31,7 @@ const RecipeList = () => {
                 getRecipes().then((data) => {
                     const dataWithMacronutrientTotals = data.map((item) => ({
                         ...item,
-                        total_kcal: item.recipes_ingredients.reduce((acc, ingredient) => ingredient.recipes_macronutrients.kcal + acc, 0) / item.servings,
+                        total_kcal: Math.round(item.recipes_ingredients.reduce((acc, ingredient) => ingredient.recipes_macronutrients.kcal + acc, 0) / item.servings),
                         total_carbohydrate: Math.round(item.recipes_ingredients.reduce((acc, ingredient) => ingredient.recipes_macronutrients.carbohydrate + acc, 0) / item.servings),
                         total_fat: Math.round(item.recipes_ingredients.reduce((acc, ingredient) => ingredient.recipes_macronutrients.fat + acc, 0) / item.servings),
                         total_protein: Math.round(item.recipes_ingredients.reduce((acc, ingredient) => ingredient.recipes_macronutrients.protein + acc, 0) / item.servings),
@@ -286,22 +227,13 @@ const RecipeList = () => {
             protein: recipe.total_protein,
         }));
 
-        const range1 = [1400, 1600];
+        const range1 = [1400, 1550];
         const range2 = [120, 160];
-        const combination = getRandomCombinations(numbers, range1, range2, 5);
+        const combination = getRandomCombinations(numbers, range1, range2, 7);
 
         console.log(combination);
 
         if (combination) {
-            const ids = combination.map((item) => item.map((obj) => obj.id)); // Extracting the IDs from the combination array
-            // const { data, error } = await supabase.from("recipes").select().in("id", ids);
-
-            // if (error) {
-            //     console.log("Error retrieving recipes:", error);
-            // } else {
-            //     console.log(data);
-            // }
-
             setMealPlan(combination);
         } else {
             console.log("Nothing returned");

@@ -4,7 +4,7 @@ import RecipeList from "../RecipeList";
 import Logbook from "../Logbook";
 import styles from "./snap-tabs.module.scss";
 
-const SnapTabs = () => {
+const SnapTabs = ({ ingredients, setIngredients, recipes, setRecipes }) => {
     return (
         <>
             <div className={styles.tabs}>
@@ -25,7 +25,7 @@ const SnapTabs = () => {
                     >
                         <Box>
                             <Stack>
-                                <IngredientList />
+                                <IngredientList ingredients={ingredients} setIngredients={setIngredients} />
                             </Stack>
                         </Box>
                     </article>
@@ -35,7 +35,7 @@ const SnapTabs = () => {
                     >
                         <Box>
                             <Stack>
-                                <RecipeList />
+                                <RecipeList ingredients={ingredients} setIngredients={setIngredients} recipes={recipes} setRecipes={setRecipes} />
                             </Stack>
                         </Box>
                     </article>

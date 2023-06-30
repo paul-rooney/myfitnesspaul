@@ -1,7 +1,7 @@
 import { Cluster, Stack } from "../../primitives";
 import styles from "./ingredient-list.module.scss";
 
-const MacronutrientValues = ({ kcal, c = null, f = null, p = null }) => {
+const MacronutrientValues = ({ kcal, c = null, f = null, p = null, unit = null }) => {
     const primaryMacronutrient = Math.max(c, f, p);
 
     return (
@@ -27,6 +27,14 @@ const MacronutrientValues = ({ kcal, c = null, f = null, p = null }) => {
                     <span className={styles.label}>Protein</span>
                     <span className={p === primaryMacronutrient ? styles.highlight : ""}>{p}g</span>
                 </Stack>
+            )}
+            {unit && (
+                <div style={{ marginInlineStart: "auto" }}>
+                    <Stack space="0">
+                        <span className={styles.label}>Typical weight</span>
+                        <span style={{ textAlign: 'right' }}>{unit}g</span>
+                    </Stack>
+                </div>
             )}
         </Cluster>
     );

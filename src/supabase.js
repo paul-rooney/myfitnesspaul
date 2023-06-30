@@ -28,7 +28,7 @@ export const signOut = async () => {
         throw error;
     }
 };
-export const getRows = async (table, columns = null) => {
+export const readRows = async (table, columns = "*") => {
     const { data, error } = await supabase.from(table).select(columns);
     return data ?? error;
 };
@@ -50,4 +50,14 @@ export const deleteRow = async (table, id) => {
     if (!id) return;
     const { error } = await supabase.from(table).delete().eq("id", id);
     return error;
+};
+
+export const listen = (table, setter) => {
+    supabase
+        .channel("any")
+        .on("postgres_changes", { event: "*", schema: "public" }, (payload) => {
+            console.log("Payload received: ", payload);
+            readRows(table).then((response) => setter(response));
+        })
+        .subscribe();
 };
