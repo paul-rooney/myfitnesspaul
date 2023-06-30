@@ -1,8 +1,8 @@
 import { Cluster, Icon, Stack } from "../../primitives";
 import styles from "./recipe-list.module.scss";
 
-const RecipeCard = ({ recipe }) => {
-    const { display_name, servings, total_kcal, total_carbohydrate, total_fat, total_protein, recipes_ingredients: ingredients } = recipe;
+const RecipeCard = ({ recipe, handleClick }) => {
+    const { id, display_name, servings, total_kcal, total_carbohydrate, total_fat, total_protein, recipes_ingredients: ingredients } = recipe;
 
     return (
         <details className={styles.details}>
@@ -19,10 +19,10 @@ const RecipeCard = ({ recipe }) => {
                             gap: "var(--size-1)",
                         }}
                     >
-                        <button className={styles.editButton} onClick={() => clickHandler(name)}>
+                        <button className={styles.editButton} data-id={id} data-operation="update" onClick={handleClick}>
                             <Icon icon="edit-3" />
                         </button>
-                        <button className={styles.deleteButton} onClick={() => clickHandler(name)}>
+                        <button className={styles.deleteButton} data-id={id} data-operation="delete" onClick={handleClick}>
                             <Icon icon="trash-2" />
                         </button>
                     </div>
