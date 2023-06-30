@@ -29,24 +29,30 @@ export const signOut = async () => {
     }
 };
 export const readRows = async (table, columns = "*") => {
-    const { data, error } = await supabase.from(table).select(columns);
-    return data ?? error;
+    try {
+        const { data, error } = await supabase.from(table).select(columns);
+        if (error) {
+            throw new Error(error.message);
+        }
+        return data;
+    } catch (error) {
+        console.error("An error occurred: ", error);
+    }
 };
 
-export const insertRow = async (table, values) => {
+export const insertRows = async (table, values) => {
     if (!values) return;
-    console.log("Inserting: ", values);
-    const { data, error } = await supabase.from(table).insert(values).select();
+    const { data, error } = await supabase.from(table).insert(values);
     return data ?? error;
 };
 
-export const updateRow = async (table, values) => {
+export const updateRows = async (table, values) => {
     if (!values) return;
-    const { data, error } = await supabase.from(table).update(values).eq("id", values.id).select();
+    const { data, error } = await supabase.from(table).update(values).eq("id", values.id);
     return data ?? error;
 };
 
-export const deleteRow = async (table, id) => {
+export const deleteRows = async (table, id) => {
     if (!id) return;
     const { error } = await supabase.from(table).delete().eq("id", id);
     return error;

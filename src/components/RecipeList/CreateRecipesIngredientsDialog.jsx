@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Stack } from "../../primitives";
 import Dialog from "../Dialog";
 import styles from "./recipe-list.module.scss";
-import { deleteRow, insertRow } from "../../supabase";
+import { deleteRows, insertRows } from "../../supabase";
 
 const CreateRecipesIngredientsDialog = ({ recipe, ingredients }) => {
     const [recipeIngredients, setRecipeIngredients] = useState([]);
@@ -40,7 +40,7 @@ const CreateRecipesIngredientsDialog = ({ recipe, ingredients }) => {
     const submitHandler = () => {
         if (recipeIngredients.length < 1) return;
 
-        insertRow("recipes_ingredients", recipeIngredients)
+        insertRows("recipes_ingredients", recipeIngredients)
             .catch((error) => console.error(error))
             .finally(() => {
                 setRecipeIngredients([]);
@@ -53,7 +53,8 @@ const CreateRecipesIngredientsDialog = ({ recipe, ingredients }) => {
         if (returnValue === "close") {
             console.log(returnValue);
             console.log(`Removed recipe with id ${recipe.id}`);
-            deleteRow("recipes", recipe.id)
+            deleteRows("recipes", recipe.id)
+            setRecipeIngredients([]);
         }
     };
 

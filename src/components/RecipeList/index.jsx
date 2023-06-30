@@ -1,18 +1,77 @@
 import { useEffect, useState } from "react";
 import { Cluster, Icon, Stack } from "../../primitives";
-import { insertRow, supabase } from "../../supabase";
+import { insertRows, supabase } from "../../supabase";
 import RecipeCard from "./RecipeCard";
 import CreateRecipeDialog from "./CreateRecipeDialog";
 import CreateRecipesIngredientsDialog from "./CreateRecipesIngredientsDialog";
 import styles from "./recipe-list.module.scss";
 import { stripNonAlphanumeric } from "../../utilities";
+import usePagination from "../../hooks/usePagination";
 // import Nutribot from "../Nutribot";
 // import FilterRecipesWidget from "./FilterRecipesWidget";
+
+function getRandomCombinations(objects, range1, range2, n) {
+    // Shuffle the objects array
+    const shuffledObjects = shuffleArray(objects);
+
+    const combinations = [];
+    const uniqueCombinations = new Set();
+    const stack = [{ arr: [], kcalSum: 0, proteinSum: 0, index: 0 }];
+
+    while (stack.length > 0 && uniqueCombinations.size < n) {
+        const { arr, kcalSum, proteinSum, index } = stack.pop();
+        const currentObject = shuffledObjects[index];
+
+        const newKcalSum = kcalSum + currentObject.kcal;
+        const newProteinSum = proteinSum + currentObject.protein;
+
+        if (newKcalSum >= range1[0] && newKcalSum <= range1[1] && newProteinSum >= range2[0] && newProteinSum <= range2[1]) {
+            const combination = [...arr, currentObject];
+            const combinationString = JSON.stringify(combination);
+
+            if (!uniqueCombinations.has(combinationString)) {
+                uniqueCombinations.add(combinationString);
+                combinations.push(combination);
+            }
+        }
+
+        if (newKcalSum > range1[1] || newProteinSum > range2[1] || index >= shuffledObjects.length - 1) {
+            continue;
+        }
+
+        stack.push({
+            arr: [...arr, currentObject],
+            kcalSum: newKcalSum,
+            proteinSum: newProteinSum,
+            index: index + 1,
+        });
+        stack.push({ arr, kcalSum, proteinSum, index: index + 1 });
+    }
+
+    return combinations.slice(0, n);
+}
+
+// Function to shuffle an array using Fisher-Yates algorithm
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
 
 const RecipeList = ({ ingredients, recipes, setRecipes }) => {
     const [filteredRecipes, setFilteredRecipes] = useState([]);
     const [newRecipe, setNewRecipe] = useState({});
     const [mealPlan, setMealPlan] = useState([]);
+
+    const itemsPerPage = 10;
+    const totalPages = Math.ceil(recipes.length / itemsPerPage);
+    const { currentPage, goToPage, nextPage, previousPage } = usePagination(totalPages);
+
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const displayedItems = recipes.slice(startIndex, endIndex);
 
     useEffect(() => {
         if (!recipes) return;
@@ -89,7 +148,7 @@ const RecipeList = ({ ingredients, recipes, setRecipes }) => {
 
         switch (operation) {
             case "create":
-                insertRow("recipes", recipe).then((res) => {
+                insertRows("recipes", recipe).then((res) => {
                     setNewRecipe(res[0]);
                     dialog = document.getElementById("createRecipesIngredientsDialog");
                     dialog.showModal();
@@ -110,115 +169,6 @@ const RecipeList = ({ ingredients, recipes, setRecipes }) => {
 
         form.reset();
     };
-
-    // function getRandomCombination(objects, range) {
-    //     const numbers = objects.map((obj) => obj.kcal);
-    //     const combinations = [];
-    //     const stack = [{ arr: [], sum: 0, index: 0 }];
-
-    //     while (stack.length > 0) {
-    //         const { arr, sum, index } = stack.pop();
-
-    //         if (sum >= range[0] && sum <= range[1]) {
-    //             combinations.push(arr);
-    //         }
-
-    //         if (sum > range[1] || index >= numbers.length) {
-    //             continue;
-    //         }
-
-    //         stack.push({ arr: [...arr, objects[index]], sum: sum + numbers[index], index: index + 1 });
-    //         stack.push({ arr, sum, index: index + 1 });
-    //     }
-
-    //     if (combinations.length === 0) {
-    //         return null; // No valid combinations found
-    //     }
-
-    //     const randomIndex = Math.floor(Math.random() * combinations.length);
-    //     return combinations[randomIndex];
-    // }
-
-    // function getRandomCombination(objects, range1, range2) {
-    //     const combinations = [];
-    //     const stack = [{ arr: [], kcalSum: 0, proteinSum: 0, index: 0 }];
-
-    //     while (stack.length > 0) {
-    //         const { arr, kcalSum, proteinSum, index } = stack.pop();
-    //         const currentObject = objects[index];
-
-    //         const newKcalSum = kcalSum + currentObject.kcal;
-    //         const newProteinSum = proteinSum + currentObject.protein;
-
-    //         if (newKcalSum >= range1[0] && newKcalSum <= range1[1] && newProteinSum >= range2[0] && newProteinSum <= range2[1]) {
-    //             combinations.push([...arr, currentObject]);
-    //         }
-
-    //         if (newKcalSum > range1[1] || newProteinSum > range2[1] || index >= objects.length - 1) {
-    //             continue;
-    //         }
-
-    //         stack.push({ arr: [...arr, currentObject], kcalSum: newKcalSum, proteinSum: newProteinSum, index: index + 1 });
-    //         stack.push({ arr, kcalSum, proteinSum, index: index + 1 });
-    //     }
-
-    //     if (combinations.length === 0) {
-    //         return null; // No valid combinations found
-    //     }
-
-    //     const randomIndex = Math.floor(Math.random() * combinations.length);
-    //     return combinations[randomIndex];
-    // }
-
-    function getRandomCombinations(objects, range1, range2, n) {
-        // Shuffle the objects array
-        const shuffledObjects = shuffleArray(objects);
-
-        const combinations = [];
-        const uniqueCombinations = new Set();
-        const stack = [{ arr: [], kcalSum: 0, proteinSum: 0, index: 0 }];
-
-        while (stack.length > 0 && uniqueCombinations.size < n) {
-            const { arr, kcalSum, proteinSum, index } = stack.pop();
-            const currentObject = shuffledObjects[index];
-
-            const newKcalSum = kcalSum + currentObject.kcal;
-            const newProteinSum = proteinSum + currentObject.protein;
-
-            if (newKcalSum >= range1[0] && newKcalSum <= range1[1] && newProteinSum >= range2[0] && newProteinSum <= range2[1]) {
-                const combination = [...arr, currentObject];
-                const combinationString = JSON.stringify(combination);
-
-                if (!uniqueCombinations.has(combinationString)) {
-                    uniqueCombinations.add(combinationString);
-                    combinations.push(combination);
-                }
-            }
-
-            if (newKcalSum > range1[1] || newProteinSum > range2[1] || index >= shuffledObjects.length - 1) {
-                continue;
-            }
-
-            stack.push({
-                arr: [...arr, currentObject],
-                kcalSum: newKcalSum,
-                proteinSum: newProteinSum,
-                index: index + 1,
-            });
-            stack.push({ arr, kcalSum, proteinSum, index: index + 1 });
-        }
-
-        return combinations.slice(0, n);
-    }
-
-    // Function to shuffle an array using Fisher-Yates algorithm
-    function shuffleArray(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-        return array;
-    }
 
     const generateMealPlan = async () => {
         const numbers = recipes.map((recipe) => ({
@@ -249,6 +199,7 @@ const RecipeList = ({ ingredients, recipes, setRecipes }) => {
                     Generate meal plan
                 </Icon>
             </button>
+
             {mealPlan.length > 0
                 ? mealPlan.map((day, index) => (
                       <div style={{ fontSize: "var(--font-size-0)" }}>
@@ -283,10 +234,27 @@ const RecipeList = ({ ingredients, recipes, setRecipes }) => {
                     Add recipe
                 </Icon>
             </button>
+
+            <Cluster justify="center" align="baseline" space="var(--size-1)">
+                <button disabled={currentPage === 1} onClick={() => goToPage(1)}>
+                    First
+                </button>
+                <button disabled={currentPage === 1} onClick={previousPage}>
+                    Previous
+                </button>
+                <span style={{ fontSize: "var(--font-size-0)", minInlineSize: "3em", textAlign: "center" }}>{currentPage}</span>
+                <button disabled={currentPage === totalPages} onClick={nextPage}>
+                    Next
+                </button>
+                <button disabled={currentPage === totalPages} onClick={() => goToPage(totalPages)}>
+                    Last
+                </button>
+            </Cluster>
+
             {/* <FilterRecipesWidget recipes={recipes} /> */}
             <ul className={styles.ul}>
-                {filteredRecipes.length > 0 ? (
-                    filteredRecipes
+                {displayedItems.length > 0 ? (
+                    displayedItems
                         .sort((a, b) =>
                             new Intl.Collator(undefined, {
                                 sensitivity: "base",

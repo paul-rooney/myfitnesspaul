@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import useSessionStorage from "./hooks/useSessionStorage";
 // import reactLogo from "./assets/react.svg";
 // import viteLogo from "/vite.svg";
 import "./App.css";
@@ -19,8 +20,8 @@ const calculateMacronutrientTotals = (recipes) => {
 
 const App = () => {
     const [session, setSession] = useState(null);
-    const [ingredients, setIngredients] = useState([]);
-    const [recipes, setRecipes] = useState([]);
+    const [ingredients, setIngredients] = useSessionStorage("ingredients", []);
+    const [recipes, setRecipes] = useSessionStorage("recipes", []);
 
     useEffect(() => {
         supabase.auth.getSession().then(({ data: { session } }) => setSession(session));
@@ -35,8 +36,13 @@ const App = () => {
     useEffect(() => {
         if (!session) return;
 
-        readRows("recipes", `id, display_name, servings, recipes_ingredients (ingredients!recipes_ingredients_ingredient_id_fkey (display_name), ingredient_identifier, quantity, unit, recipes_macronutrients (kcal, carbohydrate, fat, protein))`).then((recipes) => setRecipes(calculateMacronutrientTotals(recipes)));
-        readRows("ingredients").then((ingredients) => setIngredients(ingredients));
+        if (!!sessionStorage.getItem("ingredients")) {
+            readRows("ingredients").then((ingredients) => setIngredients(ingredients));
+        }
+
+        if (!!sessionStorage.getItem("recipes")) {
+            readRows("recipes", `id, display_name, servings, recipes_ingredients (ingredients!recipes_ingredients_ingredient_id_fkey (display_name), ingredient_identifier, quantity, unit, recipes_macronutrients (kcal, carbohydrate, fat, protein))`).then((recipes) => setRecipes(calculateMacronutrientTotals(recipes)));
+        }
     }, [session]);
 
     const submitHandler = (event) => {
