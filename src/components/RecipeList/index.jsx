@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { Cluster, Icon, Stack } from "../../primitives";
-import { deleteRows, insertRows, supabase, updateRows } from "../../supabase";
+import { deleteRows, insertRows, readRows, supabase, updateRows } from "../../supabase";
 import RecipeCard from "./RecipeCard";
 import CreateRecipeDialog from "./CreateRecipeDialog";
 import CreateRecipesIngredientsDialog from "./CreateRecipesIngredientsDialog";
 import styles from "./recipe-list.module.scss";
-import { stripNonAlphanumeric } from "../../utilities";
+import { calculateMacronutrientTotals, stripNonAlphanumeric } from "../../utilities";
 import usePagination from "../../hooks/usePagination";
+import UpdateRecipeDialog from "./UpdateRecipeDialog";
 import DeleteRecipeDialog from "./DeleteRecipeDialog";
 // import Nutribot from "../Nutribot";
 // import FilterRecipesWidget from "./FilterRecipesWidget";
@@ -23,7 +24,7 @@ const RecipeList = ({ ingredients, recipes, setRecipes }) => {
 
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    const displayedItems = recipes
+    const displayedItems = filteredRecipes
         .sort((a, b) =>
             new Intl.Collator(undefined, {
                 sensitivity: "base",
@@ -31,6 +32,19 @@ const RecipeList = ({ ingredients, recipes, setRecipes }) => {
             }).compare(a.display_name, b.display_name)
         )
         .slice(startIndex, endIndex);
+
+    useEffect(() => {
+        supabase
+            .channel("any")
+            .on("postgres_changes", { event: "*", schema: "public" }, (payload) => {
+                console.log("Payload received: ", payload);
+                readRows(
+                    "recipes",
+                    `id, display_name, servings, recipes_ingredients (ingredients!recipes_ingredients_ingredient_id_fkey (display_name), ingredient_identifier, quantity, unit, recipes_macronutrients (kcal, carbohydrate, fat, protein))`
+                ).then((recipes) => setRecipes(calculateMacronutrientTotals(recipes)));
+            })
+            .subscribe();
+    }, []);
 
     useEffect(() => {
         if (!recipes) return;
@@ -90,7 +104,10 @@ const RecipeList = ({ ingredients, recipes, setRecipes }) => {
 
             case "update":
                 recipe.id = id.value;
-                updateRows("recipes", recipe);
+                updateRows("recipes", recipe).then((res) => {
+                    // show updateRecipesIngredientsModal, or load the response some other way
+                    console.log(res[0]);
+                });
                 setRecipeToUpdate({});
 
                 break;
@@ -150,6 +167,7 @@ const RecipeList = ({ ingredients, recipes, setRecipes }) => {
             </ul>
             <CreateRecipeDialog handleSubmit={submitHandler} />
             <CreateRecipesIngredientsDialog ingredients={ingredients} recipe={newRecipe} />
+            <UpdateRecipeDialog recipe={recipeToUpdate} handleSubmit={submitHandler} />
             <DeleteRecipeDialog recipe={recipeToDelete} handleSubmit={submitHandler} />
             {/* <Nutribot /> */}
         </>

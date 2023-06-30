@@ -4,19 +4,10 @@ import useSessionStorage from "./hooks/useSessionStorage";
 // import viteLogo from "/vite.svg";
 import "./App.css";
 import { readRows, signInWithEmail, supabase } from "./supabase";
+import { calculateMacronutrientTotals } from "./utilities";
 import SignInForm from "./components/SignInForm";
 import SnapTabs from "./components/SnapTabs";
 import styles from "./app.module.scss";
-
-const calculateMacronutrientTotals = (recipes) => {
-    return recipes.map((item) => ({
-        ...item,
-        total_kcal: Math.round(item.recipes_ingredients.reduce((acc, ingredient) => ingredient.recipes_macronutrients.kcal + acc, 0) / item.servings),
-        total_carbohydrate: Math.round(item.recipes_ingredients.reduce((acc, ingredient) => ingredient.recipes_macronutrients.carbohydrate + acc, 0) / item.servings),
-        total_fat: Math.round(item.recipes_ingredients.reduce((acc, ingredient) => ingredient.recipes_macronutrients.fat + acc, 0) / item.servings),
-        total_protein: Math.round(item.recipes_ingredients.reduce((acc, ingredient) => ingredient.recipes_macronutrients.protein + acc, 0) / item.servings),
-    }));
-};
 
 const App = () => {
     const [session, setSession] = useState(null);
@@ -41,7 +32,10 @@ const App = () => {
         }
 
         if (!!sessionStorage.getItem("recipes")) {
-            readRows("recipes", `id, display_name, servings, recipes_ingredients (ingredients!recipes_ingredients_ingredient_id_fkey (display_name), ingredient_identifier, quantity, unit, recipes_macronutrients (kcal, carbohydrate, fat, protein))`).then((recipes) => setRecipes(calculateMacronutrientTotals(recipes)));
+            readRows(
+                "recipes",
+                `id, display_name, servings, recipes_ingredients (ingredients!recipes_ingredients_ingredient_id_fkey (display_name), ingredient_identifier, quantity, unit, recipes_macronutrients (kcal, carbohydrate, fat, protein))`
+            ).then((recipes) => setRecipes(calculateMacronutrientTotals(recipes)));
         }
     }, [session]);
 
@@ -64,7 +58,12 @@ const App = () => {
     } else {
         return (
             <div className={styles.wrapper}>
-                <SnapTabs ingredients={ingredients} setIngredients={setIngredients} recipes={recipes} setRecipes={setRecipes} />
+                <SnapTabs
+                    ingredients={ingredients}
+                    setIngredients={setIngredients}
+                    recipes={recipes}
+                    setRecipes={setRecipes}
+                />
             </div>
         );
     }

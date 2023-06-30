@@ -1,6 +1,9 @@
 import { createClient } from "@supabase/supabase-js";
 
-export const supabase = createClient("https://kdvwicccjdercqtrqemp.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtkdndpY2NjamRlcmNxdHJxZW1wIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODY2NTM2OTgsImV4cCI6MjAwMjIyOTY5OH0.84JOOirsgjuY0T7x-KBzvOkNFGgWt7g8NcQN6OSyv6I");
+export const supabase = createClient(
+    "https://kdvwicccjdercqtrqemp.supabase.co",
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtkdndpY2NjamRlcmNxdHJxZW1wIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODY2NTM2OTgsImV4cCI6MjAwMjIyOTY5OH0.84JOOirsgjuY0T7x-KBzvOkNFGgWt7g8NcQN6OSyv6I"
+);
 
 export const signInWithEmail = async ({ email, password }) => {
     try {
@@ -42,13 +45,13 @@ export const readRows = async (table, columns = "*") => {
 
 export const insertRows = async (table, values) => {
     if (!values) return;
-    const { data, error } = await supabase.from(table).insert(values);
+    const { data, error } = await supabase.from(table).insert(values).select();
     return data ?? error;
 };
 
 export const updateRows = async (table, values) => {
     if (!values) return;
-    const { data, error } = await supabase.from(table).update(values).eq("id", values.id);
+    const { data, error } = await supabase.from(table).update(values).eq("id", values.id).select();
     return data ?? error;
 };
 
@@ -56,14 +59,4 @@ export const deleteRows = async (table, id) => {
     if (!id) return;
     const { error } = await supabase.from(table).delete().eq("id", id);
     return error;
-};
-
-export const listen = (table, setter) => {
-    supabase
-        .channel("any")
-        .on("postgres_changes", { event: "*", schema: "public" }, (payload) => {
-            console.log("Payload received: ", payload);
-            readRows(table).then((response) => setter(response));
-        })
-        .subscribe();
 };
