@@ -31,6 +31,7 @@ export const signOut = async () => {
         throw error;
     }
 };
+
 export const readRows = async (table, columns = "*") => {
     try {
         const { data, error } = await supabase.from(table).select(columns);

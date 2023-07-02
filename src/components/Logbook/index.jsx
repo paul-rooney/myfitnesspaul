@@ -1,6 +1,7 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Cluster, Icon, Grid, Stack } from "../../primitives";
-import { formatDate, shuffleArray } from "../../utilities";
+import { supabase } from "../../supabase";
+import { formatDate, groupBy, shuffleArray } from "../../utilities";
 import styles from "./logbook.module.scss";
 
 function getRandomCombinations(objects, range1, range2, n) {
@@ -18,7 +19,12 @@ function getRandomCombinations(objects, range1, range2, n) {
         const newKcalSum = kcalSum + currentObject.kcal;
         const newProteinSum = proteinSum + currentObject.protein;
 
-        if (newKcalSum >= range1[0] && newKcalSum <= range1[1] && newProteinSum >= range2[0] && newProteinSum <= range2[1]) {
+        if (
+            newKcalSum >= range1[0] &&
+            newKcalSum <= range1[1] &&
+            newProteinSum >= range2[0] &&
+            newProteinSum <= range2[1]
+        ) {
             const combination = [...arr, currentObject];
             const combinationString = JSON.stringify(combination);
 
@@ -44,8 +50,40 @@ function getRandomCombinations(objects, range1, range2, n) {
     return combinations.slice(0, n);
 }
 
+const readRows = async (table, columns = "*", arr) => {
+    try {
+        const { data, error } = await supabase.from(table).select(columns).in("recipe_id", arr);
+        if (error) {
+            throw new Error(error.message);
+        }
+        return data;
+    } catch (error) {
+        console.error("An error occurred: ", error);
+    }
+};
+
 const Logbook = ({ recipes }) => {
     const [mealPlan, setMealPlan] = useState([]);
+    const [shoppingList, setShoppingList] = useState([]);
+
+    useEffect(() => {
+        if (!mealPlan) return;
+
+        let arr = mealPlan.flat().map((item) => item.id);
+
+        readRows("recipes_ingredients", `quantity, unit, ingredients (id, display_name)`, arr).then((ingredients) => {
+            // let x = groupBy(ingredients, "ingredients.id");
+            let x = ingredients.map((item) => ({
+                id: item.ingredients.id,
+                display_name: item.ingredients.display_name,
+                quantity: item.quantity,
+                unit: item.unit,
+            }));
+            let y = Object.entries(groupBy(x, "id"));
+            console.log(y);
+            setShoppingList(y);
+        });
+    }, [mealPlan]);
 
     const submitHandler = (event) => {
         event.preventDefault();
@@ -94,7 +132,11 @@ const Logbook = ({ recipes }) => {
             <h2 className={styles.heading}>Log</h2>
             <time>{formatDate(new Date(), "en-GB")}</time>
 
-            <button className={styles.addButton} data-operation="create" onClick={() => generateMealPlan([1400, 1550], [120, 160], 7)}>
+            <button
+                className={styles.addButton}
+                data-operation="create"
+                onClick={() => generateMealPlan([1400, 1550], [120, 160], 7)}
+            >
                 <Icon space=".5ch" direction="ltr" icon="plus">
                     Generate meal plan
                 </Icon>
@@ -107,14 +149,19 @@ const Logbook = ({ recipes }) => {
                               <Stack key={index} space="var(--size-2)">
                                   <Cluster justify="space-between" align="baseline">
                                       <h3>Day {index + 1}</h3>
-                                      <button className={styles.addButton} onClick={() => updateMealPlan(index, [1400, 1550], [120, 160], 1)}>
+                                      <button
+                                          className={styles.addButton}
+                                          onClick={() => updateMealPlan(index, [1400, 1550], [120, 160], 1)}
+                                      >
                                           <Icon space=".5ch" direction="ltr" icon="refresh-cw" />
                                       </button>
                                   </Cluster>
                                   {day.map((meal) => (
                                       <Fragment key={`${meal.id}-${index}`}>
                                           <Stack space="var(--size-1)">
-                                              <span style={{ color: "var(--jungle-10)", fontWeight: "600" }}>{meal.display_name}</span>
+                                              <span style={{ color: "var(--jungle-10)", fontWeight: "600" }}>
+                                                  {meal.display_name}
+                                              </span>
                                               <Cluster>
                                                   <span>kcal: {meal.kcal}</span>
 
@@ -136,6 +183,41 @@ const Logbook = ({ recipes }) => {
                               </Stack>
                           </div>
                       ))
+                    : null}
+            </Grid>
+
+            <Grid space="var(--size-2)">
+                {shoppingList.length > 1
+                    ? shoppingList.map(([key, value]) => {
+                          return (
+                              <div style={{ fontSize: "var(--font-size-0)" }} key={value.id}>
+                                  <Cluster space="var(--size-3)">
+                                      <span>{value[0].display_name}</span>
+                                      <span key={value.id}>
+                                          {value.reduce((acc, item) => {
+                                              let q;
+
+                                              switch (item.unit) {
+                                                  case "tsp":
+                                                      q = item.quantity * 5;
+                                                      break;
+                                                  case "tbsp":
+                                                      q = item.quantity * 15;
+                                                      break;
+                                                  case "g":
+                                                  case "ml":
+                                                  default:
+                                                      q = item.quantity;
+                                                      break;
+                                              }
+
+                                              return acc + q;
+                                          }, 0)}
+                                      </span>
+                                  </Cluster>
+                              </div>
+                          );
+                      })
                     : null}
             </Grid>
 
