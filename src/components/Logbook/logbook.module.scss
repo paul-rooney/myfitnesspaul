@@ -3,3 +3,11 @@
     font-size: var(--font-size-fluid-2);
     letter-spacing: var(--font-letterspacing-0);
 }
+
+.label {
+    font-size: var(--font-size-0);
+}
+
+.input {
+    inline-size: max(15ch, 100%);
+}
