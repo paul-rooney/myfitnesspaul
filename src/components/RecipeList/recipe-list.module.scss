@@ -17,7 +17,6 @@
         padding: var(--size-2);
     }
 
-
     .li + .li {
         margin-block-start: var(--size-1);
     }
@@ -121,4 +120,47 @@
 .highlightProtein {
     background-color: var(--jungle-3) !important;
     color: var(--jungle-12) !important;
+}
+
+.fullScreenCard {
+    background-color: var(--gray-2);
+    padding: var(--size-5);
+    position: fixed;
+    overflow-y: auto;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999; /* Adjust the z-index as needed */
+    transition: transform 0.3s ease, opacity 0.3s ease;
+
+    &.animateFullScreen {
+        animation: fadeInScale 0.3s ease;
+    }
+}
+
+@keyframes fadeInScale {
+    from {
+        transform: scale(0);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.sourceGrid {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    gap: var(--size-3);
+    margin-block-end: 2rem;
+
+    p {
+        grid-column: 2;
+    }
+
+    span {
+        display: block;
+    }
 }

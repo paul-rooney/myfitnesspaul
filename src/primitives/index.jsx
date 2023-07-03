@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import feather from './feather-sprite.svg';
-import './index.css';
+import './index.scss';
 
 export const Box = ({
     padding = 'var(--size-3)',
