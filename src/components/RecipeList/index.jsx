@@ -69,6 +69,7 @@ const RecipeList = ({ ingredients, recipes, setRecipes }) => {
                 setRecipeToUpdate(item);
                 dialog = document.getElementById("updateRecipeDialog");
                 dialog.showModal();
+                console.log(item);
                 break;
 
             case "delete":

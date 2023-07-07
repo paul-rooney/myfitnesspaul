@@ -96,9 +96,9 @@ const IngredientList = ({ ingredients, setIngredients }) => {
             display_name: display_name.value.trim(),
             brand_name: brand_name ? brand_name.value.trim() : null,
             kcal: parseInt(kcal.value),
-            carbohydrate: parseFloat(carbohydrate.value),
-            fat: parseFloat(fat.value),
-            protein: parseFloat(protein.value),
+            carbohydrate: parseFloat(carbohydrate.value) || 0,
+            fat: parseFloat(fat.value) || 0,
+            protein: parseFloat(protein.value) || 0,
             avg_unit_weight: avg_unit_weight.value ? parseFloat(avg_unit_weight.value) : null,
         };
 
