@@ -7,7 +7,7 @@ const DeleteIngredientDialog = ({ ingredient, handleSubmit }) => (
         <Stack>
             <Stack space="var(--size-1)">
                 <label className={styles.label} htmlFor="identifier">
-                    Name
+                    Identifier
                 </label>
                 <input defaultValue={ingredient.identifier} id="identifier" disabled />
                 <input defaultValue={ingredient?.id} id="id" type="hidden" />
@@ -50,6 +50,13 @@ const DeleteIngredientDialog = ({ ingredient, handleSubmit }) => (
                     Protein
                 </label>
                 <input className={styles.input} defaultValue={ingredient.protein} id="protein" type="number" min={0} max={100} step={0.1} disabled />
+                <small className={styles.small}>per 100g/100ml</small>
+            </Stack>
+            <Stack space="var(--size-1)">
+                <label className={styles.label} htmlFor="avg_unit_weight">
+                    Average unit weight
+                </label>
+                <input className={styles.input} defaultValue={ingredient.avg_unit_weight} id="avg_unit_weight" type="number" min={0} max={100} step={1} disabled />
                 <small className={styles.small}>per 100g/100ml</small>
             </Stack>
         </Stack>

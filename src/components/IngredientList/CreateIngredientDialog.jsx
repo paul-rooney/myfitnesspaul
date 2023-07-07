@@ -73,7 +73,7 @@ const CreateIngredientDialog = ({ handleSubmit }) => {
                     <label className={styles.label} htmlFor="avg_unit_weight">
                         Average unit weight <span>(optional)</span>
                     </label>
-                    <input className={styles.input} id="avg_unit_weight" type="number" min={0} max={1000} step={0.1} />
+                    <input className={styles.input} id="avg_unit_weight" type="number" min={0} max={1000} step={1} />
                 </Stack>
             </Stack>
         </Dialog>

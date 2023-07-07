@@ -156,6 +156,7 @@ const RecipeCard = ({ recipe, handleClick }) => {
                 </Stack>
             )}
         </details>
+        
     );
 };
 

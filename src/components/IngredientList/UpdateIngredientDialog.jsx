@@ -6,7 +6,12 @@ const UpdateIngredientDialog = ({ ingredient, handleSubmit }) => (
     <Dialog id="updateIngredientDialog" title="Edit ingredient" operation="update" submitHandler={handleSubmit}>
         <Stack>
             <input defaultValue={ingredient.id} id="id" type="hidden" />
-            <input defaultValue={ingredient.identifier} id="identifier" hidden />
+            <Stack space="var(--size-1)">
+                <label className={styles.label} htmlFor="identifier">
+                    Identifier
+                </label>
+                <input defaultValue={ingredient.identifier} id="identifier" />
+            </Stack>
             <Stack space="var(--size-1)">
                 <label className={styles.label} htmlFor="display_name">
                     Display name
@@ -57,7 +62,7 @@ const UpdateIngredientDialog = ({ ingredient, handleSubmit }) => (
                 <label className={styles.label} htmlFor="avg_unit_weight">
                     Average unit weight <span>(optional)</span>
                 </label>
-                <input className={styles.input} defaultValue={ingredient?.avg_unit_weight} id="avg_unit_weight" type="number" min={0} max={1000} step={0.1} />
+                <input className={styles.input} defaultValue={ingredient?.avg_unit_weight} id="avg_unit_weight" type="number" min={0} max={1000} step={1} />
             </Stack>
         </Stack>
     </Dialog>
