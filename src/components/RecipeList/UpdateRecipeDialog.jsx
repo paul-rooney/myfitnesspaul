@@ -7,11 +7,25 @@ import { deleteRows } from "../../supabase";
 const UpdateRecipeDialog = ({ recipe, handleSubmit }) => {
     const clickHandler = (event) => {
         event.preventDefault();
+        const { id, identifier, operation } = event.target.closest("button").dataset;
 
-        const { id } = event.target.dataset;
-        
-        console.log(id);
-        // deleteRows("recipes_ingredients", id);
+        switch (operation) {
+            case "update":
+                console.log("Updating");
+                break;
+
+            case "delete":
+                if (confirm(`Are you sure you want to delete ${identifier}?`)) {
+                    console.log("Deleting...", identifier);
+                    deleteRows("recipes_ingredients", id);
+                } else {
+                    console.log(`${identifier} was not deleted.`);
+                }
+                break;
+
+            default:
+                break;
+        }
     };
 
     return (
@@ -32,17 +46,37 @@ const UpdateRecipeDialog = ({ recipe, handleSubmit }) => {
                 </Stack>
                 {/* {recipe.ingredients.map(item => <span key={item}>{item}</span>)} */}
                 <Stack space="var(--size-2)">
-                    {recipe && recipe.recipes_ingredients &&
+                    {recipe &&
+                        recipe.recipes_ingredients &&
                         recipe.recipes_ingredients.map((item, index) => (
                             <Fragment key={index}>
-                                <Cluster justify="space-between">
-                                    <span>{item.ingredient_identifier}</span>
-                                    <button type="button" data-id={item.ingredient_identifier}  onClick={clickHandler}>
+                                <Cluster space="var(--size-2)">
+                                    <span style={{ marginInlineEnd: "auto" }}>{item.ingredient_identifier}</span>
+                                    <button
+                                        type="button"
+                                        data-id={item.id}
+                                        data-identifier={item.ingredient_identifier}
+                                        data-operation="update"
+                                        onClick={clickHandler}
+                                    >
+                                        <Icon label="Update" icon="edit" />
+                                    </button>
+                                    <button
+                                        type="button"
+                                        data-id={item.id}
+                                        data-identifier={item.ingredient_identifier}
+                                        data-operation="delete"
+                                        onClick={clickHandler}
+                                    >
                                         <Icon label="Remove" icon="trash" />
                                     </button>
                                 </Cluster>
                             </Fragment>
                         ))}
+                </Stack>
+                <Stack>
+                    <label>Add another ingredient</label>
+                    <input />
                 </Stack>
             </Stack>
         </Dialog>
