@@ -1,15 +1,51 @@
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { Cluster, Icon, Stack } from "../../primitives";
 import Dialog from "../Dialog";
 import styles from "./recipe-list.module.scss";
-import { deleteRows } from "../../supabase";
+import { deleteRows, insertRows } from "../../supabase";
 
-const UpdateRecipeDialog = ({ recipe, handleSubmit }) => {
+const UpdateRecipeDialog = ({ recipe, ingredients }) => {
+    const [recipeIngredients, setRecipeIngredients] = useState([]);
+    const [ingredientID, setIngredientID] = useState(null);
+
+    const blurHandler = (event) => {
+        const { value } = event.target;
+        const [item] = ingredients.filter((item) => item.identifier === value);
+
+        if (!item) return;
+
+        const { id } = item;
+
+        setIngredientID(id);
+    };
+
+    const addIngredientToList = (event) => {
+        const form = event.target.closest("form");
+        const { recipe_id, ingredient_id, ingredient_identifier, quantity, unit } = form;
+
+        if (!recipe_id.value || !ingredient_id.value || !ingredient_identifier.value || !quantity.value) return;
+
+        let ingredient = {
+            recipe_id: recipe_id.value,
+            ingredient_id: ingredient_id.value,
+            ingredient_identifier: ingredient_identifier.value,
+            quantity: parseFloat(quantity.value),
+            unit: unit.value ? unit.value : null,
+        };
+
+        setRecipeIngredients((previous) => [ingredient, ...previous]);
+        form.reset();
+    };
+
     const clickHandler = (event) => {
         event.preventDefault();
         const { id, identifier, operation } = event.target.closest("button").dataset;
+        let dialog;
 
         switch (operation) {
+            case "add":
+                break;
+
             case "update":
                 console.log("Updating");
                 break;
@@ -28,8 +64,16 @@ const UpdateRecipeDialog = ({ recipe, handleSubmit }) => {
         }
     };
 
+    const submitHandler = () => {
+        insertRows("recipes_ingredients", recipeIngredients)
+            .catch((error) => console.error(error))
+            .finally(() => {
+                setRecipeIngredients([]);
+            });
+    };
+
     return (
-        <Dialog id="updateRecipeDialog" title="Update recipe" operation="update" submitHandler={handleSubmit}>
+        <Dialog id="updateRecipeDialog" title="Update recipe" submitHandler={submitHandler}>
             <Stack>
                 <input id="id" hidden defaultValue={recipe.id} />
                 <Stack space="var(--size-1)">
@@ -74,10 +118,56 @@ const UpdateRecipeDialog = ({ recipe, handleSubmit }) => {
                             </Fragment>
                         ))}
                 </Stack>
-                <Stack>
-                    <label>Add another ingredient</label>
-                    <input />
-                </Stack>
+                <details>
+                    <summary>Add ingredient</summary>
+                    <Stack>
+                        <div className={styles.addIngredientFieldset}>
+                            <Stack>
+                                <input id="recipe_id" hidden readOnly value={recipe?.id} />
+                                <Stack space="var(--size-1)">
+                                    <label className={styles.label} htmlFor="ingredient_id">
+                                        ingredient_id
+                                    </label>
+                                    <input id="ingredient_id" disabled required value={ingredientID ?? ""} />
+                                </Stack>
+                                <Stack space="var(--size-1)">
+                                    <label>Identifier</label>
+                                    <input id="ingredient_identifier" list="ingredients_list" onBlur={blurHandler} />
+                                    <datalist id="ingredients_list">
+                                        {ingredients.map((item) => (
+                                            <option key={item.id}>{item.identifier}</option>
+                                        ))}
+                                    </datalist>
+                                </Stack>
+                                <Stack space="var(--size-1)">
+                                    <label className={styles.label} htmlFor="quantity">
+                                        Quantity
+                                    </label>
+                                    <input id="quantity" type="number" />
+                                </Stack>
+                                <Stack space="var(--size-1)">
+                                    <label className={styles.label} htmlFor="unit">
+                                        Unit <small>(optional)</small>
+                                    </label>
+                                    <input
+                                        placeholder="Leave blank to use the typical unit weight"
+                                        id="unit"
+                                        list="units"
+                                    />
+                                    <datalist id="units">
+                                        <option>g</option>
+                                        <option>ml</option>
+                                        <option>tbsp</option>
+                                        <option>tsp</option>
+                                    </datalist>
+                                </Stack>
+                                <button type="button" onClick={addIngredientToList}>
+                                    Add
+                                </button>
+                            </Stack>
+                        </div>
+                    </Stack>
+                </details>
             </Stack>
         </Dialog>
     );

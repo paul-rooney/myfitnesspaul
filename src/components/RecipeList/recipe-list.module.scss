@@ -186,3 +186,15 @@
 .pageNumber {}
 
 .servings {}
+
+.addIngredientFieldset {
+    position: relative;
+}
+
+.addIngredientButton {
+    aspect-ratio: 1;
+    inset-block-end: calc(var(--border-size-2) * 2);
+    inset-inline-end: var(--border-size-2);
+    position: absolute;
+    max-block-size: calc(2rem - (var(--border-size-2) * 2));
+}

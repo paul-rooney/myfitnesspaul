@@ -170,7 +170,7 @@ const RecipeList = ({ ingredients, recipes, setRecipes }) => {
             </ul>
             <CreateRecipeDialog handleSubmit={submitHandler} />
             <CreateRecipesIngredientsDialog ingredients={ingredients} recipe={newRecipe} />
-            <UpdateRecipeDialog recipe={recipeToUpdate} handleSubmit={submitHandler} />
+            <UpdateRecipeDialog recipe={recipeToUpdate} ingredients={ingredients} />
             <DeleteRecipeDialog recipe={recipeToDelete} handleSubmit={submitHandler} />
             {/* <Nutribot /> */}
         </>
