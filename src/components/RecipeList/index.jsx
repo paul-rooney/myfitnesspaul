@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Cluster, Icon, Stack } from "../../primitives";
+import { useEffect, useMemo, useState } from "react";
+import { Cluster, Icon } from "../../primitives";
 import { deleteRows, insertRows, readRows, supabase, updateRows } from "../../supabase";
 import RecipeCard from "./RecipeCard";
 import CreateRecipeDialog from "./CreateRecipeDialog";
@@ -8,15 +8,14 @@ import styles from "./recipe-list.module.scss";
 import { calculateMacronutrientTotals, stripNonAlphanumeric } from "../../utilities";
 import usePagination from "../../hooks/usePagination";
 import UpdateRecipeDialog from "./UpdateRecipeDialog";
-import DeleteRecipeDialog from "./DeleteRecipeDialog";
-// import Nutribot from "../Nutribot";
-// import FilterRecipesWidget from "./FilterRecipesWidget";
+import DeleteRecipeDialog from "./Dialogs/DeleteRecipeDialog";
 
 const RecipeList = ({ ingredients, recipes, setRecipes }) => {
     const [filteredRecipes, setFilteredRecipes] = useState([]);
     const [newRecipe, setNewRecipe] = useState({});
     const [recipeToUpdate, setRecipeToUpdate] = useState({});
     const [recipeToDelete, setRecipeToDelete] = useState({});
+    const [sources, setSources] = useState([]);
 
     const itemsPerPage = 10;
     const totalPages = Math.ceil(recipes.length / itemsPerPage);
@@ -24,20 +23,27 @@ const RecipeList = ({ ingredients, recipes, setRecipes }) => {
 
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    const displayedItems = filteredRecipes
-        .sort((a, b) =>
-            new Intl.Collator(undefined, {
-                sensitivity: "base",
-                ignorePunctuation: true,
-            }).compare(a.display_name, b.display_name)
-        )
-        .slice(startIndex, endIndex);
+    const displayedItems = useMemo(
+        () =>
+            filteredRecipes
+                .sort((a, b) =>
+                    new Intl.Collator(undefined, {
+                        sensitivity: "base",
+                        ignorePunctuation: true,
+                    }).compare(a.display_name, b.display_name)
+                )
+                .slice(startIndex, endIndex),
+        [filteredRecipes]
+    );
+
+    useEffect(() => {
+        readRows("recipes_sources").then((data) => setSources(data));
+    }, []);
 
     useEffect(() => {
         supabase
             .channel("any")
-            .on("postgres_changes", { event: "*", schema: "public" }, (payload) => {
-                console.log("Payload received: ", payload);
+            .on("postgres_changes", { event: "*", schema: "public" }, () => {
                 readRows(
                     "recipes",
                     `id, display_name, servings, page_number,
@@ -86,13 +92,14 @@ const RecipeList = ({ ingredients, recipes, setRecipes }) => {
     const submitHandler = (event) => {
         const form = event.target;
         const { operation } = form.dataset;
-        const { id, display_name, servings } = form;
+        const { id, display_name, servings, source } = form;
         let dialog;
         let recipe = [
             {
                 identifier: stripNonAlphanumeric(display_name.value).trim().toLowerCase(),
                 display_name: display_name.value.trim(),
                 servings: servings.value,
+                source: source.value,
             },
         ];
 
@@ -107,10 +114,7 @@ const RecipeList = ({ ingredients, recipes, setRecipes }) => {
 
             case "update":
                 recipe.id = id.value;
-                updateRows("recipes", recipe).then((res) => {
-                    // show updateRecipesIngredientsModal, or load the response some other way
-                    console.log(res[0]);
-                });
+                updateRows("recipes", recipe);
                 setRecipeToUpdate({});
 
                 break;
@@ -156,7 +160,6 @@ const RecipeList = ({ ingredients, recipes, setRecipes }) => {
                 </button>
             </Cluster>
 
-            {/* <FilterRecipesWidget recipes={recipes} /> */}
             <ul className={styles.ul}>
                 {displayedItems.length > 0 ? (
                     displayedItems.map((recipe) => (
@@ -168,11 +171,11 @@ const RecipeList = ({ ingredients, recipes, setRecipes }) => {
                     <li>No recipes found</li>
                 )}
             </ul>
-            <CreateRecipeDialog handleSubmit={submitHandler} />
+
+            <CreateRecipeDialog sources={sources} handleSubmit={submitHandler} />
             <CreateRecipesIngredientsDialog ingredients={ingredients} recipe={newRecipe} />
             <UpdateRecipeDialog recipe={recipeToUpdate} ingredients={ingredients} />
             <DeleteRecipeDialog recipe={recipeToDelete} handleSubmit={submitHandler} />
-            {/* <Nutribot /> */}
         </>
     );
 };

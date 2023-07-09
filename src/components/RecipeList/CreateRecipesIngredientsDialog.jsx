@@ -1,8 +1,8 @@
 import { useState } from "react";
+import { deleteRows, insertRows } from "../../supabase";
 import { Stack } from "../../primitives";
 import Dialog from "../Dialog";
 import styles from "./recipe-list.module.scss";
-import { deleteRows, insertRows } from "../../supabase";
 
 const CreateRecipesIngredientsDialog = ({ recipe, ingredients }) => {
     const [recipeIngredients, setRecipeIngredients] = useState([]);
@@ -49,11 +49,11 @@ const CreateRecipesIngredientsDialog = ({ recipe, ingredients }) => {
 
     const closeHandler = (event) => {
         const { returnValue } = event.target;
-        
+
         if (returnValue === "close") {
             console.log(returnValue);
             console.log(`Removed recipe with id ${recipe.id}`);
-            deleteRows("recipes", recipe.id)
+            deleteRows("recipes", recipe.id);
             setRecipeIngredients([]);
         }
     };
@@ -69,56 +69,24 @@ const CreateRecipesIngredientsDialog = ({ recipe, ingredients }) => {
             <Stack space="var(--size-0)">
                 {recipeIngredients &&
                     recipeIngredients.map((item, index) => (
-                        <p
-                            style={{ fontSize: "var(--size-0)", marginBlock: "0" }}
-                            key={index}
-                        >
+                        <p style={{ fontSize: "var(--size-0)", marginBlock: "0" }} key={index}>
                             {item.ingredient_identifier}
                         </p>
                     ))}
             </Stack>
             <Stack>
+                <input id="recipe_id" hidden value={recipe?.id} />
                 <Stack space="var(--size-1)">
-                    <label
-                        className={styles.label}
-                        htmlFor="recipe_id"
-                    >
-                        recipe_id
-                    </label>
-                    <input
-                        id="recipe_id"
-                        disabled
-                        required
-                        value={recipe?.id}
-                    />
-                </Stack>
-                <Stack space="var(--size-1)">
-                    <label
-                        className={styles.label}
-                        htmlFor="ingredient_id"
-                    >
+                    <label className={styles.label} htmlFor="ingredient_id">
                         ingredient_id
                     </label>
-                    <input
-                        id="ingredient_id"
-                        disabled
-                        required
-                        value={ingredientID ?? ""}
-                    />
+                    <input id="ingredient_id" disabled required value={ingredientID ?? ""} />
                 </Stack>
-
                 <Stack space="var(--size-1)">
-                    <label
-                        className={styles.label}
-                        htmlFor="ingredient_identifier"
-                    >
-                        ingredient_identifier
+                    <label className={styles.label} htmlFor="ingredient_identifier">
+                        Ingredient
                     </label>
-                    <input
-                        id="ingredient_identifier"
-                        list="ingredients_list"
-                        onBlur={blurHandler}
-                    />
+                    <input id="ingredient_identifier" list="ingredients_list" onBlur={blurHandler} />
                     <datalist id="ingredients_list">
                         {ingredients.map((item) => (
                             <option key={item.id}>{item.identifier}</option>
@@ -126,29 +94,16 @@ const CreateRecipesIngredientsDialog = ({ recipe, ingredients }) => {
                     </datalist>
                 </Stack>
                 <Stack space="var(--size-1)">
-                    <label
-                        className={styles.label}
-                        htmlFor="quantity"
-                    >
+                    <label className={styles.label} htmlFor="quantity">
                         Quantity
                     </label>
-                    <input
-                        id="quantity"
-                        type="number"
-                    />
+                    <input id="quantity" type="number" />
                 </Stack>
                 <Stack space="var(--size-1)">
-                    <label
-                        className={styles.label}
-                        htmlFor="unit"
-                    >
+                    <label className={styles.label} htmlFor="unit">
                         Unit <small>(optional)</small>
                     </label>
-                    <input
-                        placeholder="Leave blank to use the typical unit weight"
-                        id="unit"
-                        list="units"
-                    />
+                    <input placeholder="Leave blank to use the typical unit weight" id="unit" list="units" />
                     <datalist id="units">
                         <option>g</option>
                         <option>ml</option>
@@ -156,10 +111,7 @@ const CreateRecipesIngredientsDialog = ({ recipe, ingredients }) => {
                         <option>tsp</option>
                     </datalist>
                 </Stack>
-                <button
-                    onClick={addIngredientToList}
-                    type="button"
-                >
+                <button className={styles.addIngredientButton} onClick={addIngredientToList} type="button">
                     Add
                 </button>
             </Stack>

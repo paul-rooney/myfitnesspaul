@@ -81,6 +81,14 @@ const RecipeCard = ({ recipe, handleClick }) => {
                         >
                             <Icon icon="edit-3" />
                         </button>
+                        <button
+                            className={styles.deleteButton}
+                            data-id={id}
+                            data-operation="delete"
+                            onClick={handleClick}
+                        >
+                            <Icon icon="trash" />
+                        </button>
                         <button className={styles.expandButton} onClick={toggleFullScreen}>
                             <Icon icon="maximize-2" />
                         </button>

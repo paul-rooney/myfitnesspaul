@@ -1,8 +1,8 @@
 import { Fragment, useState } from "react";
+import { deleteRows, insertRows } from "../../supabase";
 import { Cluster, Icon, Stack } from "../../primitives";
 import Dialog from "../Dialog";
 import styles from "./recipe-list.module.scss";
-import { deleteRows, insertRows } from "../../supabase";
 
 const UpdateRecipeDialog = ({ recipe, ingredients }) => {
     const [recipeIngredients, setRecipeIngredients] = useState([]);
@@ -39,23 +39,19 @@ const UpdateRecipeDialog = ({ recipe, ingredients }) => {
 
     const clickHandler = (event) => {
         event.preventDefault();
+
         const { id, identifier, operation } = event.target.closest("button").dataset;
-        let dialog;
 
         switch (operation) {
             case "add":
                 break;
 
             case "update":
-                console.log("Updating");
                 break;
 
             case "delete":
-                if (confirm(`Are you sure you want to delete ${identifier}?`)) {
-                    console.log("Deleting...", identifier);
+                if (confirm(`Delete ${identifier}?`)) {
                     deleteRows("recipes_ingredients", id);
-                } else {
-                    console.log(`${identifier} was not deleted.`);
                 }
                 break;
 
@@ -65,6 +61,7 @@ const UpdateRecipeDialog = ({ recipe, ingredients }) => {
     };
 
     const submitHandler = () => {
+        // this handler being called within this component is preventing the handler running for changes to display name and servings
         insertRows("recipes_ingredients", recipeIngredients)
             .catch((error) => console.error(error))
             .finally(() => {
@@ -118,18 +115,14 @@ const UpdateRecipeDialog = ({ recipe, ingredients }) => {
                             </Fragment>
                         ))}
                 </Stack>
+                <hr />
                 <details>
                     <summary>Add ingredient</summary>
                     <Stack>
                         <div className={styles.addIngredientFieldset}>
                             <Stack>
                                 <input id="recipe_id" hidden readOnly value={recipe?.id} />
-                                <Stack space="var(--size-1)">
-                                    <label className={styles.label} htmlFor="ingredient_id">
-                                        ingredient_id
-                                    </label>
-                                    <input id="ingredient_id" disabled required value={ingredientID ?? ""} />
-                                </Stack>
+                                <input id="ingredient_id" hidden value={ingredientID ?? ""} />
                                 <Stack space="var(--size-1)">
                                     <label>Identifier</label>
                                     <input id="ingredient_identifier" list="ingredients_list" onBlur={blurHandler} />
@@ -161,7 +154,11 @@ const UpdateRecipeDialog = ({ recipe, ingredients }) => {
                                         <option>tsp</option>
                                     </datalist>
                                 </Stack>
-                                <button type="button" onClick={addIngredientToList}>
+                                <button
+                                    className={styles.addIngredientButton}
+                                    type="button"
+                                    onClick={addIngredientToList}
+                                >
                                     Add
                                 </button>
                             </Stack>

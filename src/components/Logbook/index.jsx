@@ -64,6 +64,7 @@ const readRows = async (table, columns = "*", arr) => {
 
 const Logbook = ({ recipes }) => {
     const [mealPlan, setMealPlan] = useState([]);
+    // const [lockedMeals, setLockedMeals] = useState([]);
     const [shoppingList, setShoppingList] = useState([]);
 
     useEffect(() => {
@@ -83,7 +84,49 @@ const Logbook = ({ recipes }) => {
         generateMealPlan([minKcal.value, maxKcal.value], [minProtein.value, maxProtein.value], numDays.value);
     };
 
+    // const generateMealPlan = async (range1, range2, n) => {
+    //     // check if any meals have been locked in place
+    //     let lockedMeals = mealPlan
+    //         .map((day, dayIndex) => {
+    //             return day.map((meal) => {
+    //                 if (meal.is_locked) {
+    //                     return [dayIndex, day.indexOf(meal), meal];
+    //                 }
+    //             });
+    //         })
+    //         .flat()
+    //         .filter((meal) => meal !== undefined);
+    //     console.log(lockedMeals);
+
+    //     const numbers = recipes.map((recipe) => ({
+    //         id: recipe.id,
+    //         display_name: recipe.display_name,
+    //         kcal: recipe.total_kcal,
+    //         protein: recipe.total_protein,
+    //     }));
+
+    //     const combination = getRandomCombinations(numbers, range1, range2, n);
+
+    //     if (combination) {
+    //         // const newArr = [...mealPlan];
+    //         // newArr[index];
+
+    //         setMealPlan(combination);
+    //     }
+    // };
+
     const generateMealPlan = async (range1, range2, n) => {
+        const lockedMeals = mealPlan
+            .map((day, dayIndex) => {
+                return day.map((meal, mealIndex) => {
+                    if (meal.is_locked) {
+                        return { dayIndex, mealIndex, meal };
+                    }
+                });
+            })
+            .flat()
+            .filter((meal) => meal !== undefined);
+
         const numbers = recipes.map((recipe) => ({
             id: recipe.id,
             display_name: recipe.display_name,
@@ -91,16 +134,39 @@ const Logbook = ({ recipes }) => {
             protein: recipe.total_protein,
         }));
 
-        const combination = getRandomCombinations(numbers, range1, range2, n);
+        const availableMeals = numbers.filter(
+            (number) =>
+                !lockedMeals.some(
+                    (lockedMeal) => lockedMeal.dayIndex === number.dayIndex && lockedMeal.mealIndex === number.mealIndex
+                )
+        );
 
-        if (combination) {
-            setMealPlan(combination);
-        } else {
-            console.log("Nothing returned");
+        const combinations = [];
+        for (let i = 0; i < n; i++) {
+            const combination = [];
+            const lockedMealsForDay = lockedMeals.filter((lockedMeal) => lockedMeal.dayIndex === i);
+
+            for (let j = 0; j < mealPlan[i].length; j++) {
+                const lockedMeal = lockedMealsForDay.find((meal) => meal.mealIndex === j);
+
+                if (lockedMeal) {
+                    combination.push(lockedMeal.meal);
+                } else {
+                    const randomIndex = Math.floor(Math.random() * availableMeals.length);
+                    combination.push(availableMeals[randomIndex]);
+                    availableMeals.splice(randomIndex, 1); // Remove the selected meal from available meals
+                }
+            }
+
+            combinations.push(combination);
         }
+
+        setMealPlan(combinations);
     };
 
     const updateMealPlan = async (index, range1, range2, n) => {
+        // check if any meals have been locked in place
+
         const numbers = recipes.map((recipe) => ({
             id: recipe.id,
             display_name: recipe.display_name,
@@ -141,6 +207,32 @@ const Logbook = ({ recipes }) => {
                 setShoppingList(Object.entries(groupBy(groupedMealsWithIngredients, "ingredient_display_name")));
             }
         );
+    };
+
+    // const lockMeal = (dayIndex, mealIndex) => {
+    //     const isLocked = mealPlan[dayIndex][mealIndex].is_locked ? false : true;
+    //     const newArr = [...mealPlan];
+    //     newArr[dayIndex][mealIndex].is_locked = isLocked;
+
+    //     setMealPlan(newArr);
+    // };
+
+    const lockMeal = (dayIndex, mealIndex) => {
+        const isLocked = mealPlan[dayIndex][mealIndex].is_locked ? false : true;
+        const newArr = [...mealPlan];
+
+        const updatedDay = newArr[dayIndex].map((meal, index) => {
+            if (index === mealIndex) {
+                return {
+                    ...meal,
+                    is_locked: isLocked,
+                };
+            }
+            return meal;
+        });
+
+        newArr[dayIndex] = updatedDay;
+        setMealPlan(newArr);
     };
 
     return (
@@ -219,20 +311,25 @@ const Logbook = ({ recipes }) => {
                 </form>
                 <Grid min="150px">
                     {mealPlan.length > 0
-                        ? mealPlan.map((day, index) => (
-                              <div style={{ fontSize: "var(--font-size-0)" }} key={`${day}-${index}`}>
-                                  <Stack key={index} space="var(--size-2)">
+                        ? mealPlan.map((day, dayIndex) => (
+                              <div style={{ fontSize: "var(--font-size-0)" }} key={`${day}-${dayIndex}`}>
+                                  <Stack key={dayIndex} space="var(--size-2)">
                                       <Cluster justify="space-between" align="baseline">
-                                          <h3>Day {index + 1}</h3>
+                                          <h3>Day {dayIndex + 1}</h3>
                                           <button
                                               className={styles.addButton}
-                                              onClick={() => updateMealPlan(index, [1400, 1550], [120, 160], 1)}
+                                              onClick={() => updateMealPlan(dayIndex, [1400, 1550], [120, 160], 1)}
                                           >
                                               <Icon space=".5ch" direction="ltr" icon="refresh-cw" />
                                           </button>
                                       </Cluster>
-                                      {day.map((meal) => (
-                                          <Fragment key={`${meal.id}-${index}`}>
+                                      {day.map((meal, mealIndex) => (
+                                          <button
+                                              key={`${meal.id}-${dayIndex}`}
+                                              type="button"
+                                              onClick={() => lockMeal(dayIndex, mealIndex)}
+                                              style={meal?.is_locked ? { backgroundColor: "blue" } : {}}
+                                          >
                                               <Stack space="var(--size-1)">
                                                   <span style={{ color: "var(--jungle-10)", fontWeight: "600" }}>
                                                       {meal.display_name}
@@ -243,7 +340,7 @@ const Logbook = ({ recipes }) => {
                                                       <span>Protein: {meal.protein}</span>
                                                   </Cluster>
                                               </Stack>
-                                          </Fragment>
+                                          </button>
                                       ))}
                                       <Cluster>
                                           <Stack>

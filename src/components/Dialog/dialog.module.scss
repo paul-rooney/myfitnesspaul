@@ -96,8 +96,9 @@ html:has(dialog[open]) {
     }
 }
 
-.dialog [data-operation="delete"] .footer {
-    background-color: var(--red-7) !important;
+.dialog [data-operation="delete"] .header {
+    background-color: var(--red-9) !important;
+    color: var(--red-1) !important;
 
     .cancelButton {
         background-color: var(--stone-6) !important;
