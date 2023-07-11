@@ -23,7 +23,12 @@ const CreateRecipeDialog = ({ sources, handleSubmit }) => (
                 </label>
                 <input id="source" list="sources_list" />
                 <datalist id="sources_list">
-                    {sources && sources.map(({ id, source }) => <option key={id} value={id}>{source}</option>)}
+                    {sources &&
+                        sources.map(({ id, source }) => (
+                            <option key={id} value={id}>
+                                {source}
+                            </option>
+                        ))}
                 </datalist>
             </Stack>
         </Stack>
