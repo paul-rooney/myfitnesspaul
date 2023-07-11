@@ -23,18 +23,14 @@ const RecipeList = ({ ingredients, recipes, setRecipes }) => {
 
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    const displayedItems = useMemo(
-        () =>
-            filteredRecipes
-                .sort((a, b) =>
-                    new Intl.Collator(undefined, {
-                        sensitivity: "base",
-                        ignorePunctuation: true,
-                    }).compare(a.display_name, b.display_name)
-                )
-                .slice(startIndex, endIndex),
-        [filteredRecipes]
-    );
+    const displayedItems = filteredRecipes
+        .sort((a, b) =>
+            new Intl.Collator(undefined, {
+                sensitivity: "base",
+                ignorePunctuation: true,
+            }).compare(a.display_name, b.display_name)
+        )
+        .slice(startIndex, endIndex);
 
     useEffect(() => {
         readRows("recipes_sources").then((data) => setSources(data));
@@ -149,9 +145,7 @@ const RecipeList = ({ ingredients, recipes, setRecipes }) => {
                 <button disabled={currentPage === 1} onClick={previousPage}>
                     Previous
                 </button>
-                <span style={{ fontSize: "var(--font-size-0)", minInlineSize: "3em", textAlign: "center" }}>
-                    {currentPage}
-                </span>
+                <span style={{ fontSize: "var(--font-size-0)", minInlineSize: "3em", textAlign: "center" }}>{currentPage}</span>
                 <button disabled={currentPage === totalPages} onClick={nextPage}>
                     Next
                 </button>
@@ -172,10 +166,10 @@ const RecipeList = ({ ingredients, recipes, setRecipes }) => {
                 )}
             </ul>
 
-            <CreateRecipeDialog sources={sources} handleSubmit={submitHandler} />
-            <CreateRecipesIngredientsDialog ingredients={ingredients} recipe={newRecipe} />
+            {/* <CreateRecipeDialog sources={sources} handleSubmit={submitHandler} /> */}
+            {/* <CreateRecipesIngredientsDialog ingredients={ingredients} recipe={newRecipe} /> */}
             <UpdateRecipeDialog recipe={recipeToUpdate} ingredients={ingredients} />
-            <DeleteRecipeDialog recipe={recipeToDelete} handleSubmit={submitHandler} />
+            {/* <DeleteRecipeDialog recipe={recipeToDelete} handleSubmit={submitHandler} /> */}
         </>
     );
 };

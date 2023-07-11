@@ -73,6 +73,7 @@ const UpdateRecipeDialog = ({ recipe, ingredients }) => {
         <Dialog id="updateRecipeDialog" title="Update recipe" submitHandler={submitHandler}>
             <Stack>
                 <input id="id" hidden defaultValue={recipe.id} />
+                <input id="source" hidden defaultValue={recipe.source} />
                 <Stack space="var(--size-1)">
                     <label className={styles.label} htmlFor="display_name">
                         Display name
@@ -85,7 +86,6 @@ const UpdateRecipeDialog = ({ recipe, ingredients }) => {
                     </label>
                     <input id="servings" type="number" required defaultValue={recipe.servings} />
                 </Stack>
-                {/* {recipe.ingredients.map(item => <span key={item}>{item}</span>)} */}
                 <Stack space="var(--size-2)">
                     {recipe &&
                         recipe.recipes_ingredients &&
@@ -93,22 +93,10 @@ const UpdateRecipeDialog = ({ recipe, ingredients }) => {
                             <Fragment key={index}>
                                 <Cluster space="var(--size-2)">
                                     <span style={{ marginInlineEnd: "auto" }}>{item.ingredient_identifier}</span>
-                                    <button
-                                        type="button"
-                                        data-id={item.id}
-                                        data-identifier={item.ingredient_identifier}
-                                        data-operation="update"
-                                        onClick={clickHandler}
-                                    >
+                                    <button type="button" data-id={item.id} data-identifier={item.ingredient_identifier} data-operation="update" onClick={clickHandler}>
                                         <Icon label="Update" icon="edit" />
                                     </button>
-                                    <button
-                                        type="button"
-                                        data-id={item.id}
-                                        data-identifier={item.ingredient_identifier}
-                                        data-operation="delete"
-                                        onClick={clickHandler}
-                                    >
+                                    <button type="button" data-id={item.id} data-identifier={item.ingredient_identifier} data-operation="delete" onClick={clickHandler}>
                                         <Icon label="Remove" icon="trash" />
                                     </button>
                                 </Cluster>
@@ -118,52 +106,42 @@ const UpdateRecipeDialog = ({ recipe, ingredients }) => {
                 <hr />
                 <details>
                     <summary>Add ingredient</summary>
-                    <Stack>
-                        <div className={styles.addIngredientFieldset}>
-                            <Stack>
-                                <input id="recipe_id" hidden readOnly value={recipe?.id} />
-                                <input id="ingredient_id" hidden value={ingredientID ?? ""} />
-                                <Stack space="var(--size-1)">
-                                    <label>Identifier</label>
-                                    <input id="ingredient_identifier" list="ingredients_list" onBlur={blurHandler} />
-                                    <datalist id="ingredients_list">
-                                        {ingredients.map((item) => (
-                                            <option key={item.id}>{item.identifier}</option>
-                                        ))}
-                                    </datalist>
-                                </Stack>
-                                <Stack space="var(--size-1)">
-                                    <label className={styles.label} htmlFor="quantity">
-                                        Quantity
-                                    </label>
-                                    <input id="quantity" type="number" />
-                                </Stack>
-                                <Stack space="var(--size-1)">
-                                    <label className={styles.label} htmlFor="unit">
-                                        Unit <small>(optional)</small>
-                                    </label>
-                                    <input
-                                        placeholder="Leave blank to use the typical unit weight"
-                                        id="unit"
-                                        list="units"
-                                    />
-                                    <datalist id="units">
-                                        <option>g</option>
-                                        <option>ml</option>
-                                        <option>tbsp</option>
-                                        <option>tsp</option>
-                                    </datalist>
-                                </Stack>
-                                <button
-                                    className={styles.addIngredientButton}
-                                    type="button"
-                                    onClick={addIngredientToList}
-                                >
-                                    Add
-                                </button>
+                    <div className={styles.addIngredientFieldset}>
+                        <Stack>
+                            <input id="recipe_id" hidden readOnly defaultValue={recipe?.id} />
+                            <input id="ingredient_id" hidden defaultValue={ingredientID ?? ""} />
+                            <Stack space="var(--size-1)">
+                                <label>Identifier</label>
+                                <input id="ingredient_identifier" list="ingredients_list" onBlur={blurHandler} />
+                                <datalist id="ingredients_list">
+                                    {ingredients.map((item) => (
+                                        <option key={item.id}>{item.identifier}</option>
+                                    ))}
+                                </datalist>
                             </Stack>
-                        </div>
-                    </Stack>
+                            <Stack space="var(--size-1)">
+                                <label className={styles.label} htmlFor="quantity">
+                                    Quantity
+                                </label>
+                                <input id="quantity" type="number" />
+                            </Stack>
+                            <Stack space="var(--size-1)">
+                                <label className={styles.label} htmlFor="unit">
+                                    Unit <small>(optional)</small>
+                                </label>
+                                <input placeholder="Leave blank to use the typical unit weight" id="unit" list="units" />
+                                <datalist id="units">
+                                    <option>g</option>
+                                    <option>ml</option>
+                                    <option>tbsp</option>
+                                    <option>tsp</option>
+                                </datalist>
+                            </Stack>
+                            <button className={styles.addIngredientButton} type="button" onClick={addIngredientToList}>
+                                Add
+                            </button>
+                        </Stack>
+                    </div>
                 </details>
             </Stack>
         </Dialog>

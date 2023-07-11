@@ -5,6 +5,7 @@ import styles from "./delete-recipe-dialog.module.scss";
 const DeleteRecipeDialog = ({ recipe, handleSubmit }) => (
     <Dialog id="deleteRecipeDialog" title="Delete recipe" operation="delete" submitHandler={handleSubmit}>
         <Stack>
+            <input id="source" hidden defaultValue={recipe.source} />
             <input id="id" hidden defaultValue={recipe.id} />
             <Stack space="var(--size-1)">
                 <label className={styles.label} htmlFor="display_name">
