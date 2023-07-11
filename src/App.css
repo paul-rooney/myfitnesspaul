@@ -1,6 +1,6 @@
 body {
-    background-color: var(--stone-3);
-    color: var(--stone-11);
+    background-color: var(--gray-3);
+    color: var(--gray-11);
     font-family: var(--font-sans);
     margin: 0;
 }

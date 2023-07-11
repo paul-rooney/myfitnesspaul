@@ -286,7 +286,7 @@ const Logbook = ({ recipes }) => {
                                       {day.map((meal, mealIndex) => (
                                           <button key={`${meal.id}-${dayIndex}`} type="button" onClick={() => lockMeal(dayIndex, mealIndex)} style={meal?.is_locked ? { backgroundColor: "blue" } : {}}>
                                               <Stack space="var(--size-1)">
-                                                  <span style={{ color: "var(--jungle-10)", fontWeight: "600" }}>{meal.display_name}</span>
+                                                  <span style={{ color: "var(--blue-10)", fontWeight: "600" }}>{meal.display_name}</span>
                                                   <Cluster>
                                                       <span>kcal: {meal.kcal}</span>
 

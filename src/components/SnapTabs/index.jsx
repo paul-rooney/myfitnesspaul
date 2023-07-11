@@ -9,27 +9,21 @@ const SnapTabs = ({ ingredients, setIngredients, recipes, setRecipes }) => {
         <>
             <div className={styles.tabs}>
                 <section className={`${styles.section} ${styles.scroll}`}>
-                    <article id="log" className={styles.article}>
-                        <Box>
-                            <Stack>
-                                {/* <Logbook recipes={recipes} /> */}
-                            </Stack>
-                        </Box>
-                    </article>
-                    <article id="recipes" className={styles.article}>
-                        <Box>
-                            <Stack>
-                                <RecipeList ingredients={ingredients} setIngredients={setIngredients} recipes={recipes} setRecipes={setRecipes} />
-                            </Stack>
-                        </Box>
-                    </article>
-                    <article id="ingredients" className={styles.article}>
-                        <Box>
-                            <Stack>
-                                {/* <IngredientList ingredients={ingredients} setIngredients={setIngredients} /> */}
-                            </Stack>
-                        </Box>
-                    </article>
+                    <Box id="log" className={styles.article}>
+                        <Stack>
+                            <Logbook recipes={recipes} />
+                        </Stack>
+                    </Box>
+                    <Box id="recipes" className={styles.article}>
+                        <Stack>
+                            <RecipeList ingredients={ingredients} setIngredients={setIngredients} recipes={recipes} setRecipes={setRecipes} />
+                        </Stack>
+                    </Box>
+                    <Box id="ingredients" className={styles.article}>
+                        <Stack>
+                            <IngredientList ingredients={ingredients} setIngredients={setIngredients} />
+                        </Stack>
+                    </Box>
                 </section>
             </div>
             <footer className={`${styles.footer} ${styles.scroll}`}>

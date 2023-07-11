@@ -1,16 +1,12 @@
-import { useEffect, useRef, useState } from 'react';
-import feather from './feather-sprite.svg';
-import './index.scss';
+import { useEffect, useRef, useState } from "react";
+import feather from "./feather-sprite.svg";
+import "./index.scss";
 
-export const Box = ({
-    padding = 'var(--size-3)',
-    borderWidth = '0',
-    children,
-}) => {
-    const i = `box-${[padding, borderWidth].join('-')}`;
+export const Box = ({ padding = "var(--size-3)", borderWidth = "0", children, ...attributes }) => {
+    const i = `box-${[padding, borderWidth].join("-")}`;
 
     if (!document.getElementById(i)) {
-        let style = document.createElement('style');
+        let style = document.createElement("style");
 
         style.id = i;
         style.innerHTML = `
@@ -19,30 +15,24 @@ export const Box = ({
                 border: ${borderWidth} solid;
             }
         `
-            .replace(/\s\s+/g, ' ')
+            .replace(/\s\s+/g, " ")
             .trim();
 
         document.head.appendChild(style);
     }
 
     return (
-        <div className="box" data-i={i}>
+        <div {...attributes} className={`box ${attributes.className ?? ""}`.trim()} data-i={i}>
             {children}
         </div>
     );
 };
 
-export const Center = ({
-    max = 'var(--size-content-3)',
-    andText = false,
-    gutters = '0',
-    intrinsic = false,
-    children,
-}) => {
-    const i = `center-${[max, andText, gutters, intrinsic].join('-')}`;
+export const Center = ({ max = "var(--size-content-3)", andText = false, gutters = "0", intrinsic = false, children, ...attributes }) => {
+    const i = `center-${[max, andText, gutters, intrinsic].join("-")}`;
 
     if (!document.getElementById(i)) {
-        let style = document.createElement('style');
+        let style = document.createElement("style");
 
         style.id = i;
         style.innerHTML = `
@@ -52,13 +42,13 @@ export const Center = ({
                     gutters
                         ? `
                 padding-inline: ${gutters};`
-                        : ''
+                        : ""
                 }
                 ${
                     andText
                         ? `
                 text-align: center;`
-                        : ''
+                        : ""
                 }
                 ${
                     intrinsic
@@ -66,33 +56,28 @@ export const Center = ({
                 display: flex;
                 flex-direction: column;
                 align-items: center;`
-                        : ''
+                        : ""
                 }
             }
         `
-            .replace(/\s\s+/g, ' ')
+            .replace(/\s\s+/g, " ")
             .trim();
 
         document.head.appendChild(style);
     }
 
     return (
-        <div className="center" data-i={i}>
+        <div {...attributes} className={`center ${attributes.className ?? ""}`.trim()} data-i={i}>
             {children}
         </div>
     );
 };
 
-export const Cluster = ({
-    justify = 'flex-start',
-    align = 'flex-start',
-    space = 'var(--size-3)',
-    children,
-}) => {
-    const i = `cluster-${[justify, align, space].join('-')}`;
+export const Cluster = ({ justify = "flex-start", align = "flex-start", space = "var(--size-3)", children, ...attributes }) => {
+    const i = `cluster-${[justify, align, space].join("-")}`;
 
     if (!document.getElementById(i)) {
-        let style = document.createElement('style');
+        let style = document.createElement("style");
 
         style.id = i;
         style.innerHTML = `
@@ -102,36 +87,30 @@ export const Cluster = ({
                 gap: ${space};
             }
         `
-            .replace(/\s\s+/g, ' ')
+            .replace(/\s\s+/g, " ")
             .trim();
 
         document.head.appendChild(style);
     }
 
     return (
-        <div className="cluster" data-i={i}>
+        <div {...attributes} className={`cluster ${attributes.className ?? ""}`.trim()} data-i={i}>
             {children}
         </div>
     );
 };
 
-export const Cover = ({
-    centered = 'h1',
-    space = 'var(--size-3)',
-    minBlockSize = '100vh',
-    noPad = false,
-    children,
-}) => {
-    const i = `cover-${[centered, space, minBlockSize, noPad].join('-')}`;
+export const Cover = ({ centered = "h1", space = "var(--size-3)", minBlockSize = "100vh", noPad = false, children, ...attributes }) => {
+    const i = `cover-${[centered, space, minBlockSize, noPad].join("-")}`;
 
     if (!document.getElementById(i)) {
-        let style = document.createElement('style');
+        let style = document.createElement("style");
 
         style.id = i;
         style.innerHTML = `
             [data-i="${i}"] {
                 min-block-size: ${minBlockSize};
-                padding: ${noPad ? '0' : space};
+                padding: ${noPad ? "0" : space};
             }
             
             [data-i="${i}"] > * {
@@ -150,25 +129,25 @@ export const Cover = ({
                 margin-block: auto;
             }
         `
-            .replace(/\s\s+/g, ' ')
+            .replace(/\s\s+/g, " ")
             .trim();
 
         document.head.appendChild(style);
     }
 
     return (
-        <div className="cover" data-i={i}>
+        <div {...attributes} className={`cover ${attributes.className ?? ""}`.trim()} data-i={i}>
             {children}
         </div>
     );
 };
 
-export const Frame = ({ ratio = '16:9', children }) => {
-    const i = `frame-${[ratio].join('-')}`;
+export const Frame = ({ ratio = "16:9", children, ...attributes }) => {
+    const i = `frame-${[ratio].join("-")}`;
 
     if (!document.getElementById(i)) {
-        let aspectRatio = ratio.split(':');
-        let style = document.createElement('style');
+        let aspectRatio = ratio.split(":");
+        let style = document.createElement("style");
 
         style.id = i;
         style.innerHTML = `
@@ -176,24 +155,24 @@ export const Frame = ({ ratio = '16:9', children }) => {
                 aspect-ratio: ${aspectRatio[0]} / ${aspectRatio[1]};
             }
         `
-            .replace(/\s\s+/g, ' ')
+            .replace(/\s\s+/g, " ")
             .trim();
 
         document.head.appendChild(style);
     }
 
     return (
-        <div className="frame" data-i={i}>
+        <div {...attributes} className={`frame ${attributes.className ?? ""}`.trim()} data-i={i}>
             {children}
         </div>
     );
 };
 
-export const Grid = ({ space = 'var(--size-3)', min = '250px', children }) => {
-    const i = `grid-${[space, min].join('-')}`;
+export const Grid = ({ space = "var(--size-3)", min = "250px", children, ...attributes }) => {
+    const i = `grid-${[space, min].join("-")}`;
 
     if (!document.getElementById(i)) {
-        let style = document.createElement('style');
+        let style = document.createElement("style");
 
         style.id = i;
         style.innerHTML = `
@@ -202,33 +181,27 @@ export const Grid = ({ space = 'var(--size-3)', min = '250px', children }) => {
                 grid-template-columns: repeat(auto-fill, minmax(min(${min}, 100%), 1fr));
             }
         `
-            .replace(/\s\s+/g, ' ')
+            .replace(/\s\s+/g, " ")
             .trim();
 
         document.head.appendChild(style);
     }
 
     return (
-        <div className="grid" data-i={i}>
+        <div {...attributes} className={`grid ${attributes.className ?? ""}`.trim()} data-i={i}>
             {children}
         </div>
     );
 };
 
-export const Icon = ({
-    space = null,
-    label = null,
-    direction = 'rtl',
-    icon,
-    children,
-}) => {
-    let i = '';
+export const Icon = ({ space = null, label = null, direction = "rtl", icon, children, ...attributes }) => {
+    let i = "";
 
     if (space) {
-        i = `icon-${[space, label, direction].join('-')}`;
+        i = `icon-${[space, label, direction].join("-")}`;
 
         if (!document.getElementById(i)) {
-            let style = document.createElement('style');
+            let style = document.createElement("style");
 
             style.id = i;
             style.innerHTML = `
@@ -241,7 +214,7 @@ export const Icon = ({
                     margin-inline-end: ${space};
                 }
             `
-                .replace(/\s\s+/g, ' ')
+                .replace(/\s\s+/g, " ")
                 .trim();
 
             document.head.appendChild(style);
@@ -249,13 +222,7 @@ export const Icon = ({
     }
 
     return (
-        <span
-            className="icon"
-            data-i={i}
-            dir={direction}
-            role="img"
-            aria-label={label}
-        >
+        <span {...attributes} className={`icon ${attributes.className ?? ""}`.trim()} data-i={i} dir={direction} role="img" aria-label={label}>
             <svg className="icon">
                 <use href={`${feather}#${icon}`} />
             </svg>
@@ -264,16 +231,11 @@ export const Icon = ({
     );
 };
 
-export const Imposter = ({
-    breakout = false,
-    margin = '0px',
-    fixed = false,
-    children,
-}) => {
-    const i = `imposter-${[breakout, margin, fixed].join('-')}`;
+export const Imposter = ({ breakout = false, margin = "0px", fixed = false, children, ...attributes }) => {
+    const i = `imposter-${[breakout, margin, fixed].join("-")}`;
 
     if (!document.getElementById(i)) {
-        let style = document.createElement('style');
+        let style = document.createElement("style");
 
         style.id = i;
         style.innerHTML = `
@@ -284,36 +246,30 @@ export const Imposter = ({
                 max-inline-size: calc(100% - (${margin} * 2));
                 max-block-size: calc(100% - (${margin} * 2));
                 overflow: auto;`
-                        : ''
+                        : ""
                 }
                 ${
                     fixed
                         ? `
                 position: fixed;`
-                        : ''
+                        : ""
                 }
             }
         `
-            .replace(/\s\s+/g, ' ')
+            .replace(/\s\s+/g, " ")
             .trim();
 
         document.head.appendChild(style);
     }
 
     return (
-        <div className="imposter" data-i={i}>
+        <div {...attributes} className={`imposter ${attributes.className ?? ""}`.trim()} data-i={i}>
             {children}
         </div>
     );
 };
 
-export const Reel = ({
-    itemWidth = 'auto',
-    height = 'auto',
-    space = 'var(--size-3)',
-    noBar = false,
-    children,
-}) => {
+export const Reel = ({ itemWidth = "auto", height = "auto", space = "var(--size-3)", noBar = false, children, ...attributes }) => {
     const [isOverflowing, setIsOverflowing] = useState();
     const element = useRef(null);
 
@@ -327,10 +283,10 @@ export const Reel = ({
         }
     }, [element]);
 
-    const i = `reel-${[itemWidth, height, space, noBar].join('-')}`;
+    const i = `reel-${[itemWidth, height, space, noBar].join("-")}`;
 
     if (!document.getElementById(i)) {
-        let style = document.createElement('style');
+        let style = document.createElement("style");
 
         style.id = i;
         style.innerHTML = `
@@ -351,7 +307,7 @@ export const Reel = ({
                     !noBar
                         ? `
                 padding-block-end: ${space};`
-                        : ''
+                        : ""
                 }
             }
         
@@ -365,40 +321,27 @@ export const Reel = ({
             [data-i="${i}"]::-webkit-scrollbar {
                 display: none;
             }`
-                    : ''
+                    : ""
             }
         `
-            .replace(/\s\s+/g, ' ')
+            .replace(/\s\s+/g, " ")
             .trim();
 
         document.head.appendChild(style);
     }
 
     return (
-        <div
-            className={isOverflowing ? 'reel overflowing' : 'reel'}
-            data-i={i}
-            ref={element}
-        >
+        <div {...attributes} className={`${isOverflowing ? "reel overflowing" : "reel"} ${attributes.className}`.trim()} data-i={i} ref={element}>
             {children}
         </div>
     );
 };
 
-export const Sidebar = ({
-    side = 'left',
-    sideWidth = null,
-    contentMin = '50%',
-    space = 'var(--size-3)',
-    noStretch = false,
-    children,
-}) => {
-    const i = `sidebar-${[side, sideWidth, contentMin, space, noStretch].join(
-        '-'
-    )}`;
+export const Sidebar = ({ side = "left", sideWidth = null, contentMin = "50%", space = "var(--size-3)", noStretch = false, children, ...attributes }) => {
+    const i = `sidebar-${[side, sideWidth, contentMin, space, noStretch].join("-")}`;
 
     if (!document.getElementById(i)) {
-        let style = document.createElement('style');
+        let style = document.createElement("style");
 
         style.id = i;
         style.innerHTML = `
@@ -408,7 +351,7 @@ export const Sidebar = ({
                     noStretch
                         ? `
                 align-items: flex-start;`
-                        : ''
+                        : ""
                 }
             }
 
@@ -417,45 +360,38 @@ export const Sidebar = ({
                     sideWidth
                         ? `
                 flex-basis: ${sideWidth};`
-                        : ''
+                        : ""
                 }
             }
 
-            [data-i="${i}"] > ${
-            side !== 'left' ? `:first-child` : `:last-child`
-        } {
+            [data-i="${i}"] > ${side !== "left" ? `:first-child` : `:last-child`} {
                 flex-basis: 0;
                 flex-grow: 999;
                 min-inline-size: ${contentMin};
             }
         `
-            .replace(/\s\s+/g, ' ')
+            .replace(/\s\s+/g, " ")
             .trim();
 
         document.head.appendChild(style);
     }
 
     return (
-        <div className="sidebar" data-i={i}>
+        <div {...attributes} className={`sidebar ${attributes.className ?? ""}`.trim()} data-i={i}>
             {children}
         </div>
     );
 };
 
-export const Stack = ({
-    space = 'var(--size-3)',
-    recursive = false,
-    splitAfter = null,
-    children,
-}) => {
-    const i = `stack-${[space, recursive, splitAfter].join('-')}`;
+export const Stack = ({ space = "var(--size-3)", recursive = false, splitAfter = null, children, ...attributes }) => {
+    const i = `stack-${[space, recursive, splitAfter].join("-")}`;
 
     if (!document.getElementById(i)) {
-        let style = document.createElement('style');
+        let style = document.createElement("style");
 
         style.id = i;
         style.innerHTML = `
-            [data-i="${i}"] ${recursive ? '' : '> '} * + * {
+            [data-i="${i}"] ${recursive ? "" : "> "} * + * {
                 margin-block-start: ${space};
             }
 
@@ -469,32 +405,27 @@ export const Stack = ({
             [data-i="${i}"] > :nth-child(${splitAfter}) {
                 margin-block-end: auto;
             }`
-                    : ''
+                    : ""
             }
         `
-            .replace(/\s\s+/g, ' ')
+            .replace(/\s\s+/g, " ")
             .trim();
 
         document.head.appendChild(style);
     }
 
     return (
-        <div className="stack" data-i={i}>
+        <div {...attributes} className={`stack ${attributes.className ?? ""}`.trim()} data-i={i}>
             {children}
         </div>
     );
 };
 
-export const Switcher = ({
-    threshold = 'var(--size-content-3)',
-    space = 'var(--size-3)',
-    limit = 4,
-    children,
-}) => {
-    const i = `switcher-${[threshold, space, limit].join('-')}`;
+export const Switcher = ({ threshold = "var(--size-content-3)", space = "var(--size-3)", limit = 4, children, ...attributes }) => {
+    const i = `switcher-${[threshold, space, limit].join("-")}`;
 
     if (!document.getElementById(i)) {
-        let style = document.createElement('style');
+        let style = document.createElement("style");
 
         style.id = i;
         style.innerHTML = `
@@ -511,14 +442,14 @@ export const Switcher = ({
                 flex-basis: 100%;
             }
         `
-            .replace(/\s\s+/g, ' ')
+            .replace(/\s\s+/g, " ")
             .trim();
 
         document.head.appendChild(style);
     }
 
     return (
-        <div className="switcher" data-i={i}>
+        <div {...attributes} className={`switcher ${attributes.className ?? ""}`.trim()} data-i={i}>
             {children}
         </div>
     );

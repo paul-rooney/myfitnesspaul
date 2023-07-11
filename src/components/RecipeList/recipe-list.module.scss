@@ -1,5 +1,5 @@
 .heading {
-    color: var(--stone-10);
+    color: var(--gray-10);
     font-size: var(--font-size-fluid-2);
     letter-spacing: var(--font-letterspacing-0);
 }
@@ -10,8 +10,8 @@
     margin: 0;
 
     .li {
-        background-color: var(--stone-2);
-        border: var(--border-size-1) solid var(--stone-2);
+        background-color: var(--gray-2);
+        border: var(--border-size-1) solid var(--gray-2);
         border-radius: var(--radius-2);
         box-shadow: var(--shadow-1);
         padding: var(--size-2);
@@ -57,9 +57,9 @@
             .editButton,
             .deleteButton {
                 aspect-ratio: var(--ratio-square);
-                background-color: var(--stone-1);
+                background-color: var(--gray-1);
                 block-size: var(--size-6);
-                border: var(--border-size-1) solid var(--stone-5);
+                border: var(--border-size-1) solid var(--gray-5);
                 border-radius: var(--radius-round);
                 box-shadow: var(--shadow-1);
                 margin-inline-start: auto;

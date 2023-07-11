@@ -166,10 +166,10 @@ const RecipeList = ({ ingredients, recipes, setRecipes }) => {
                 )}
             </ul>
 
-            {/* <CreateRecipeDialog sources={sources} handleSubmit={submitHandler} /> */}
-            {/* <CreateRecipesIngredientsDialog ingredients={ingredients} recipe={newRecipe} /> */}
+            <CreateRecipeDialog sources={sources} handleSubmit={submitHandler} />
+            <CreateRecipesIngredientsDialog ingredients={ingredients} recipe={newRecipe} />
             <UpdateRecipeDialog recipe={recipeToUpdate} ingredients={ingredients} />
-            {/* <DeleteRecipeDialog recipe={recipeToDelete} handleSubmit={submitHandler} /> */}
+            <DeleteRecipeDialog recipe={recipeToDelete} handleSubmit={submitHandler} />
         </>
     );
 };
