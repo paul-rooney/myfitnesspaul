@@ -110,6 +110,17 @@ const Logbook = ({ recipes }) => {
 
     const updateMealPlan = async (index, range1, range2, n) => {
         // check if any meals have been locked in place
+        let lockedMeals = mealPlan
+            .map((day, dayIndex) => {
+                return day.map((meal) => {
+                    if (meal.is_locked) {
+                        return [dayIndex, day.indexOf(meal), meal];
+                    }
+                });
+            })
+            .flat()
+            .filter((meal) => meal !== undefined);
+        console.log(lockedMeals);
 
         const numbers = recipes.map((recipe) => ({
             id: recipe.id,
