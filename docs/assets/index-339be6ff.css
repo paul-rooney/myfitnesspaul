@@ -1,8 +1,8 @@
 @charset "UTF-8";
 @import "https://unpkg.com/open-props";
 body {
-    background-color: var(--gray-3);
-    color: var(--gray-11);
+    background-color: var(--surface1);
+    color: var(--text2);
     font-family: var(--font-sans);
     margin: 0;
 }
@@ -100,7 +100,7 @@ body {
     flex-grow: 1;
 }
 ._heading_yw1r9_2 {
-    color: var(--gray-10);
+    color: var(--text2);
     font-size: var(--font-size-fluid-2);
     letter-spacing: var(--font-letterspacing-0);
 }
@@ -110,8 +110,8 @@ body {
     margin: 0;
 }
 ._ul_yw1r9_8 ._li_yw1r9_13 {
-    background-color: var(--gray-2);
-    border: var(--border-size-1) solid var(--gray-5);
+    background-color: var(--surface1);
+    border: var(--border-size-1) solid var(--surface2);
     border-radius: var(--radius-2);
     box-shadow: var(--shadow-1);
     padding: var(--size-2);
@@ -147,9 +147,9 @@ body {
 ._ul_yw1r9_8 ._summary_yw1r9_26 ._header_yw1r9_23 ._editButton_yw1r9_48,
 ._ul_yw1r9_8 ._summary_yw1r9_26 ._header_yw1r9_23 ._deleteButton_yw1r9_49 {
     aspect-ratio: var(--ratio-square);
-    background-color: var(--gray-1);
+    background-color: var(--surface1);
     block-size: var(--size-6);
-    border: var(--border-size-1) solid var(--gray-5);
+    border: var(--border-size-1) solid var(--surface2);
     border-radius: var(--radius-round);
     box-shadow: var(--shadow-1);
     margin-inline-start: auto;
@@ -187,8 +187,8 @@ body {
     content: "…";
 }
 ._fieldset_yw1r9_70 ._searchInput_yw1r9_91 {
-    background-color: var(--gray-3);
-    border: var(--border-size-1) solid var(--gray-5);
+    background-color: var(--surface1);
+    border: var(--border-size-1) solid var(--surface2);
     border-radius: var(--radius-2);
     box-shadow: var(--inner-shadow-2);
     grid-column: 1/-1;
@@ -237,11 +237,11 @@ html:has(dialog[open]) {
     pointer-events: none;
 }
 ._dialog_i2ovy_5 {
-    background-color: var(--gray-1);
-    border: var(--border-size-1) solid var(--gray-5);
+    background-color: var(--surface1);
+    border: var(--border-size-1) solid var(--surface2);
     border-radius: var(--radius-2);
     box-shadow: var(--shadow-6);
-    color: var(--gray-10);
+    color: var(--text2);
     display: grid;
     inline-size: 100%;
     margin: auto !important;
@@ -285,7 +285,7 @@ html:has(dialog[open]) {
     padding: var(--size-3);
 }
 ._dialog_i2ovy_5 ._form_i2ovy_32 ._footer_i2ovy_40 {
-    background-color: var(--gray-3);
+    background-color: var(--surface1);
     grid-row: 3;
 }
 ._dialog_i2ovy_5 ._form_i2ovy_32 ._footer_i2ovy_40 ._menu_i2ovy_62 {
@@ -310,24 +310,24 @@ html:has(dialog[open]) {
     stroke-width: 4;
 }
 ._dialog_i2ovy_5 ._form_i2ovy_32 ._footer_i2ovy_40 ._menu_i2ovy_62 ._cancelButton_i2ovy_66 {
-    background-color: var(--gray-8);
-    border: var(--border-size-1) solid var(--gray-8);
-    color: var(--gray-0);
+    background-color: var(--surface3);
+    border: var(--border-size-1) solid var(--surface3);
+    color: var(--text1);
 }
 ._dialog_i2ovy_5 [data-operation="delete"] ._footer_i2ovy_40 {
     background-color: var(--red-7) !important;
 }
 ._dialog_i2ovy_5 [data-operation="delete"] ._footer_i2ovy_40 ._cancelButton_i2ovy_66 {
-    background-color: var(--gray-6) !important;
-    border: var(--border-size-1) solid var(--gray-6) !important;
-    color: var(--gray-12) !important;
+    background-color: var(--surface2) !important;
+    border: var(--border-size-1) solid var(--surface2) !important;
+    color: var(--text2) !important;
 }
 ._dialog_i2ovy_5 [data-operation="delete"] ._footer_i2ovy_40 ._confirmButton_i2ovy_67 {
     background-color: var(--red-12) !important;
     border: var(--border-size-1) solid var(--red-12) !important;
 }
 ._heading_1n535_1 {
-    color: var(--gray-10);
+    color: var(--text2);
     font-size: var(--font-size-fluid-2);
     letter-spacing: var(--font-letterspacing-0);
 }
@@ -337,8 +337,8 @@ html:has(dialog[open]) {
     margin: 0;
 }
 ._ul_1n535_7 ._li_1n535_12 {
-    background-color: var(--gray-2);
-    border: var(--border-size-1) solid var(--gray-5);
+    background-color: var(--surface1);
+    border: var(--border-size-1) solid var(--surface2);
     border-radius: var(--radius-2);
     box-shadow: var(--shadow-1);
     padding: var(--size-2);
@@ -375,9 +375,9 @@ html:has(dialog[open]) {
 ._ul_1n535_7 ._summary_1n535_22 ._header_1n535_28 ._editButton_1n535_48,
 ._ul_1n535_7 ._summary_1n535_22 ._header_1n535_28 ._deleteButton_1n535_49 {
     aspect-ratio: var(--ratio-square);
-    background-color: var(--gray-1);
+    background-color: var(--surface1);
     block-size: var(--size-6);
-    border: var(--border-size-1) solid var(--gray-5);
+    border: var(--border-size-1) solid var(--surface2);
     border-radius: var(--radius-round);
     box-shadow: var(--shadow-1);
     margin-inline-start: auto;
@@ -428,7 +428,7 @@ html:has(dialog[open]) {
     color: var(--jungle-12) !important;
 }
 ._heading_16el8_1 {
-    color: var(--gray-10);
+    color: var(--text2);
     font-size: var(--font-size-fluid-2);
     letter-spacing: var(--font-letterspacing-0);
 }
@@ -463,7 +463,7 @@ html:has(dialog[open]) {
     overflow-y: auto;
 }
 ._footer_f2afg_33 {
-    background-color: var(--gray-2);
+    background-color: var(--surface1);
     display: flex;
     flex-direction: column;
     flex-shrink: 0;
@@ -526,6 +526,6 @@ input[type="month"],
 input[type="week"],
 input[type="time"] {
     border: 0;
-    border-block-end: var(--border-size-2) solid var(--gray-3);
+    border-block-end: var(--border-size-2) solid var(--surface1);
     padding: var(--size-2);
 }

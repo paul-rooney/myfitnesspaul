@@ -1,6 +1,6 @@
 body {
-    background-color: var(--gray-3);
-    color: var(--gray-11);
+    background-color: var(--surface1);
+    color: var(--text1);
     font-family: var(--font-sans);
     margin: 0;
 }

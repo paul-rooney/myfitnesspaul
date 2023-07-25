@@ -135,9 +135,9 @@ const RecipeCard = ({ recipe, handleClick }) => {
                                                 : styles.highlightProtein
                                         }
                                         style={{
-                                            backgroundColor: "var(--gray-6)",
+                                            backgroundColor: "var(--surface2)",
                                             borderRadius: "var(--radius-2)",
-                                            color: "var(--gray-0)",
+                                            color: "var(--text1)",
                                             fontSize: "var(--font-size-0)",
                                             marginBlock: "0",
                                             padding: "var(--size-1) var(--size-2)",
@@ -243,9 +243,9 @@ const comp = () =>
     //                                         : styles.highlightProtein
     //                                 }
     //                                 style={{
-    //                                     backgroundColor: "var(--gray-6)",
+    //                                     backgroundColor: "var(--surface2)",
     //                                     borderRadius: "var(--radius-2)",
-    //                                     color: "var(--gray-0)",
+    //                                     color: "var(--text1)",
     //                                     fontSize: "var(--font-size-0)",
     //                                     marginBlock: "0",
     //                                     padding: "var(--size-1) var(--size-2)",
