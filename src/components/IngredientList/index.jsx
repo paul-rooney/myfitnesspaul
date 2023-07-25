@@ -30,16 +30,6 @@ const IngredientList = ({ ingredients, setIngredients }) => {
         .slice(startIndex, endIndex);
 
     useEffect(() => {
-        supabase
-            .channel("any")
-            .on("postgres_changes", { event: "*", schema: "public" }, (payload) => {
-                console.log("Payload received: ", payload);
-                readRows("ingredients").then((ingredients) => setIngredients(ingredients));
-            })
-            .subscribe();
-    }, []);
-
-    useEffect(() => {
         if (!ingredients) return;
 
         setFilteredIngredients(ingredients);

@@ -37,20 +37,6 @@ const RecipeList = ({ ingredients, recipes, setRecipes }) => {
     }, []);
 
     useEffect(() => {
-        supabase
-            .channel("any")
-            .on("postgres_changes", { event: "*", schema: "public" }, () => {
-                readRows(
-                    "recipes",
-                    `id, display_name, servings, page_number,
-                    recipes_ingredients (ingredients!recipes_ingredients_ingredient_id_fkey (display_name), id, ingredient_identifier, quantity, unit, recipes_macronutrients (kcal, carbohydrate, fat, protein)), 
-                    recipes_sources (source, author, thumbnail_url)`
-                ).then((recipes) => setRecipes(calculateMacronutrientTotals(recipes)));
-            })
-            .subscribe();
-    }, []);
-
-    useEffect(() => {
         if (!recipes) return;
 
         setFilteredRecipes(recipes);
@@ -95,7 +81,7 @@ const RecipeList = ({ ingredients, recipes, setRecipes }) => {
                 identifier: stripNonAlphanumeric(display_name.value).trim().toLowerCase(),
                 display_name: display_name.value.trim(),
                 servings: servings.value,
-                source: source.value,
+                source: source.value !== "" ? source.value : null,
             },
         ];
 
@@ -145,7 +131,9 @@ const RecipeList = ({ ingredients, recipes, setRecipes }) => {
                 <button disabled={currentPage === 1} onClick={previousPage}>
                     Previous
                 </button>
-                <span style={{ fontSize: "var(--font-size-0)", minInlineSize: "3em", textAlign: "center" }}>{currentPage}</span>
+                <span style={{ fontSize: "var(--font-size-0)", minInlineSize: "3em", textAlign: "center" }}>
+                    {currentPage}
+                </span>
                 <button disabled={currentPage === totalPages} onClick={nextPage}>
                     Next
                 </button>
