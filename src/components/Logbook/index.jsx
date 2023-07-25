@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { useState } from "react";
 import { Cluster, Icon, Grid, Stack, Switcher } from "../../primitives";
 import { supabase } from "../../supabase";
 import { formatDate, groupBy, shuffleArray } from "../../utilities";
@@ -61,12 +61,6 @@ const Logbook = ({ recipes }) => {
     const [mealPlan, setMealPlan] = useState([]);
     // const [lockedMeals, setLockedMeals] = useState([]);
     const [shoppingList, setShoppingList] = useState([]);
-
-    useEffect(() => {
-        if (mealPlan.length < 1) return;
-
-        // generateShoppingList();
-    }, [mealPlan]);
 
     const submitHandler = (event) => {
         event.preventDefault();
@@ -342,6 +336,9 @@ const Logbook = ({ recipes }) => {
                                                           case "tbsp":
                                                               q = item.quantity * 15;
                                                               break;
+                                                          case "pint":
+                                                              q = item.quantity * 568;
+                                                              break;
                                                           case "g":
                                                           case "ml":
                                                           default:
@@ -360,10 +357,10 @@ const Logbook = ({ recipes }) => {
                 </Grid>
             </details>
 
-            <form onSubmit={submitHandler}>
+            <form onSubmit={submitHandler} hidden>
                 <Stack>
                     <Stack space="var(--size-1)">
-                        <label className={styles.label} html="weight">
+                        <label className={styles.label} htmlFor="weight">
                             Weight
                         </label>
                         <input id="weight" type="number" />
@@ -374,7 +371,7 @@ const Logbook = ({ recipes }) => {
                                 <legend>Breakfast</legend>
                                 <button type="button">Add</button>
                             </Cluster>
-                            {/* <label html="breakfast"></label>
+                            {/* <label htmlFor="breakfast"></label>
                             <input id="breakfast" /> */}
                         </Stack>
                     </fieldset>
@@ -384,7 +381,7 @@ const Logbook = ({ recipes }) => {
                                 <legend>Lunch</legend>
                                 <button type="button">Add</button>
                             </Cluster>
-                            {/* <label html="lunch"></label>
+                            {/* <label htmlFor="lunch"></label>
                             <input id="lunch" /> */}
                         </Stack>
                     </fieldset>
@@ -394,7 +391,7 @@ const Logbook = ({ recipes }) => {
                                 <legend>Dinner</legend>
                                 <button type="button">Add</button>
                             </Cluster>
-                            {/* <label html="dinner"></label>
+                            {/* <label htmlFor="dinner"></label>
                             <input id="dinner" /> */}
                         </Stack>
                     </fieldset>
