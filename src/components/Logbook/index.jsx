@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { useState } from "react";
 import { Cluster, Icon, Grid, Stack, Switcher } from "../../primitives";
 import { supabase } from "../../supabase";
 import { formatDate, groupBy, shuffleArray } from "../../utilities";
@@ -110,6 +110,17 @@ const Logbook = ({ recipes }) => {
 
     const updateMealPlan = async (index, range1, range2, n) => {
         // check if any meals have been locked in place
+        let lockedMeals = mealPlan
+            .map((day, dayIndex) => {
+                return day.map((meal) => {
+                    if (meal.is_locked) {
+                        return [dayIndex, day.indexOf(meal), meal];
+                    }
+                });
+            })
+            .flat()
+            .filter((meal) => meal !== undefined);
+        console.log(lockedMeals);
 
         const numbers = recipes.map((recipe) => ({
             id: recipe.id,
@@ -325,6 +336,9 @@ const Logbook = ({ recipes }) => {
                                                           case "tbsp":
                                                               q = item.quantity * 15;
                                                               break;
+                                                          case "pint":
+                                                              q = item.quantity * 568;
+                                                              break;
                                                           case "g":
                                                           case "ml":
                                                           default:
@@ -343,7 +357,7 @@ const Logbook = ({ recipes }) => {
                 </Grid>
             </details>
 
-            <form onSubmit={submitHandler}>
+            <form onSubmit={submitHandler} hidden>
                 <Stack>
                     <Stack space="var(--size-1)">
                         <label className={styles.label} htmlFor="weight">
@@ -357,7 +371,7 @@ const Logbook = ({ recipes }) => {
                                 <legend>Breakfast</legend>
                                 <button type="button">Add</button>
                             </Cluster>
-                            {/* <label html="breakfast"></label>
+                            {/* <label htmlFor="breakfast"></label>
                             <input id="breakfast" /> */}
                         </Stack>
                     </fieldset>
@@ -367,7 +381,7 @@ const Logbook = ({ recipes }) => {
                                 <legend>Lunch</legend>
                                 <button type="button">Add</button>
                             </Cluster>
-                            {/* <label html="lunch"></label>
+                            {/* <label htmlFor="lunch"></label>
                             <input id="lunch" /> */}
                         </Stack>
                     </fieldset>
@@ -377,7 +391,7 @@ const Logbook = ({ recipes }) => {
                                 <legend>Dinner</legend>
                                 <button type="button">Add</button>
                             </Cluster>
-                            {/* <label html="dinner"></label>
+                            {/* <label htmlFor="dinner"></label>
                             <input id="dinner" /> */}
                         </Stack>
                     </fieldset>
