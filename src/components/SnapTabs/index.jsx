@@ -1,7 +1,8 @@
 import { Box, Stack } from "../../primitives";
-import IngredientList from "../IngredientList";
-import RecipeList from "../RecipeList";
 import Logbook from "../Logbook";
+import MealPlanner from "../MealPlanner";
+import RecipeList from "../RecipeList";
+import IngredientList from "../IngredientList";
 import styles from "./snap-tabs.module.scss";
 
 const SnapTabs = ({ ingredients, setIngredients, recipes, setRecipes }) => {
@@ -12,6 +13,11 @@ const SnapTabs = ({ ingredients, setIngredients, recipes, setRecipes }) => {
                     <Box id="log" className={styles.article}>
                         <Stack>
                             <Logbook recipes={recipes} />
+                        </Stack>
+                    </Box>
+                    <Box id="mealPlanner" className={styles.article}>
+                        <Stack>
+                            <MealPlanner recipes={recipes} />
                         </Stack>
                     </Box>
                     <Box id="recipes" className={styles.article}>
@@ -31,6 +37,9 @@ const SnapTabs = ({ ingredients, setIngredients, recipes, setRecipes }) => {
                     <nav className={styles.nav}>
                         <a className={styles.a} href="#log">
                             Log
+                        </a>
+                        <a className={styles.a} href="#mealPlanner">
+                            Meal Planner
                         </a>
                         <a className={styles.a} href="#recipes">
                             Recipes

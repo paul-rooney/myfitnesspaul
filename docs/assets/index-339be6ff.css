@@ -140,7 +140,7 @@ body {
 ._ul_yw1r9_8 ._summary_yw1r9_26 ._header_yw1r9_23 ._brandName_yw1r9_41 {
     font-family: var(--font-mono);
     font-size: var(--font-size-00);
-    font-weight: var(--font-weight-5);
+    font-weight: var(--font-weight-3);
     letter-spacing: var(--font-letterspacing-3);
     text-transform: uppercase;
 }
@@ -157,13 +157,13 @@ body {
 ._ul_yw1r9_8 ._label_yw1r9_58 {
     font-family: var(--font-mono);
     font-size: var(--font-size-00);
-    font-weight: var(--font-weight-5);
+    font-weight: var(--font-weight-3);
     letter-spacing: var(--font-letterspacing-3);
     text-transform: uppercase;
 }
 ._ul_yw1r9_8 ._highlight_yw1r9_65 {
     color: var(--green-8);
-    font-weight: var(--font-weight-5);
+    font-weight: var(--font-weight-3);
 }
 ._fieldset_yw1r9_70 {
     align-items: baseline;
@@ -225,7 +225,7 @@ body {
 ._small_yw1r9_130 {
     font-family: var(--font-mono);
     font-size: var(--font-size-00);
-    font-weight: var(--font-weight-5);
+    font-weight: var(--font-weight-3);
     letter-spacing: var(--font-letterspacing-3);
     text-transform: uppercase;
 }
@@ -273,7 +273,7 @@ html:has(dialog[open]) {
     grid-row: 1;
 }
 ._dialog_i2ovy_5 ._form_i2ovy_32 ._header_i2ovy_39 ._heading_i2ovy_46 {
-    font-weight: var(--font-weight-5);
+    font-weight: var(--font-weight-3);
     margin-block: 0;
 }
 ._dialog_i2ovy_5 ._form_i2ovy_32 ._article_i2ovy_50 {
@@ -368,7 +368,7 @@ html:has(dialog[open]) {
 ._ul_1n535_7 ._summary_1n535_22 ._header_1n535_28 ._servings_1n535_41 {
     font-family: var(--font-mono);
     font-size: var(--font-size-00);
-    font-weight: var(--font-weight-5);
+    font-weight: var(--font-weight-3);
     letter-spacing: var(--font-letterspacing-3);
     text-transform: uppercase;
 }
@@ -385,13 +385,13 @@ html:has(dialog[open]) {
 ._ul_1n535_7 ._label_1n535_58 {
     font-family: var(--font-mono);
     font-size: var(--font-size-00);
-    font-weight: var(--font-weight-5);
+    font-weight: var(--font-weight-3);
     letter-spacing: var(--font-letterspacing-3);
     text-transform: uppercase;
 }
 ._ul_1n535_7 ._highlight_1n535_65 {
     color: var(--green-8);
-    font-weight: var(--font-weight-5);
+    font-weight: var(--font-weight-3);
 }
 ._addButton_1n535_70 {
     background-color: var(--red-8);

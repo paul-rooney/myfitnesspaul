@@ -97,8 +97,7 @@ html {
     --shadow-strength-dark: 0.8;
 }
 body {
-    font-family: "Inter", "Plus Jakarta Sans", "Hind";
-    font-weight: 500;
+    font-family: "Plus Jakarta Sans";
 }
 #root {
     display: flex;
@@ -115,7 +114,8 @@ h3,
 h4,
 h5,
 h6 {
-    font-family: "Inter", "Plus Jakarta Sans", "Tenor Sans";
+    font-family: "Plus Jakarta Sans";
+    font-weight: 300;
 }
 h1 {
 }

@@ -1,9 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 
-export const supabase = createClient(
-    "https://kdvwicccjdercqtrqemp.supabase.co",
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtkdndpY2NjamRlcmNxdHJxZW1wIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODY2NTM2OTgsImV4cCI6MjAwMjIyOTY5OH0.84JOOirsgjuY0T7x-KBzvOkNFGgWt7g8NcQN6OSyv6I"
-);
+export const supabase = createClient("https://kdvwicccjdercqtrqemp.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtkdndpY2NjamRlcmNxdHJxZW1wIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODY2NTM2OTgsImV4cCI6MjAwMjIyOTY5OH0.84JOOirsgjuY0T7x-KBzvOkNFGgWt7g8NcQN6OSyv6I");
 
 export const signInWithEmail = async ({ email, password }) => {
     try {
@@ -48,6 +45,18 @@ export const insertRows = async (table, values) => {
     if (!values) return;
     const { data, error } = await supabase.from(table).insert(values).select();
     return data ?? error;
+};
+
+export const upsertRows = async (table, values, options = {}) => {
+    try {
+        const { data, error } = await supabase.from(table).upsert(values, options).select();
+        if (error) {
+            throw new Error(error.message);
+        }
+        return data;
+    } catch (error) {
+        console.error("An error occurred: ", error);
+    }
 };
 
 export const updateRows = async (table, values) => {
