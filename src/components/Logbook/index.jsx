@@ -5,7 +5,7 @@ import { formatDate } from "../../utilities";
 import styles from "./logbook.module.scss";
 
 const getTodaysLog = async (table, columns = "*") => {
-    const today = new Date(Date.now()).toISOString().slice(0,10);
+    const today = new Date(Date.now()).toISOString().slice(0, 10);
 
     try {
         const { data, error } = await supabase.from(table).select(columns).eq("meal_date", today);
@@ -18,8 +18,6 @@ const getTodaysLog = async (table, columns = "*") => {
     }
 };
 
-const getPreviousWeight = await readRows("users_weight", "weight");
-
 const Logbook = ({ recipes }) => {
     const [previousWeight, setPreviousWeight] = useState(null);
     const [breakfast, setBreakfast] = useState([]);
@@ -27,15 +25,11 @@ const Logbook = ({ recipes }) => {
     const [dinner, setDinner] = useState([]);
 
     useEffect(() => {
-        if (!getPreviousWeight) return;
-
-        const { weight } = getPreviousWeight[0];
-
-        setPreviousWeight(weight);
+        readRows("users_weight", "weight").then((data) => setPreviousWeight(data[0].weight));
     }, []);
 
     useEffect(() => {
-        getTodaysLog("users_logs", "*, recipes (display_name)").then(data => console.log(data))
+        getTodaysLog("users_logs", "*, recipes (display_name)").then((data) => console.log(data));
     }, []);
 
     const clickHandler = (event) => {
