@@ -47,9 +47,9 @@ const SnapTabs = ({ ingredients, setIngredients, recipes, setRecipes }) => {
                         <a className={styles.a} href="#ingredients">
                             Ingredients
                         </a>
-                        <a className={styles.a} href="#settings" style={{ marginInlineStart: "auto" }}>
+                        {/* <a className={styles.a} href="#settings" style={{ marginInlineStart: "auto" }}>
                             Settings
-                        </a>
+                        </a> */}
                     </nav>
                 </Box>
             </footer>
