@@ -4,7 +4,7 @@ export const supabase = createClient("https://kdvwicccjdercqtrqemp.supabase.co",
 
 export const signInWithEmail = async ({ email, password }) => {
     try {
-        const { data, error } = await supabase.auth.signInWithPassword({
+        const { error } = await supabase.auth.signInWithPassword({
             email: email,
             password: password,
         });
@@ -12,7 +12,7 @@ export const signInWithEmail = async ({ email, password }) => {
             throw new Error(error.message);
         }
     } catch (error) {
-        console.error("An error occurred during sign-in:", error);
+        console.error("An error occurred during sign-in: ", error);
         throw error;
     }
 };
@@ -24,7 +24,7 @@ export const signOut = async () => {
             throw new Error(error.message);
         }
     } catch (error) {
-        console.error("An error occurred during sign-out:", error);
+        console.error("An error occurred during sign-out: ", error);
         throw error;
     }
 };

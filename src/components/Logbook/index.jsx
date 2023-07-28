@@ -3,6 +3,7 @@ import { Cluster, Stack } from "../../primitives";
 import { supabase, insertRows, readRows, upsertRows, updateRows } from "../../supabase";
 import { formatDate, formatDateISO, getPastDate, getFutureDate } from "../../utilities";
 import styles from "./logbook.module.scss";
+import MacronutrientDisplay from "../MacronutrientDisplay";
 
 const getLog = async (table, columns = "*", date) => {
     try {
@@ -175,6 +176,7 @@ const Logbook = ({ recipes }) => {
     return (
         <>
             <h2 className={styles.heading}>Log</h2>
+            <MacronutrientDisplay date={displayedDate} />
             <Cluster justify="center" align="baseline">
                 <button data-direction="previous" onClick={adjustDate}>
                     Previous
