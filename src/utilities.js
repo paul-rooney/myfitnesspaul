@@ -28,9 +28,23 @@ export const groupBy = (arr, key) => arr.reduce((acc, item) => ((acc[item[key]] 
 //     return acc;
 //   }, {});
 
-export const stripNonAlphanumeric = (str) => str.replace(/[^a-zA-Z0-9\s]/g, ''); 
+export const stripNonAlphanumeric = (str) => str.replace(/[^a-zA-Z0-9\s]/g, "");
 
 export const formatDate = (date, locale) => new Intl.DateTimeFormat(locale, { dateStyle: "full" }).format(date);
+
+export const formatDateISO = (date = Date.now()) => new Date(date).toISOString().slice(0, 10);
+
+export const getPastDate = (startDate, daysInPast) => {
+    const newDate = new Date(startDate);
+    newDate.setDate(newDate.getDate() - daysInPast);
+    return newDate;
+};
+
+export const getFutureDate = (startDate, daysInFuture) => {
+    const newDate = new Date(startDate);
+    newDate.setDate(newDate.getDate() + daysInFuture);
+    return newDate;
+};
 
 export const shuffleArray = (array) => {
     for (let i = array.length - 1; i > 0; i--) {
@@ -38,7 +52,7 @@ export const shuffleArray = (array) => {
         [array[i], array[j]] = [array[j], array[i]];
     }
     return array;
-}
+};
 
 export const calculateMacronutrientTotals = (recipes) => {
     return recipes.map((item) => ({
