@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Cluster, Stack } from "../../primitives";
-import { supabase, insertRows, readRows, upsertRows } from "../../supabase";
+import { supabase, insertRows, readRows, upsertRows, updateRows } from "../../supabase";
 import { formatDate, formatDateISO, getPastDate, getFutureDate } from "../../utilities";
 import styles from "./logbook.module.scss";
 
@@ -30,48 +30,68 @@ const getWeight = async (table, columns = "*", date) => {
 
 const Logbook = ({ recipes }) => {
     const [weight, setWeight] = useState(null);
-    const [breakfast, setBreakfast] = useState([]);
-    const [lunch, setLunch] = useState([]);
-    const [dinner, setDinner] = useState([]);
+    const [breakfast, setBreakfast] = useState({});
+    const [lunch, setLunch] = useState({});
+    const [dinner, setDinner] = useState({});
     const [displayedDate, setDisplayedDate] = useState(new Date());
 
     useEffect(() => {
         const date = formatDateISO(displayedDate);
 
-        getWeight("users_weight", "weight", date).then(([entry]) => setWeight(entry.weight));
+        getWeight("users_weight", "weight", date).then(([entry]) => setWeight(entry?.weight));
         getLog("users_logs", "*, recipes (display_name)", date).then((data) => {
-            setBreakfast([]);
-            setLunch([]);
-            setDinner([]);
+            setBreakfast({});
+            setLunch({});
+            setDinner({});
 
-            data.map((meal) => {
-                if (meal.meal_name === "breakfast") {
-                    setBreakfast([meal]);
-                } else if (meal.meal_name === "lunch") {
-                    setLunch([meal]);
+            if (!data.length) return;
+
+            data.map(({ id, user_id, meal_name, meal_date, recipe_id, recipes }) => {
+                const entry = {
+                    id: id,
+                    user_id: user_id,
+                    meal_name: meal_name,
+                    meal_date: meal_date,
+                    recipe_id: recipe_id,
+                    display_name: recipes.display_name,
+                };
+
+                if (meal_name === "breakfast") {
+                    setBreakfast(entry);
+                } else if (meal_name === "lunch") {
+                    setLunch(entry);
                 } else {
-                    setDinner([meal]);
+                    setDinner(entry);
                 }
             });
         });
     }, [displayedDate]);
 
-    const clickHandler = (event) => {
+    const clickHandler = async (event) => {
+        const { data } = await supabase.auth.getSession();
         const { meal } = event.target.dataset;
         const input = document.getElementById(meal);
-        const entry = input.value;
+        const entry = {
+            user_id: data.session.user.id,
+            meal_name: null,
+            meal_date: formatDateISO(displayedDate),
+            recipe_id: input.value,
+        };
 
         switch (meal) {
             case "breakfast":
-                setBreakfast([entry]);
+                entry.meal_name = "breakfast";
+                setBreakfast(entry);
                 break;
 
             case "lunch":
-                setLunch([entry]);
+                entry.meal_name = "lunch";
+                setLunch(entry);
                 break;
 
             case "dinner":
-                setDinner([entry]);
+                entry.meal_name = "dinner";
+                setDinner(entry);
                 break;
 
             default:
@@ -84,31 +104,41 @@ const Logbook = ({ recipes }) => {
     const submitHandler = async (event) => {
         event.preventDefault();
 
-        const { data } = await supabase.auth.getSession();
+        if (Object.keys(breakfast).length) {
+            const payload = {
+                id: breakfast?.id,
+                user_id: breakfast.user_id,
+                meal_name: breakfast.meal_name,
+                meal_date: formatDateISO(displayedDate),
+                recipe_id: breakfast.recipe_id,
+            };
 
-        if (!breakfast.length && !lunch.length && !dinner.length) return;
+            upsertRows("users_logs", payload, { ignoreDuplicates: false, onConflict: "meal_name_date" });
+        }
 
-        const breakfastPayload = breakfast.map((entry) => ({
-            user_id: data.session.user.id,
-            meal_name: "breakfast",
-            recipe_id: entry,
-        }));
+        if (Object.keys(lunch).length) {
+            const payload = {
+                id: lunch?.id,
+                user_id: lunch.user_id,
+                meal_name: lunch.meal_name,
+                meal_date: formatDateISO(displayedDate),
+                recipe_id: lunch.recipe_id,
+            };
 
-        const lunchPayload = lunch.map((entry) => ({
-            user_id: data.session.user.id,
-            meal_name: "lunch",
-            recipe_id: entry,
-        }));
+            upsertRows("users_logs", payload, { ignoreDuplicates: false, onConflict: "meal_name_date" });
+        }
 
-        const dinnerPayload = dinner.map((entry) => ({
-            user_id: data.session.user.id,
-            meal_name: "dinner",
-            recipe_id: entry,
-        }));
+        if (Object.keys(dinner).length) {
+            const payload = {
+                id: dinner?.id,
+                user_id: dinner.user_id,
+                meal_name: dinner.meal_name,
+                meal_date: formatDateISO(displayedDate),
+                recipe_id: dinner.recipe_id,
+            };
 
-        insertRows("users_logs", breakfastPayload);
-        insertRows("users_logs", lunchPayload);
-        insertRows("users_logs", dinnerPayload);
+            upsertRows("users_logs", payload, { ignoreDuplicates: false, onConflict: "meal_name_date" });
+        }
     };
 
     const logWeight = async (event) => {
@@ -185,11 +215,9 @@ const Logbook = ({ recipes }) => {
                         </Cluster>
                         <input id="breakfast" list="recipes_list" />
                         <Stack space="var(--size-1)" role="list">
-                            {breakfast.map((entry, index) => (
-                                <p className={styles.meals} role="listitem" key={index}>
-                                    {entry?.recipes?.display_name}
-                                </p>
-                            ))}
+                            <p className={styles.meals} role="listitem">
+                                {breakfast?.display_name}
+                            </p>
                         </Stack>
                     </Stack>
                     <Stack space="var(--size-1)">
@@ -201,11 +229,9 @@ const Logbook = ({ recipes }) => {
                         </Cluster>
                         <input id="lunch" list="recipes_list" />
                         <Stack space="var(--size-1)" role="list">
-                            {lunch.map((entry, index) => (
-                                <p className={styles.meals} role="listitem" key={index}>
-                                    {entry?.recipes?.display_name}
-                                </p>
-                            ))}
+                            <p className={styles.meals} role="listitem">
+                                {lunch?.display_name}
+                            </p>
                         </Stack>
                     </Stack>
                     <Stack space="var(--size-1)">
@@ -217,11 +243,9 @@ const Logbook = ({ recipes }) => {
                         </Cluster>
                         <input id="dinner" list="recipes_list" />
                         <Stack space="var(--size-1)" role="list">
-                            {dinner.map((entry, index) => (
-                                <p className={styles.meals} role="listitem" key={index}>
-                                    {entry?.recipes?.display_name}
-                                </p>
-                            ))}
+                            <p className={styles.meals} role="listitem">
+                                {dinner?.display_name}
+                            </p>
                         </Stack>
                     </Stack>
                     <Cluster justify="end">
