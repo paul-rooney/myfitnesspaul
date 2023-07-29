@@ -26,35 +26,44 @@ const MacronutrientDisplay = ({ date }) => {
         getStuff(
             "users_logs",
             `recipes (
+                servings,
                 recipes_ingredients ( 
                     recipes_macronutrients ( kcal, carbohydrate, fat, protein )
                 )
             )`,
             date
         ).then((recipes) => {
-            const x = recipes
-                .flatMap((recipe) => recipe.recipes.recipes_ingredients)
-                .map((ingredient) => ingredient.recipes_macronutrients);
+            const flattenedRecipes = recipes.flatMap((item) => {
+                const servings = item.recipes.servings;
+                const ingredients = item.recipes.recipes_ingredients;
 
-            setKcal(() => Math.round(x.reduce((acc, ingredient) => acc + ingredient.kcal, 0)));
-            setCarbohydrate(() => Math.round(x.reduce((acc, ingredient) => acc + ingredient.carbohydrate, 0)));
-            setFat(() => Math.round(x.reduce((acc, ingredient) => acc + ingredient.fat, 0)));
-            setProtein(() => Math.round(x.reduce((acc, ingredient) => acc + ingredient.protein, 0)));
+                return ingredients.map((ingredient) => {
+                    return {
+                        servings,
+                        ...ingredient.recipes_macronutrients,
+                    };
+                });
+            });
+
+            setKcal(() => flattenedRecipes.reduce((acc, { kcal, servings }) => acc + kcal / servings, 0));
+            setCarbohydrate(() => flattenedRecipes.reduce((acc, { carbohydrate, servings }) => acc + carbohydrate / servings, 0));
+            setFat(() => flattenedRecipes.reduce((acc, { fat, servings }) => acc + fat / servings, 0));
+            setProtein(() => flattenedRecipes.reduce((acc, { protein, servings }) => acc + protein / servings, 0));
         });
     }, [date]);
 
     return (
         <>
-        <Cluster>
-            {kcal && carbohydrate && fat && protein ? (
-                <>
-                Total kcal: {kcal}
-                <StackedBar kcal={kcal} c={carbohydrate} f={fat} p={protein} />
-                </>
-            ) : (
-                <p>No data to display</p>
-            )}
-        </Cluster>
+            <Cluster>
+                {kcal && carbohydrate && fat && protein ? (
+                    <>
+                        Total kcal: {kcal}
+                        <StackedBar kcal={kcal} c={carbohydrate} f={fat} p={protein} />
+                    </>
+                ) : (
+                    <p>No data to display</p>
+                )}
+            </Cluster>
         </>
     );
 };

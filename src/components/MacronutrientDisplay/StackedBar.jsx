@@ -1,64 +1,40 @@
-import { Cluster } from "../../primitives";
+import styles from "./stacked-bar.module.scss";
 
 const StackedBar = ({ kcal, c, f, p }) => {
-    const cWidth = Math.round(((c * 4) / kcal) * 100);
-    const fWidth = Math.round(((f * 9) / kcal) * 100);
-    const pWidth = Math.round(((p * 4) / kcal) * 100);
+    const cWidth = Math.ceil(((c * 4) / kcal) * 100);
+    const fWidth = Math.ceil(((f * 9) / kcal) * 100);
+    const pWidth = Math.ceil(((p * 4) / kcal) * 100);
 
     return (
-        <Cluster
-            space="0"
-            style={{ border: "1px solid var(--surface2)", minBlockSize: "1rem", width: "100%", padding: "var(--size-1)" }}
-        >
+        <div className={styles.stackedBar}>
             <span
+                className={`${styles.bar} ${styles.barCarbohydrate}`}
                 style={{
-                    backgroundColor: "var(--jungle-3)",
-                    color: "var(--jungle-12)",
-                    flexGrow: "1",
-                    fontSize: "var(--font-size-00)",
-                    fontWeight: "var(--font-weight-7)",
-                    letterSpacing: "var(--font-letterspacing-3)",
-                    minBlockSize: "1rem",
-                    padding: "var(--size-1)",
-                    textTransform: "uppercase",
-                    width: `${cWidth}%`,
+                    "--width": cWidth,
                 }}
             >
-                Carbohydrate:&nbsp;{c}g
+                Carbohydrate<br />
+                {Math.round(c)}&thinsp;<span className="text-transform:lowercase">g</span>
             </span>
             <span
+                className={`${styles.bar} ${styles.barFat}`}
                 style={{
-                    backgroundColor: "var(--red-3)",
-                    color: "var(--red-12)",
-                    flexGrow: "1",
-                    fontSize: "var(--font-size-00)",
-                    fontWeight: "var(--font-weight-7)",
-                    letterSpacing: "var(--font-letterspacing-3)",
-                    minBlockSize: "1rem",
-                    padding: "var(--size-1)",
-                    textTransform: "uppercase",
-                    width: `${fWidth}%`,
+                    "--width": fWidth,
                 }}
             >
-                Fat:&nbsp;{f}g
+                Fat<br />
+                {Math.round(f)}&thinsp;<span className="text-transform:lowercase">g</span>
             </span>
             <span
+                className={`${styles.bar} ${styles.barProtein}`}
                 style={{
-                    backgroundColor: "var(--orange-3)",
-                    color: "var(--orange-10)",
-                    flexGrow: "1",
-                    fontSize: "var(--font-size-00)",
-                    fontWeight: "var(--font-weight-7)",
-                    letterSpacing: "var(--font-letterspacing-3)",
-                    minBlockSize: "1rem",
-                    padding: "var(--size-1)",
-                    textTransform: "uppercase",
-                    width: `${pWidth}%`,
+                    "--width": pWidth,
                 }}
             >
-                Protein:&nbsp;{p}g
+                Protein<br />
+                {Math.round(p)}&thinsp;<span className="text-transform:lowercase">g</span>
             </span>
-        </Cluster>
+        </div>
     );
 };
 

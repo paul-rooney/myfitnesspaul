@@ -565,3 +565,11 @@ Media queries
 This file evolved from Natural Selection:
 https://github.com/frontaid/natural-selection
 */
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+Utilities
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+.text-transform\:lowercase {
+    text-transform: lowercase;
+}

@@ -1,0 +1,40 @@
+.stackedBar {
+    display: grid;
+    grid-template-columns: repeat(100, 1fr);
+    grid-template-rows: repeat(2, 1rem);
+    
+    border: 1px solid var(--surface2);
+    min-block-size: 1rem;
+    width: 100%;
+    padding: var(--size-1);
+}
+
+.bar {
+    font-size: var(--font-size-00);
+    font-weight: var(--font-weight-7);
+    grid-row: 1 / -1;
+    letter-spacing: var(--font-letterspacing-3);
+    min-block-size: 1rem;
+    overflow-x: hidden;
+    padding: var(--size-1);
+    text-transform: uppercase;
+    text-overflow: ellipsis;
+}
+
+.barCarbohydrate {
+    background-color: var(--jungle-3);
+    color: var(--jungle-12);
+    grid-column: span var(--width, 0);
+}
+
+.barFat {
+    background-color: var(--red-3);
+    color: var(--red-12);
+    grid-column: span var(--width, 0);
+}
+
+.barProtein {
+    background-color: var(--orange-3);
+    color: var(--orange-10);
+    grid-column: span var(--width, 0);
+}
