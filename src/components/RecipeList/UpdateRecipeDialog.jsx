@@ -1,12 +1,38 @@
-import { Fragment, useState } from "react";
-import { deleteRows, insertRows } from "../../supabase";
+import { Fragment, useEffect, useState } from "react";
+import { deleteRows, insertRows, updateRows } from "../../supabase";
 import { Cluster, Icon, Stack } from "../../primitives";
 import Dialog from "../Dialog";
 import styles from "./recipe-list.module.scss";
 
+const updateStarRating = (selector, dependency) => {
+    const array = Array.from(document.querySelectorAll(selector));
+
+    array.forEach((element) => element.classList.remove(`${styles.active}`));
+
+    for (let index = 0; index < dependency; index++) {
+        const element = array[index];
+        element.classList.add(`${styles.active}`);
+    }
+};
+
 const UpdateRecipeDialog = ({ recipe, ingredients }) => {
     const [recipeIngredients, setRecipeIngredients] = useState([]);
     const [ingredientID, setIngredientID] = useState(null);
+    const [rating, setRating] = useState(recipe.rating ?? 0);
+    const [effort, setEffort] = useState(recipe.effort ?? 0);
+
+    useEffect(() => {
+        setRating(recipe.rating ?? 0);
+        setEffort(recipe.effort ?? 0);
+    }, [recipe]);
+
+    useEffect(() => {
+        updateStarRating("[data-rating]", rating);
+    }, [rating]);
+
+    useEffect(() => {
+        updateStarRating("[data-effort]", effort);
+    }, [effort]);
 
     const blurHandler = (event) => {
         const { value } = event.target;
@@ -60,8 +86,18 @@ const UpdateRecipeDialog = ({ recipe, ingredients }) => {
         }
     };
 
-    const submitHandler = () => {
+    const submitHandler = (event) => {
+        const { id } = event.target;
+
+        const payload = {
+            id: id.value,
+            rating: rating,
+            effort: effort,
+        };
+
         // this handler being called within this component is preventing the handler running for changes to display name and servings
+        updateRows("recipes", payload).catch((error) => console.error(error));
+
         insertRows("recipes_ingredients", recipeIngredients)
             .catch((error) => console.error(error))
             .finally(() => {
@@ -92,19 +128,131 @@ const UpdateRecipeDialog = ({ recipe, ingredients }) => {
                         recipe.recipes_ingredients.map((item, index) => (
                             <Fragment key={index}>
                                 <Cluster space="var(--size-2)">
-                                    <span style={{ marginInlineEnd: "auto" }}>{item.ingredient_identifier}</span>
-                                    <button type="button" data-id={item.id} data-identifier={item.ingredient_identifier} data-operation="update" onClick={clickHandler}>
+                                    <span style={{ marginInlineEnd: "auto" }}>{item.ingredients.display_name}</span>
+                                    <button
+                                        type="button"
+                                        data-id={item.id}
+                                        data-identifier={item.ingredient_identifier}
+                                        data-operation="update"
+                                        onClick={clickHandler}
+                                    >
                                         <Icon label="Update" icon="edit" />
                                     </button>
-                                    <button type="button" data-id={item.id} data-identifier={item.ingredient_identifier} data-operation="delete" onClick={clickHandler}>
+                                    <button
+                                        type="button"
+                                        data-id={item.id}
+                                        data-identifier={item.ingredient_identifier}
+                                        data-operation="delete"
+                                        onClick={clickHandler}
+                                    >
                                         <Icon label="Remove" icon="trash" />
                                     </button>
                                 </Cluster>
                             </Fragment>
                         ))}
                 </Stack>
-                <hr />
-                <details>
+                <Stack space="var(--size-1)">
+                    <label htmlFor="rating">Rating</label>
+                    <input
+                        id="rating"
+                        type="number"
+                        defaultValue={recipe.rating}
+                        min={1}
+                        max={5}
+                        step={1}
+                        hidden
+                        readOnly
+                    />
+                    <Cluster space="var(--size-1)">
+                        <button
+                            type="button"
+                            className={styles.starRating}
+                            data-rating={1}
+                            onClick={() => setRating(1)}
+                        >
+                            <Icon label="1 out of 5" icon="star"></Icon>
+                        </button>
+                        <button
+                            type="button"
+                            className={styles.starRating}
+                            data-rating={2}
+                            onClick={() => setRating(2)}
+                        >
+                            <Icon label="2 out of 5" icon="star"></Icon>
+                        </button>
+                        <button
+                            type="button"
+                            className={styles.starRating}
+                            data-rating={3}
+                            onClick={() => setRating(3)}
+                        >
+                            <Icon label="3 out of 5" icon="star"></Icon>
+                        </button>
+                        <button
+                            type="button"
+                            className={styles.starRating}
+                            data-rating={4}
+                            onClick={() => setRating(4)}
+                        >
+                            <Icon label="4 out of 5" icon="star"></Icon>
+                        </button>
+                        <button
+                            type="button"
+                            className={styles.starRating}
+                            data-rating={5}
+                            onClick={() => setRating(5)}
+                        >
+                            <Icon label="5 out of 5" icon="star"></Icon>
+                        </button>
+                    </Cluster>
+                </Stack>
+                <Stack space="var(--size-1)">
+                    <label htmlFor="effort">Effort</label>
+                    <input id="effort" type="number" value={rating} min={1} max={5} step={1} hidden readOnly />
+                    <Cluster space="var(--size-1)">
+                        <button
+                            type="button"
+                            className={styles.starRating}
+                            data-effort={1}
+                            onClick={() => setEffort(1)}
+                        >
+                            <Icon label="1 out of 5" icon="star"></Icon>
+                        </button>
+                        <button
+                            type="button"
+                            className={styles.starRating}
+                            data-effort={2}
+                            onClick={() => setEffort(2)}
+                        >
+                            <Icon label="2 out of 5" icon="star"></Icon>
+                        </button>
+                        <button
+                            type="button"
+                            className={styles.starRating}
+                            data-effort={3}
+                            onClick={() => setEffort(3)}
+                        >
+                            <Icon label="3 out of 5" icon="star"></Icon>
+                        </button>
+                        <button
+                            type="button"
+                            className={styles.starRating}
+                            data-effort={4}
+                            onClick={() => setEffort(4)}
+                        >
+                            <Icon label="4 out of 5" icon="star"></Icon>
+                        </button>
+                        <button
+                            type="button"
+                            className={styles.starRating}
+                            data-effort={5}
+                            onClick={() => setEffort(5)}
+                        >
+                            <Icon label="5 out of 5" icon="star"></Icon>
+                        </button>
+                    </Cluster>
+                </Stack>
+                <details open>
                     <summary>Add ingredient</summary>
                     <div className={styles.addIngredientFieldset}>
                         <Stack>
@@ -129,7 +277,11 @@ const UpdateRecipeDialog = ({ recipe, ingredients }) => {
                                 <label className={styles.label} htmlFor="unit">
                                     Unit <small>(optional)</small>
                                 </label>
-                                <input placeholder="Leave blank to use the typical unit weight" id="unit" list="units" />
+                                <input
+                                    placeholder="Leave blank to use the typical unit weight"
+                                    id="unit"
+                                    list="units"
+                                />
                                 <datalist id="units">
                                     <option>g</option>
                                     <option>ml</option>

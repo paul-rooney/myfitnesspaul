@@ -34,7 +34,7 @@ const App = () => {
         if (!!sessionStorage.getItem("recipes")) {
             readRows(
                 "recipes",
-                `id, display_name, servings, page_number, 
+                `id, display_name, servings, page_number, rating, effort,
                 recipes_ingredients (ingredients!recipes_ingredients_ingredient_id_fkey (display_name), id, ingredient_identifier, quantity, unit, recipes_macronutrients (kcal, carbohydrate, fat, protein)),
                 recipes_sources (source, author, thumbnail_url)`
             ).then((recipes) => setRecipes(calculateMacronutrientTotals(recipes)));

@@ -210,3 +210,16 @@
         stroke-width: 4;
     }
 }
+
+.starRating {
+    background-color: transparent;
+    border: 0;
+    color: var(--yellow-6);
+    font-size: var(--font-size-3);
+    padding-block: var(--size-1);
+    padding-inline: 0;
+
+    &.active svg {
+        fill: var(--yellow-6);
+    }
+}

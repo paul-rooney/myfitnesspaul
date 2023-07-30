@@ -1,16 +1,16 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Cluster, Icon } from "../../primitives";
-import { deleteRows, insertRows, readRows, supabase, updateRows } from "../../supabase";
+import { deleteRows, insertRows, readRows, updateRows } from "../../supabase";
 import RecipeCard from "./RecipeCard";
 import CreateRecipeDialog from "./CreateRecipeDialog";
 import CreateRecipesIngredientsDialog from "./CreateRecipesIngredientsDialog";
 import styles from "./recipe-list.module.scss";
-import { calculateMacronutrientTotals, stripNonAlphanumeric } from "../../utilities";
+import { stripNonAlphanumeric } from "../../utilities";
 import usePagination from "../../hooks/usePagination";
 import UpdateRecipeDialog from "./UpdateRecipeDialog";
 import DeleteRecipeDialog from "./Dialogs/DeleteRecipeDialog";
 
-const RecipeList = ({ ingredients, recipes, setRecipes }) => {
+const RecipeList = ({ ingredients, recipes }) => {
     const [filteredRecipes, setFilteredRecipes] = useState([]);
     const [newRecipe, setNewRecipe] = useState({});
     const [recipeToUpdate, setRecipeToUpdate] = useState({});
