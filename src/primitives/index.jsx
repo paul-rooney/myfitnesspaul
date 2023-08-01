@@ -101,6 +101,23 @@ export const Cluster = ({ justify = "flex-start", align = "flex-start", space = 
 };
 
 export const Cover = ({ centered = "h1", space = "var(--size-3)", minBlockSize = "100vh", noPad = false, children, ...attributes }) => {
+    const element = useRef(null);
+
+    useEffect(() => {
+        if (!element) return;
+
+        const targets = Array.from(document.querySelectorAll(".cover"));
+        targets.forEach((target) => target.setAttribute("data-observe", ""));
+        const callback = (entries) => {
+            entries.forEach((entry) => {
+                entry.target.setAttribute("data-visible", entry.isIntersecting);
+            });
+        };
+
+        const observer = new IntersectionObserver(callback);
+        targets.forEach((target) => observer.observe(target));
+    }, [element]);
+
     const i = `cover-${[centered, space, minBlockSize, noPad].join("-")}`;
 
     if (!document.getElementById(i)) {
@@ -136,7 +153,7 @@ export const Cover = ({ centered = "h1", space = "var(--size-3)", minBlockSize =
     }
 
     return (
-        <div {...attributes} className={`cover ${attributes.className ?? ""}`.trim()} data-i={i}>
+        <div {...attributes} className={`cover ${attributes.className ?? ""}`.trim()} data-i={i} ref={element}>
             {children}
         </div>
     );
@@ -270,7 +287,7 @@ export const Imposter = ({ breakout = false, margin = "0px", fixed = false, chil
 };
 
 export const Reel = ({ itemWidth = "auto", height = "auto", space = "var(--size-3)", noBar = false, children, ...attributes }) => {
-    const [isOverflowing, setIsOverflowing] = useState();
+    const [isOverflowing, setIsOverflowing] = useState(false);
     const element = useRef(null);
 
     useEffect(() => {
