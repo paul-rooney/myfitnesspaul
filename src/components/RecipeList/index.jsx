@@ -7,15 +7,17 @@ import CreateRecipesIngredientsDialog from "./CreateRecipesIngredientsDialog";
 import styles from "./recipe-list.module.scss";
 import { stripNonAlphanumeric } from "../../utilities";
 import usePagination from "../../hooks/usePagination";
+import FilterRecipesWidget from "./FilterRecipesWidget";
 import UpdateRecipeDialog from "./UpdateRecipeDialog";
 import DeleteRecipeDialog from "./Dialogs/DeleteRecipeDialog";
+import useSessionStorage from "../../hooks/useSessionStorage";
 
 const RecipeList = ({ ingredients, recipes }) => {
     const [filteredRecipes, setFilteredRecipes] = useState([]);
     const [newRecipe, setNewRecipe] = useState({});
     const [recipeToUpdate, setRecipeToUpdate] = useState({});
     const [recipeToDelete, setRecipeToDelete] = useState({});
-    const [sources, setSources] = useState([]);
+    const [sources, setSources] = useSessionStorage("recipes_sources", []);
 
     const itemsPerPage = 10;
     const totalPages = Math.ceil(recipes.length / itemsPerPage);
@@ -33,7 +35,9 @@ const RecipeList = ({ ingredients, recipes }) => {
         .slice(startIndex, endIndex);
 
     useEffect(() => {
-        readRows("recipes_sources").then((data) => setSources(data));
+        if (!sessionStorage.getItem("recipes_sources")) {
+            readRows("recipes_sources").then((data) => setSources(data));
+        }
     }, []);
 
     useEffect(() => {
@@ -118,6 +122,8 @@ const RecipeList = ({ ingredients, recipes }) => {
         <>
             <h2 className={styles.heading}>Recipes</h2>
 
+            {/* <FilterRecipesWidget setFilteredRecipes={setFilteredRecipes} /> */}
+
             <button className={styles.addButton} data-operation="create" onClick={clickHandler}>
                 <Icon space=".5ch" direction="ltr" icon="plus">
                     Add recipe
@@ -131,9 +137,7 @@ const RecipeList = ({ ingredients, recipes }) => {
                 <button disabled={currentPage === 1} onClick={previousPage}>
                     Previous
                 </button>
-                <span style={{ fontSize: "var(--font-size-0)", minInlineSize: "3em", textAlign: "center" }}>
-                    {currentPage}
-                </span>
+                <span style={{ fontSize: "var(--font-size-0)", minInlineSize: "3em", textAlign: "center" }}>{currentPage}</span>
                 <button disabled={currentPage === totalPages} onClick={nextPage}>
                     Next
                 </button>

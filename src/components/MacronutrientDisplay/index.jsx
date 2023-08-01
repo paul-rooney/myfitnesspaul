@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../../supabase";
-import { formatDateISO } from "../../utilities";
+import { calculateMacronutrientTotals, formatDateISO } from "../../utilities";
 import { Cluster } from "../../primitives";
 import StackedBar from "./StackedBar";
 

@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { Cluster, Stack } from "../../primitives";
+import { Cluster, Icon, Stack } from "../../primitives";
 import { supabase, insertRows, readRows, upsertRows, updateRows } from "../../supabase";
 import { formatDate, formatDateISO, getPastDate, getFutureDate } from "../../utilities";
 import styles from "./logbook.module.scss";
 import MacronutrientDisplay from "../MacronutrientDisplay";
 import WeightDisplay from "../WeightDisplay";
+import useSessionStorage from "../../hooks/useSessionStorage";
 
 const getLog = async (table, columns = "*", date) => {
     try {
@@ -31,16 +32,21 @@ const getWeight = async (table, columns = "*", date) => {
 };
 
 const Logbook = ({ recipes }) => {
-    const [weight, setWeight] = useState(null);
+    const [displayedDate, setDisplayedDate] = useState(new Date());
+    const [weight, setWeight] = useSessionStorage(`users_weight_${formatDateISO(displayedDate)}`, null);
     const [breakfast, setBreakfast] = useState({});
     const [lunch, setLunch] = useState({});
     const [dinner, setDinner] = useState({});
-    const [displayedDate, setDisplayedDate] = useState(new Date());
 
     useEffect(() => {
         const date = formatDateISO(displayedDate);
 
-        getWeight("users_weight", "weight", date).then(([entry]) => setWeight(entry?.weight));
+        if (sessionStorage.getItem(`users_weight_${date}`) && JSON.parse(sessionStorage.getItem(`users_weight_${date}`))) {
+            setWeight(JSON.parse(sessionStorage.getItem(`users_weight_${date}`)));
+        } else {
+            getWeight("users_weight", "weight", date).then(([entry]) => setWeight(entry?.weight));
+        }
+
         getLog("users_logs", "*, recipes (display_name)", date).then((data) => {
             setBreakfast({});
             setLunch({});
@@ -196,7 +202,7 @@ const Logbook = ({ recipes }) => {
                     </label>
                     <input id="weight" type="number" defaultValue={weight} step={0.25} />
                     <Cluster justify="end">
-                        <button>Log weight</button>
+                        <button className={styles.button}>Log weight</button>
                     </Cluster>
                 </Stack>
             </form>
@@ -209,51 +215,53 @@ const Logbook = ({ recipes }) => {
                         </option>
                     ))}
                 </datalist>
-                <Stack>
+                <Stack space="var(--size-4)">
                     <Stack space="var(--size-1)">
                         <Cluster justify="space-between" align="baseline">
                             <label htmlFor="breakfast">Breakfast</label>
-                            <button type="button" data-meal="breakfast" onClick={clickHandler}>
-                                Add
+                            <button className={styles.button} type="button" data-meal="breakfast" onClick={clickHandler}>
+                                <Icon space="0.5ch" direction="ltr" icon="plus">Add</Icon>
                             </button>
                         </Cluster>
-                        <input id="breakfast" list="recipes_list" />
-                        <Stack space="var(--size-1)" role="list">
+                        <input id="breakfast" list="recipes_list" placeholder={breakfast?.display_name} />
+                        {/* <Stack space="var(--size-1)" role="list">
                             <p className={styles.meals} role="listitem">
                                 {breakfast?.display_name}
                             </p>
-                        </Stack>
+                        </Stack> */}
                     </Stack>
                     <Stack space="var(--size-1)">
                         <Cluster justify="space-between" align="baseline">
                             <label htmlFor="lunch">Lunch</label>
-                            <button type="button" data-meal="lunch" onClick={clickHandler}>
-                                Add
+                            <button className={styles.button} type="button" data-meal="lunch" onClick={clickHandler}>
+                                <Icon space="0.5ch" direction="ltr" icon="plus">Add</Icon>
                             </button>
                         </Cluster>
-                        <input id="lunch" list="recipes_list" />
-                        <Stack space="var(--size-1)" role="list">
+                        <input id="lunch" list="recipes_list" placeholder={lunch?.display_name} />
+                        {/* <Stack space="var(--size-1)" role="list">
                             <p className={styles.meals} role="listitem">
                                 {lunch?.display_name}
                             </p>
-                        </Stack>
+                        </Stack> */}
                     </Stack>
                     <Stack space="var(--size-1)">
                         <Cluster justify="space-between" align="center">
                             <label htmlFor="dinner">Dinner</label>
-                            <button type="button" data-meal="dinner" onClick={clickHandler}>
-                                Add
+                            <button className={styles.button} type="button" data-meal="dinner" onClick={clickHandler}>
+                                <Icon space="0.5ch" direction="ltr" icon="plus">Add</Icon>
                             </button>
                         </Cluster>
-                        <input id="dinner" list="recipes_list" />
-                        <Stack space="var(--size-1)" role="list">
+                        <input id="dinner" list="recipes_list" placeholder={dinner?.display_name} />
+                        {/* <Stack space="var(--size-1)" role="list">
                             <p className={styles.meals} role="listitem">
                                 {dinner?.display_name}
                             </p>
-                        </Stack>
+                        </Stack> */}
                     </Stack>
                     <Cluster justify="end">
-                        <button type="submit">Complete log</button>
+                        <button className={styles.button} type="submit">
+                            <Icon space="1ch" direction="rtl" icon="check">Complete log</Icon>
+                        </button>
                     </Cluster>
                 </Stack>
             </form>
