@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import { Cluster, Icon, Stack } from "../../primitives";
-import { supabase, insertRows, readRows, upsertRows, updateRows } from "../../supabase";
+import { supabase, upsertRows } from "../../supabase";
 import { formatDate, formatDateISO, getPastDate, getFutureDate } from "../../utilities";
 import styles from "./logbook.module.scss";
 import MacronutrientDisplay from "../MacronutrientDisplay";
 import WeightDisplay from "../WeightDisplay";
-import useSessionStorage from "../../hooks/useSessionStorage";
 
 const getLog = async (table, columns = "*", matchedColumn, date) => {
     try {
@@ -21,7 +20,7 @@ const getLog = async (table, columns = "*", matchedColumn, date) => {
 
 const Logbook = ({ recipes }) => {
     const [date, setDate] = useState(formatDateISO(new Date()));
-    const [weight, setWeight] = useSessionStorage(`users_weight_${date}`, 0);
+    const [weight, setWeight] = useState(null);
     const [breakfast, setBreakfast] = useState({});
     const [lunch, setLunch] = useState({});
     const [dinner, setDinner] = useState({});
@@ -188,11 +187,6 @@ const Logbook = ({ recipes }) => {
                             </button>
                         </Cluster>
                         <input id="breakfast" list="recipes_list" placeholder={breakfast?.display_name} />
-                        {/* <Stack space="var(--size-1)" role="list">
-                            <p className={styles.meals} role="listitem">
-                                {breakfast?.display_name}
-                            </p>
-                        </Stack> */}
                     </Stack>
                     <Stack space="var(--size-1)">
                         <Cluster justify="space-between" align="baseline">
@@ -204,11 +198,6 @@ const Logbook = ({ recipes }) => {
                             </button>
                         </Cluster>
                         <input id="lunch" list="recipes_list" placeholder={lunch?.display_name} />
-                        {/* <Stack space="var(--size-1)" role="list">
-                            <p className={styles.meals} role="listitem">
-                                {lunch?.display_name}
-                            </p>
-                        </Stack> */}
                     </Stack>
                     <Stack space="var(--size-1)">
                         <Cluster justify="space-between" align="center">
@@ -220,11 +209,6 @@ const Logbook = ({ recipes }) => {
                             </button>
                         </Cluster>
                         <input id="dinner" list="recipes_list" placeholder={dinner?.display_name} />
-                        {/* <Stack space="var(--size-1)" role="list">
-                            <p className={styles.meals} role="listitem">
-                                {dinner?.display_name}
-                            </p>
-                        </Stack> */}
                     </Stack>
                     <Cluster justify="end">
                         <button className={styles.button} type="submit">
