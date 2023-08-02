@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Cluster, Icon, Grid, Stack, Switcher } from "../../primitives";
 import { supabase } from "../../supabase";
 import { groupBy, shuffleArray } from "../../utilities";
@@ -19,7 +19,12 @@ function getRandomCombinations(objects, range1, range2, n) {
         const newKcalSum = kcalSum + currentObject.kcal;
         const newProteinSum = proteinSum + currentObject.protein;
 
-        if (newKcalSum >= range1[0] && newKcalSum <= range1[1] && newProteinSum >= range2[0] && newProteinSum <= range2[1]) {
+        if (
+            newKcalSum >= range1[0] &&
+            newKcalSum <= range1[1] &&
+            newProteinSum >= range2[0] &&
+            newProteinSum <= range2[1]
+        ) {
             const combination = [...arr, currentObject];
             const combinationString = JSON.stringify(combination);
 
@@ -57,9 +62,43 @@ const readRows = async (table, columns = "*", arr) => {
     }
 };
 
+const read = async (table, columns = "*") => {
+    try {
+        const { data, error } = await supabase.from(table).select(columns);
+        if (error) {
+            throw new Error(error.message);
+        }
+        return data;
+    } catch (error) {
+        console.error("An error occurred: ", error);
+    }
+};
+
+const getWeight = async () => {
+    const getMeanWeight = (arr) => arr.reduce((acc, value) => acc + value, 0) / arr.length;
+    
+    const weightData = await read("users_weight");
+    // const { weight } = weightData.pop();
+    const weight = weightData.slice(-7).map(value => value.weight);
+    const meanWeight = getMeanWeight(weight);
+
+    return meanWeight;
+};
+
+const mifflinStJeorEquation = (weight, height, age) => {
+    return (10 * (weight / 2.205)) + (6.25 * height) - (5 * 32) + 5;
+};
+
 const MealPlanner = ({ recipes }) => {
     const [mealPlan, setMealPlan] = useState([]);
     const [shoppingList, setShoppingList] = useState([]);
+    const [weight, setWeight] = useState(null);
+
+    useEffect(() => {
+        if (weight) return;
+
+        getWeight().then((weightValue) => setWeight(weightValue));
+    }, [weight]);
 
     const submitHandler = (event) => {
         event.preventDefault();
@@ -137,24 +176,26 @@ const MealPlanner = ({ recipes }) => {
     const generateShoppingList = () => {
         let arr = mealPlan.flat().map((item) => item.id);
 
-        readRows("recipes_ingredients", `id, recipe_id, quantity, unit, ingredients (id, display_name)`, arr).then((ingredients) => {
-            const groupedMealsWithIngredients = mealPlan
-                .flat()
-                .map((meal) =>
-                    ingredients
-                        .filter((item) => meal.id === item.recipe_id)
-                        .map((item) => ({
-                            ...meal,
-                            ingredient_id: item.ingredients.id,
-                            ingredient_display_name: item.ingredients.display_name,
-                            quantity: item.quantity,
-                            unit: item.unit,
-                        }))
-                )
-                .flat();
+        readRows("recipes_ingredients", `id, recipe_id, quantity, unit, ingredients (id, display_name)`, arr).then(
+            (ingredients) => {
+                const groupedMealsWithIngredients = mealPlan
+                    .flat()
+                    .map((meal) =>
+                        ingredients
+                            .filter((item) => meal.id === item.recipe_id)
+                            .map((item) => ({
+                                ...meal,
+                                ingredient_id: item.ingredients.id,
+                                ingredient_display_name: item.ingredients.display_name,
+                                quantity: item.quantity,
+                                unit: item.unit,
+                            }))
+                    )
+                    .flat();
 
-            setShoppingList(Object.entries(groupBy(groupedMealsWithIngredients, "ingredient_display_name")));
-        });
+                setShoppingList(Object.entries(groupBy(groupedMealsWithIngredients, "ingredient_display_name")));
+            }
+        );
     };
 
     const lockMeal = (dayIndex, mealIndex) => {
@@ -175,11 +216,13 @@ const MealPlanner = ({ recipes }) => {
         setMealPlan(newArr);
     };
 
+    // const bmr = mifflinStJeorEquation(weight, 175.26, 32);
+
     return (
         <>
             <h2 className={styles.heading}>Meal Planner</h2>
 
-            <details className={styles.details}>
+            <details className={styles.details} open>
                 <summary>
                     <h3>Meal Planner</h3>
                 </summary>
@@ -188,26 +231,58 @@ const MealPlanner = ({ recipes }) => {
                         <Switcher threshold="280px" space="var(--size-1)" limit="2">
                             <Stack space="var(--size-1)">
                                 <label className={styles.label}>Minimum kcal</label>
-                                <input id="minKcal" className={styles.input} type="number" step={10} defaultValue={1400}></input>
+                                <input
+                                    id="minKcal"
+                                    className={styles.input}
+                                    type="number"
+                                    step={10}
+                                    defaultValue={weight && Math.round(weight * 10 - 50)}
+                                ></input>
                             </Stack>
                             <Stack space="var(--size-1)">
                                 <label className={styles.label}>Maximum kcal</label>
-                                <input id="maxKcal" className={styles.input} type="number" step={10} defaultValue={1550}></input>
+                                <input
+                                    id="maxKcal"
+                                    className={styles.input}
+                                    type="number"
+                                    step={10}
+                                    defaultValue={weight && Math.round(weight * 10 + 50)}
+                                ></input>
                             </Stack>
                         </Switcher>
                         <Switcher threshold="280px" space="var(--size-1)" limit="3">
                             <Stack space="var(--size-1)">
                                 <label className={styles.label}>Minimum protein</label>
-                                <input id="minProtein" className={styles.input} type="number" step={1} defaultValue={120}></input>
+                                <input
+                                    id="minProtein"
+                                    className={styles.input}
+                                    type="number"
+                                    step={1}
+                                    defaultValue={weight && Math.round(weight * 0.7)}
+                                ></input>
                             </Stack>
                             <Stack space="var(--size-1)">
                                 <label className={styles.label}>Maximum protein</label>
-                                <input id="maxProtein" className={styles.input} type="number" step={1} defaultValue={160}></input>
+                                <input
+                                    id="maxProtein"
+                                    className={styles.input}
+                                    type="number"
+                                    step={1}
+                                    defaultValue={weight && Math.round(weight * 1.1)}
+                                ></input>
                             </Stack>
                         </Switcher>
                         <Stack space="var(--size-1)">
                             <label className={styles.label}>Number of days</label>
-                            <input id="numDays" className={styles.input} type="number" min={1} max={14} step={1} defaultValue={7}></input>
+                            <input
+                                id="numDays"
+                                className={styles.input}
+                                type="number"
+                                min={1}
+                                max={14}
+                                step={1}
+                                defaultValue={7}
+                            ></input>
                         </Stack>
                         <button type="submit" className={styles.addButton}>
                             <Icon space=".5ch" direction="ltr" icon="plus">
@@ -223,14 +298,24 @@ const MealPlanner = ({ recipes }) => {
                                   <Stack key={dayIndex} space="var(--size-2)">
                                       <Cluster justify="space-between" align="baseline">
                                           <h3>Day {dayIndex + 1}</h3>
-                                          <button className={styles.addButton} onClick={() => updateMealPlan(dayIndex, [1400, 1550], [120, 160], 1)}>
+                                          <button
+                                              className={styles.addButton}
+                                              onClick={() => updateMealPlan(dayIndex, [1400, 1550], [120, 160], 1)}
+                                          >
                                               <Icon space=".5ch" direction="ltr" icon="refresh-cw" />
                                           </button>
                                       </Cluster>
                                       {day.map((meal, mealIndex) => (
-                                          <button key={`${meal.id}-${dayIndex}`} type="button" onClick={() => lockMeal(dayIndex, mealIndex)} style={meal?.is_locked ? { backgroundColor: "blue" } : {}}>
+                                          <button
+                                              key={`${meal.id}-${dayIndex}`}
+                                              type="button"
+                                              onClick={() => lockMeal(dayIndex, mealIndex)}
+                                              style={meal?.is_locked ? { backgroundColor: "blue" } : {}}
+                                          >
                                               <Stack space="var(--size-1)">
-                                                  <span style={{ color: "var(--blue-10)", fontWeight: "600" }}>{meal.display_name}</span>
+                                                  <span style={{ color: "var(--blue-10)", fontWeight: "600" }}>
+                                                      {meal.display_name}
+                                                  </span>
                                                   <Cluster>
                                                       <span>kcal: {meal.kcal}</span>
 
@@ -255,7 +340,7 @@ const MealPlanner = ({ recipes }) => {
                         : null}
                 </Grid>
             </details>
-            <details className={styles.details}>
+            <details className={styles.details} open>
                 <summary>
                     <h3>Shopping list</h3>
                 </summary>
