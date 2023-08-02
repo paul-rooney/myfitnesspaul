@@ -18,10 +18,12 @@ const updateStarRating = (selector, dependency) => {
 const UpdateRecipeDialog = ({ recipe, ingredients }) => {
     const [recipeIngredients, setRecipeIngredients] = useState([]);
     const [ingredientID, setIngredientID] = useState(null);
+    const [pageNumber, setPageNumber] = useState(recipe.page_number ?? null);
     const [rating, setRating] = useState(recipe.rating ?? 0);
     const [effort, setEffort] = useState(recipe.effort ?? 0);
 
     useEffect(() => {
+        setPageNumber(recipe.page_number ?? null);
         setRating(recipe.rating ?? 0);
         setEffort(recipe.effort ?? 0);
     }, [recipe]);
@@ -43,6 +45,12 @@ const UpdateRecipeDialog = ({ recipe, ingredients }) => {
         const { id } = item;
 
         setIngredientID(id);
+    };
+
+    const changeHandler = (event) => {
+        const pageNumber = event.target.value ? event.target.value : null;
+
+        setPageNumber(pageNumber);
     };
 
     const addIngredientToList = (event) => {
@@ -89,10 +97,13 @@ const UpdateRecipeDialog = ({ recipe, ingredients }) => {
     const submitHandler = (event) => {
         const { id } = event.target;
 
+        console.log(pageNumber);
+
         const payload = {
             id: id.value,
             rating: rating,
             effort: effort,
+            page_number: pageNumber,
         };
 
         // this handler being called within this component is preventing the handler running for changes to display name and servings
@@ -105,11 +116,20 @@ const UpdateRecipeDialog = ({ recipe, ingredients }) => {
             });
     };
 
+    console.log(pageNumber);
+
     return (
         <Dialog id="updateRecipeDialog" title="Update recipe" submitHandler={submitHandler}>
             <Stack>
+                <h2 style={{ fontSize: "var(--font-size-0)", fontWeight: "var(--font-weight-4)" }}>{recipe?.recipes_sources?.source}</h2>
                 <input id="id" hidden defaultValue={recipe.id} />
                 <input id="source" hidden defaultValue={recipe.source} />
+                <Stack space="var(--size-1)">
+                    <label className={styles.label} htmlFor="page_number">
+                        Page number
+                    </label>
+                    <input id="page_number" defaultValue={pageNumber} onChange={changeHandler} />
+                </Stack>
                 <Stack space="var(--size-1)">
                     <label className={styles.label} htmlFor="display_name">
                         Display name
@@ -122,86 +142,23 @@ const UpdateRecipeDialog = ({ recipe, ingredients }) => {
                     </label>
                     <input id="servings" type="number" required defaultValue={recipe.servings} />
                 </Stack>
-                <Stack space="var(--size-2)">
-                    {recipe &&
-                        recipe.recipes_ingredients &&
-                        recipe.recipes_ingredients.map((item, index) => (
-                            <Fragment key={index}>
-                                <Cluster space="var(--size-2)">
-                                    <span style={{ marginInlineEnd: "auto" }}>{item.ingredients.display_name}</span>
-                                    <button
-                                        type="button"
-                                        data-id={item.id}
-                                        data-identifier={item.ingredient_identifier}
-                                        data-operation="update"
-                                        onClick={clickHandler}
-                                    >
-                                        <Icon label="Update" icon="edit" />
-                                    </button>
-                                    <button
-                                        type="button"
-                                        data-id={item.id}
-                                        data-identifier={item.ingredient_identifier}
-                                        data-operation="delete"
-                                        onClick={clickHandler}
-                                    >
-                                        <Icon label="Remove" icon="trash" />
-                                    </button>
-                                </Cluster>
-                            </Fragment>
-                        ))}
-                </Stack>
                 <Stack space="var(--size-1)">
                     <label htmlFor="rating">Rating</label>
-                    <input
-                        id="rating"
-                        type="number"
-                        defaultValue={recipe.rating}
-                        min={1}
-                        max={5}
-                        step={1}
-                        hidden
-                        readOnly
-                    />
+                    <input id="rating" type="number" defaultValue={recipe.rating} min={1} max={5} step={1} hidden readOnly />
                     <Cluster space="var(--size-1)">
-                        <button
-                            type="button"
-                            className={styles.starRating}
-                            data-rating={1}
-                            onClick={() => setRating(1)}
-                        >
+                        <button type="button" className={styles.starRating} data-rating={1} onClick={() => setRating(1)}>
                             <Icon label="1 out of 5" icon="star"></Icon>
                         </button>
-                        <button
-                            type="button"
-                            className={styles.starRating}
-                            data-rating={2}
-                            onClick={() => setRating(2)}
-                        >
+                        <button type="button" className={styles.starRating} data-rating={2} onClick={() => setRating(2)}>
                             <Icon label="2 out of 5" icon="star"></Icon>
                         </button>
-                        <button
-                            type="button"
-                            className={styles.starRating}
-                            data-rating={3}
-                            onClick={() => setRating(3)}
-                        >
+                        <button type="button" className={styles.starRating} data-rating={3} onClick={() => setRating(3)}>
                             <Icon label="3 out of 5" icon="star"></Icon>
                         </button>
-                        <button
-                            type="button"
-                            className={styles.starRating}
-                            data-rating={4}
-                            onClick={() => setRating(4)}
-                        >
+                        <button type="button" className={styles.starRating} data-rating={4} onClick={() => setRating(4)}>
                             <Icon label="4 out of 5" icon="star"></Icon>
                         </button>
-                        <button
-                            type="button"
-                            className={styles.starRating}
-                            data-rating={5}
-                            onClick={() => setRating(5)}
-                        >
+                        <button type="button" className={styles.starRating} data-rating={5} onClick={() => setRating(5)}>
                             <Icon label="5 out of 5" icon="star"></Icon>
                         </button>
                     </Cluster>
@@ -210,47 +167,39 @@ const UpdateRecipeDialog = ({ recipe, ingredients }) => {
                     <label htmlFor="effort">Effort</label>
                     <input id="effort" type="number" value={rating} min={1} max={5} step={1} hidden readOnly />
                     <Cluster space="var(--size-1)">
-                        <button
-                            type="button"
-                            className={styles.starRating}
-                            data-effort={1}
-                            onClick={() => setEffort(1)}
-                        >
+                        <button type="button" className={styles.starRating} data-effort={1} onClick={() => setEffort(1)}>
                             <Icon label="1 out of 5" icon="star"></Icon>
                         </button>
-                        <button
-                            type="button"
-                            className={styles.starRating}
-                            data-effort={2}
-                            onClick={() => setEffort(2)}
-                        >
+                        <button type="button" className={styles.starRating} data-effort={2} onClick={() => setEffort(2)}>
                             <Icon label="2 out of 5" icon="star"></Icon>
                         </button>
-                        <button
-                            type="button"
-                            className={styles.starRating}
-                            data-effort={3}
-                            onClick={() => setEffort(3)}
-                        >
+                        <button type="button" className={styles.starRating} data-effort={3} onClick={() => setEffort(3)}>
                             <Icon label="3 out of 5" icon="star"></Icon>
                         </button>
-                        <button
-                            type="button"
-                            className={styles.starRating}
-                            data-effort={4}
-                            onClick={() => setEffort(4)}
-                        >
+                        <button type="button" className={styles.starRating} data-effort={4} onClick={() => setEffort(4)}>
                             <Icon label="4 out of 5" icon="star"></Icon>
                         </button>
-                        <button
-                            type="button"
-                            className={styles.starRating}
-                            data-effort={5}
-                            onClick={() => setEffort(5)}
-                        >
+                        <button type="button" className={styles.starRating} data-effort={5} onClick={() => setEffort(5)}>
                             <Icon label="5 out of 5" icon="star"></Icon>
                         </button>
                     </Cluster>
+                </Stack>
+                <Stack space="var(--size-2)">
+                    {recipe &&
+                        recipe.recipes_ingredients &&
+                        recipe.recipes_ingredients.map((item, index) => (
+                            <Fragment key={index}>
+                                <Cluster space="var(--size-2)">
+                                    <span style={{ marginInlineEnd: "auto" }}>{item.ingredients.display_name}</span>
+                                    <button type="button" data-id={item.id} data-identifier={item.ingredient_identifier} data-operation="update" onClick={clickHandler}>
+                                        <Icon label="Update" icon="edit" />
+                                    </button>
+                                    <button type="button" data-id={item.id} data-identifier={item.ingredient_identifier} data-operation="delete" onClick={clickHandler}>
+                                        <Icon label="Remove" icon="trash" />
+                                    </button>
+                                </Cluster>
+                            </Fragment>
+                        ))}
                 </Stack>
                 <details open>
                     <summary>Add ingredient</summary>
@@ -277,11 +226,7 @@ const UpdateRecipeDialog = ({ recipe, ingredients }) => {
                                 <label className={styles.label} htmlFor="unit">
                                     Unit <small>(optional)</small>
                                 </label>
-                                <input
-                                    placeholder="Leave blank to use the typical unit weight"
-                                    id="unit"
-                                    list="units"
-                                />
+                                <input placeholder="Leave blank to use the typical unit weight" id="unit" list="units" />
                                 <datalist id="units">
                                     <option>g</option>
                                     <option>ml</option>

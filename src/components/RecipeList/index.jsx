@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Cluster, Icon } from "../../primitives";
+import { Cluster, Icon, Stack } from "../../primitives";
 import { deleteRows, insertRows, readRows, updateRows } from "../../supabase";
 import RecipeCard from "./RecipeCard";
 import CreateRecipeDialog from "./CreateRecipeDialog";
@@ -7,15 +7,17 @@ import CreateRecipesIngredientsDialog from "./CreateRecipesIngredientsDialog";
 import styles from "./recipe-list.module.scss";
 import { stripNonAlphanumeric } from "../../utilities";
 import usePagination from "../../hooks/usePagination";
+import FilterRecipesWidget from "./FilterRecipesWidget";
 import UpdateRecipeDialog from "./UpdateRecipeDialog";
 import DeleteRecipeDialog from "./Dialogs/DeleteRecipeDialog";
+import useSessionStorage from "../../hooks/useSessionStorage";
 
 const RecipeList = ({ ingredients, recipes }) => {
     const [filteredRecipes, setFilteredRecipes] = useState([]);
     const [newRecipe, setNewRecipe] = useState({});
     const [recipeToUpdate, setRecipeToUpdate] = useState({});
     const [recipeToDelete, setRecipeToDelete] = useState({});
-    const [sources, setSources] = useState([]);
+    const [sources, setSources] = useSessionStorage("recipes_sources", []);
 
     const itemsPerPage = 10;
     const totalPages = Math.ceil(recipes.length / itemsPerPage);
@@ -33,6 +35,10 @@ const RecipeList = ({ ingredients, recipes }) => {
         .slice(startIndex, endIndex);
 
     useEffect(() => {
+        const recipes_sources = sessionStorage.getItem("recipes_sources");
+
+        if (recipes_sources && JSON.parse(recipes_sources).length) return;
+        
         readRows("recipes_sources").then((data) => setSources(data));
     }, []);
 
@@ -57,7 +63,6 @@ const RecipeList = ({ ingredients, recipes }) => {
                 setRecipeToUpdate(item);
                 dialog = document.getElementById("updateRecipeDialog");
                 dialog.showModal();
-                console.log(item);
                 break;
 
             case "delete":
@@ -115,8 +120,10 @@ const RecipeList = ({ ingredients, recipes }) => {
     };
 
     return (
-        <>
+        <Stack>
             <h2 className={styles.heading}>Recipes</h2>
+
+            {/* <FilterRecipesWidget setFilteredRecipes={setFilteredRecipes} /> */}
 
             <button className={styles.addButton} data-operation="create" onClick={clickHandler}>
                 <Icon space=".5ch" direction="ltr" icon="plus">
@@ -131,9 +138,7 @@ const RecipeList = ({ ingredients, recipes }) => {
                 <button disabled={currentPage === 1} onClick={previousPage}>
                     Previous
                 </button>
-                <span style={{ fontSize: "var(--font-size-0)", minInlineSize: "3em", textAlign: "center" }}>
-                    {currentPage}
-                </span>
+                <span style={{ fontSize: "var(--font-size-0)", minInlineSize: "3em", textAlign: "center" }}>{currentPage}</span>
                 <button disabled={currentPage === totalPages} onClick={nextPage}>
                     Next
                 </button>
@@ -158,7 +163,7 @@ const RecipeList = ({ ingredients, recipes }) => {
             <CreateRecipesIngredientsDialog ingredients={ingredients} recipe={newRecipe} />
             <UpdateRecipeDialog recipe={recipeToUpdate} ingredients={ingredients} />
             <DeleteRecipeDialog recipe={recipeToDelete} handleSubmit={submitHandler} />
-        </>
+        </Stack>
     );
 };
 

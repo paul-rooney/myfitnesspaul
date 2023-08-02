@@ -219,7 +219,7 @@ const MealPlanner = ({ recipes }) => {
     // const bmr = mifflinStJeorEquation(weight, 175.26, 32);
 
     return (
-        <>
+        <Stack>
             <h2 className={styles.heading}>Meal Planner</h2>
 
             <details className={styles.details} open>
@@ -391,7 +391,7 @@ const MealPlanner = ({ recipes }) => {
                         : null}
                 </Grid>
             </details>
-        </>
+        </Stack>
     );
 };
 
