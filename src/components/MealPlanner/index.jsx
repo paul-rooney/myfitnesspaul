@@ -176,7 +176,7 @@ const MealPlanner = ({ recipes }) => {
     };
 
     return (
-        <>
+        <Stack>
             <h2 className={styles.heading}>Meal Planner</h2>
 
             <details className={styles.details}>
@@ -306,7 +306,7 @@ const MealPlanner = ({ recipes }) => {
                         : null}
                 </Grid>
             </details>
-        </>
+        </Stack>
     );
 };
 

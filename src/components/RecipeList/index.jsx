@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Cluster, Icon } from "../../primitives";
+import { Cluster, Icon, Stack } from "../../primitives";
 import { deleteRows, insertRows, readRows, updateRows } from "../../supabase";
 import RecipeCard from "./RecipeCard";
 import CreateRecipeDialog from "./CreateRecipeDialog";
@@ -35,9 +35,11 @@ const RecipeList = ({ ingredients, recipes }) => {
         .slice(startIndex, endIndex);
 
     useEffect(() => {
-        if (!sessionStorage.getItem("recipes_sources")) {
-            readRows("recipes_sources").then((data) => setSources(data));
-        }
+        const recipes_sources = sessionStorage.getItem("recipes_sources");
+
+        if (recipes_sources && JSON.parse(recipes_sources).length) return;
+        
+        readRows("recipes_sources").then((data) => setSources(data));
     }, []);
 
     useEffect(() => {
@@ -119,7 +121,7 @@ const RecipeList = ({ ingredients, recipes }) => {
     };
 
     return (
-        <>
+        <Stack>
             <h2 className={styles.heading}>Recipes</h2>
 
             {/* <FilterRecipesWidget setFilteredRecipes={setFilteredRecipes} /> */}
@@ -162,7 +164,7 @@ const RecipeList = ({ ingredients, recipes }) => {
             <CreateRecipesIngredientsDialog ingredients={ingredients} recipe={newRecipe} />
             <UpdateRecipeDialog recipe={recipeToUpdate} ingredients={ingredients} />
             <DeleteRecipeDialog recipe={recipeToDelete} handleSubmit={submitHandler} />
-        </>
+        </Stack>
     );
 };
 

@@ -11,24 +11,16 @@ const SnapTabs = ({ ingredients, setIngredients, recipes, setRecipes }) => {
             <div className={styles.tabs}>
                 <section className={`${styles.section} ${styles.scroll}`}>
                     <Box id="log" className={styles.article}>
-                        <Stack>
-                            <Logbook recipes={recipes} />
-                        </Stack>
+                        <Logbook recipes={recipes} />
                     </Box>
                     <Box id="mealPlanner" className={styles.article}>
-                        <Stack>
-                            <MealPlanner recipes={recipes} />
-                        </Stack>
+                        <MealPlanner recipes={recipes} />
                     </Box>
                     <Box id="recipes" className={styles.article}>
-                        <Stack>
-                            <RecipeList ingredients={ingredients} setIngredients={setIngredients} recipes={recipes} setRecipes={setRecipes} />
-                        </Stack>
+                        <RecipeList ingredients={ingredients} setIngredients={setIngredients} recipes={recipes} setRecipes={setRecipes} />
                     </Box>
                     <Box id="ingredients" className={styles.article}>
-                        <Stack>
-                            <IngredientList ingredients={ingredients} setIngredients={setIngredients} />
-                        </Stack>
+                        <IngredientList ingredients={ingredients} setIngredients={setIngredients} />
                     </Box>
                 </section>
             </div>

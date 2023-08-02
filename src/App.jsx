@@ -27,22 +27,26 @@ const App = () => {
     useEffect(() => {
         if (!session) return;
 
-        if (sessionStorage.getItem("ingredients") && JSON.parse(sessionStorage.getItem("ingredients")).length) {
-            setIngredients(JSON.parse(sessionStorage.getItem("ingredients")));
-        } else {
-            readRows("ingredients").then((ingredients) => setIngredients(ingredients));
-        }
+        const ingredients = sessionStorage.getItem("ingredients");
 
-        if (sessionStorage.getItem("recipes") && JSON.parse(sessionStorage.getItem("recipes")).length) {
-            setRecipes(calculateMacronutrientTotals(JSON.parse(sessionStorage.getItem("recipes"))));
-        } else {
-            readRows(
-                "recipes",
-                `id, display_name, servings, page_number, rating, effort,
+        if (ingredients && JSON.parse(ingredients).length) return;
+
+        readRows("ingredients").then((ingredients) => setIngredients(ingredients));
+    }, [session]);
+
+    useEffect(() => {
+        if (!session) return;
+
+        const recipes = sessionStorage.getItem("recipes");
+        
+        if (recipes && JSON.parse(recipes).length) return;
+
+        readRows(
+            "recipes",
+            `id, display_name, servings, page_number, rating, effort,
                 recipes_ingredients (ingredients!recipes_ingredients_ingredient_id_fkey (display_name), id, ingredient_identifier, quantity, unit, recipes_macronutrients (kcal, carbohydrate, fat, protein)),
                 recipes_sources (source, author, thumbnail_url)`
-            ).then((recipes) => setRecipes(calculateMacronutrientTotals(recipes)));
-        }
+        ).then((recipes) => setRecipes(calculateMacronutrientTotals(recipes)));
     }, [session]);
 
     useEffect(() => {

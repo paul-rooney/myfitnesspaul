@@ -68,18 +68,7 @@ const IngredientList = ({ ingredients, setIngredients }) => {
     const submitHandler = (event) => {
         const form = event.target;
         const { operation } = form.dataset;
-        const {
-            id,
-            identifier,
-            grouping,
-            display_name,
-            brand_name,
-            kcal,
-            carbohydrate,
-            fat,
-            protein,
-            avg_unit_weight,
-        } = form;
+        const { id, identifier, grouping, display_name, brand_name, kcal, carbohydrate, fat, protein, avg_unit_weight } = form;
         let ingredient = {
             identifier: stripNonAlphanumeric(identifier.value).trim().toLowerCase(),
             grouping: grouping.value ? stripNonAlphanumeric(grouping.value).trim().toLowerCase() : null,
@@ -118,7 +107,7 @@ const IngredientList = ({ ingredients, setIngredients }) => {
     };
 
     return (
-        <>
+        <Stack>
             <h2 className={styles.heading}>Ingredients</h2>
 
             <FilterIngredientsForm ingredients={ingredients} setFilteredIngredients={setFilteredIngredients} />
@@ -136,9 +125,7 @@ const IngredientList = ({ ingredients, setIngredients }) => {
                 <button disabled={currentPage === 1} onClick={previousPage}>
                     Previous
                 </button>
-                <span style={{ fontSize: "var(--font-size-0)", minInlineSize: "3em", textAlign: "center" }}>
-                    {currentPage}
-                </span>
+                <span style={{ fontSize: "var(--font-size-0)", minInlineSize: "3em", textAlign: "center" }}>{currentPage}</span>
                 <button disabled={currentPage === totalPages} onClick={nextPage}>
                     Next
                 </button>
@@ -149,47 +136,29 @@ const IngredientList = ({ ingredients, setIngredients }) => {
 
             <ul className={styles.ul}>
                 {displayedItems.length > 0 ? (
-                    displayedItems.map(
-                        ({ brand_name, carbohydrate, display_name, fat, id, kcal, protein, avg_unit_weight }) => (
-                            <li className={styles.li} key={id}>
-                                <details className={styles.details}>
-                                    <summary className={styles.summary}>
-                                        <header className={styles.header}>
-                                            <Stack space="0">
-                                                {brand_name && <span className={styles.brandName}>{brand_name}</span>}
-                                                <span className={styles.displayName}>{display_name}</span>
-                                            </Stack>
-                                            <Cluster space="var(--size-1)">
-                                                <button
-                                                    className={styles.editButton}
-                                                    data-id={id}
-                                                    data-operation="update"
-                                                    onClick={clickHandler}
-                                                >
-                                                    <Icon icon="edit-3" />
-                                                </button>
-                                                <button
-                                                    className={styles.deleteButton}
-                                                    data-id={id}
-                                                    data-operation="delete"
-                                                    onClick={clickHandler}
-                                                >
-                                                    <Icon icon="trash-2" />
-                                                </button>
-                                            </Cluster>
-                                        </header>
-                                    </summary>
-                                    <MacronutrientValues
-                                        kcal={kcal}
-                                        c={carbohydrate}
-                                        f={fat}
-                                        p={protein}
-                                        unit={avg_unit_weight}
-                                    />
-                                </details>
-                            </li>
-                        )
-                    )
+                    displayedItems.map(({ brand_name, carbohydrate, display_name, fat, id, kcal, protein, avg_unit_weight }) => (
+                        <li className={styles.li} key={id}>
+                            <details className={styles.details}>
+                                <summary className={styles.summary}>
+                                    <header className={styles.header}>
+                                        <Stack space="0">
+                                            {brand_name && <span className={styles.brandName}>{brand_name}</span>}
+                                            <span className={styles.displayName}>{display_name}</span>
+                                        </Stack>
+                                        <Cluster space="var(--size-1)">
+                                            <button className={styles.editButton} data-id={id} data-operation="update" onClick={clickHandler}>
+                                                <Icon icon="edit-3" />
+                                            </button>
+                                            <button className={styles.deleteButton} data-id={id} data-operation="delete" onClick={clickHandler}>
+                                                <Icon icon="trash-2" />
+                                            </button>
+                                        </Cluster>
+                                    </header>
+                                </summary>
+                                <MacronutrientValues kcal={kcal} c={carbohydrate} f={fat} p={protein} unit={avg_unit_weight} />
+                            </details>
+                        </li>
+                    ))
                 ) : (
                     <li>No ingredients found</li>
                 )}
@@ -197,7 +166,7 @@ const IngredientList = ({ ingredients, setIngredients }) => {
             <CreateIngredientDialog handleSubmit={submitHandler} />
             <UpdateIngredientDialog ingredient={ingredientToUpdate} handleSubmit={submitHandler} />
             <DeleteIngredientDialog ingredient={ingredientToDelete} handleSubmit={submitHandler} />
-        </>
+        </Stack>
     );
 };
 
