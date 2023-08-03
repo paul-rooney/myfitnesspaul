@@ -17,10 +17,7 @@ const WeightDisplay = () => {
             <p>Weight</p>
             <span>1 week</span>
             <div className={styles.lineGraph}>
-                <div
-                    className={styles.lines}
-                    style={{ "--columns": `${weightValues.length}`, "--rows": `${weightValues.length}` }}
-                >
+                <div className={styles.lines} style={{ "--columns": `${weightValues.length}`, "--rows": `${weightValues.length}` }}>
                     {weightValues.map((value, index) => (
                         <Fragment key={value.id}>
                             <div className={styles.line} data-axis="x" style={{ gridRow: index + 1 }}></div>
@@ -29,10 +26,7 @@ const WeightDisplay = () => {
                     ))}
                 </div>
 
-                <div
-                    className={styles.points}
-                    style={{ "--columns": `${weightValues.length}`, "--rows": `${weightValues.length}` }}
-                >
+                <div className={styles.points} style={{ "--columns": `${weightValues.length}`, "--rows": `${weightValues.length}` }}>
                     {weightValues.map((value, index) => (
                         <div className={styles.point} data-point={value.weight} key={value.id} style={{ gridColumn: index + 1, gridRow: index + 1 }}></div>
                     ))}

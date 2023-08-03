@@ -3,6 +3,7 @@ import { deleteRows, insertRows, updateRows } from "../../supabase";
 import { Cluster, Icon, Stack } from "../../primitives";
 import Dialog from "../Dialog";
 import styles from "./recipe-list.module.scss";
+import Button from "../Common/Button";
 
 const updateStarRating = (selector, dependency) => {
     const array = Array.from(document.querySelectorAll(selector));
@@ -191,12 +192,12 @@ const UpdateRecipeDialog = ({ recipe, ingredients }) => {
                             <Fragment key={index}>
                                 <Cluster space="var(--size-2)">
                                     <span style={{ marginInlineEnd: "auto" }}>{item.ingredients.display_name}</span>
-                                    <button type="button" data-id={item.id} data-identifier={item.ingredient_identifier} data-operation="update" onClick={clickHandler}>
+                                    <Button data-id={item.id} data-identifier={item.ingredient_identifier} data-operation="update" clickHandler={clickHandler}>
                                         <Icon label="Update" icon="edit" />
-                                    </button>
-                                    <button type="button" data-id={item.id} data-identifier={item.ingredient_identifier} data-operation="delete" onClick={clickHandler}>
+                                    </Button>
+                                    <Button data-id={item.id} data-identifier={item.ingredient_identifier} data-operation="delete" clickHandler={clickHandler}>
                                         <Icon label="Remove" icon="trash" />
-                                    </button>
+                                    </Button>
                                 </Cluster>
                             </Fragment>
                         ))}

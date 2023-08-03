@@ -3,6 +3,7 @@ import { deleteRows, insertRows } from "../../supabase";
 import { Stack } from "../../primitives";
 import Dialog from "../Dialog";
 import styles from "./recipe-list.module.scss";
+import Button from "../Common/Button";
 
 const CreateRecipesIngredientsDialog = ({ recipe, ingredients }) => {
     const [recipeIngredients, setRecipeIngredients] = useState([]);
@@ -51,21 +52,13 @@ const CreateRecipesIngredientsDialog = ({ recipe, ingredients }) => {
         const { returnValue } = event.target;
 
         if (returnValue === "close") {
-            console.log(returnValue);
-            console.log(`Removed recipe with id ${recipe.id}`);
             deleteRows("recipes", recipe.id);
             setRecipeIngredients([]);
         }
     };
 
     return (
-        <Dialog
-            id="createRecipesIngredientsDialog"
-            title="Add ingredients"
-            operation="create"
-            submitHandler={submitHandler}
-            closeHandler={closeHandler}
-        >
+        <Dialog id="createRecipesIngredientsDialog" title="Add ingredients" operation="create" submitHandler={submitHandler} closeHandler={closeHandler}>
             <Stack space="var(--size-0)">
                 {recipeIngredients &&
                     recipeIngredients.map((item, index) => (
@@ -111,9 +104,7 @@ const CreateRecipesIngredientsDialog = ({ recipe, ingredients }) => {
                         <option>tsp</option>
                     </datalist>
                 </Stack>
-                <button className={styles.addIngredientButton} onClick={addIngredientToList} type="button">
-                    Add
-                </button>
+                <Button clickHandler={addIngredientToList}>Add</Button>
             </Stack>
         </Dialog>
     );

@@ -11,6 +11,7 @@ import FilterRecipesWidget from "./FilterRecipesWidget";
 import UpdateRecipeDialog from "./UpdateRecipeDialog";
 import DeleteRecipeDialog from "./Dialogs/DeleteRecipeDialog";
 import useSessionStorage from "../../hooks/useSessionStorage";
+import Button from "../Common/Button";
 
 const RecipeList = ({ ingredients, recipes }) => {
     const [filteredRecipes, setFilteredRecipes] = useState([]);
@@ -38,7 +39,7 @@ const RecipeList = ({ ingredients, recipes }) => {
         const recipes_sources = sessionStorage.getItem("recipes_sources");
 
         if (recipes_sources && JSON.parse(recipes_sources).length) return;
-        
+
         readRows("recipes_sources").then((data) => setSources(data));
     }, []);
 
@@ -125,26 +126,26 @@ const RecipeList = ({ ingredients, recipes }) => {
 
             {/* <FilterRecipesWidget setFilteredRecipes={setFilteredRecipes} /> */}
 
-            <button className={styles.addButton} data-operation="create" onClick={clickHandler}>
+            <Button variant="primary" data-operation="create" clickHandler={clickHandler}>
                 <Icon space=".5ch" direction="ltr" icon="plus">
                     Add recipe
                 </Icon>
-            </button>
+            </Button>
 
             <Cluster justify="center" align="baseline" space="var(--size-1)">
-                <button disabled={currentPage === 1} onClick={() => goToPage(1)}>
+                <Button disabled={currentPage === 1} clickHandler={() => goToPage(1)}>
                     First
-                </button>
-                <button disabled={currentPage === 1} onClick={previousPage}>
+                </Button>
+                <Button disabled={currentPage === 1} clickHandler={previousPage}>
                     Previous
-                </button>
+                </Button>
                 <span style={{ fontSize: "var(--font-size-0)", minInlineSize: "3em", textAlign: "center" }}>{currentPage}</span>
-                <button disabled={currentPage === totalPages} onClick={nextPage}>
+                <Button disabled={currentPage === totalPages} clickHandler={nextPage}>
                     Next
-                </button>
-                <button disabled={currentPage === totalPages} onClick={() => goToPage(totalPages)}>
+                </Button>
+                <Button disabled={currentPage === totalPages} clickHandler={() => goToPage(totalPages)}>
                     Last
-                </button>
+                </Button>
             </Cluster>
 
             <ul className={styles.ul}>

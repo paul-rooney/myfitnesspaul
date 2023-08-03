@@ -1,0 +1,22 @@
+.button {
+    block-size: var(--size-6);
+    border-radius: var(--radius-1);
+    box-shadow: var(--shadow-1);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-0);
+    letter-spacing: var(--font-letterspacing-1);
+    text-transform: uppercase;
+
+    &[data-variant="primary"] {
+        background-color: var(--red-8);
+        border: var(--border-size-1) solid var(--red-8);
+        color: var(--red-0);
+    }
+
+    &[data-variant="default"],
+    &[data-variant="secondary"] {
+        background-color: var(--surface2);
+        border: var(--border-size-1) solid var(--surface4);
+        color: var(--text1);
+    }
+}

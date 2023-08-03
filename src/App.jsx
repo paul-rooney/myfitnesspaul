@@ -38,7 +38,7 @@ const App = () => {
         if (!session) return;
 
         const recipes = sessionStorage.getItem("recipes");
-        
+
         if (recipes && JSON.parse(recipes).length) return;
 
         readRows(

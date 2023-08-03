@@ -17,18 +17,10 @@ const FilterIngredientsForm = ({ ingredients, setFilteredIngredients }) => {
 
     return (
         <fieldset className={styles.fieldset}>
-            <label
-                className={styles.label}
-                htmlFor="search"
-            >
+            <label className={styles.label} htmlFor="search">
                 Search ingredients
             </label>
-            <input
-                className={styles.searchInput}
-                id="search"
-                type="search"
-                onChange={changeHandler}
-            />
+            <input className={styles.searchInput} id="search" type="search" onChange={changeHandler} />
         </fieldset>
     );
 };

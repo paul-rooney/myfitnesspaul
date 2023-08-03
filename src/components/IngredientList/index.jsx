@@ -9,6 +9,7 @@ import UpdateIngredientDialog from "./UpdateIngredientDialog";
 import DeleteIngredientDialog from "./DeleteIngredientDialog";
 import styles from "./ingredient-list.module.scss";
 import { stripNonAlphanumeric } from "../../utilities";
+import Button from "../Common/Button";
 
 const IngredientList = ({ ingredients, setIngredients }) => {
     const [filteredIngredients, setFilteredIngredients] = useState([]);
@@ -112,26 +113,26 @@ const IngredientList = ({ ingredients, setIngredients }) => {
 
             <FilterIngredientsForm ingredients={ingredients} setFilteredIngredients={setFilteredIngredients} />
 
-            <button className={styles.addButton} data-operation="create" onClick={clickHandler}>
+            <Button variant="primary" data-operation="create" clickHandler={clickHandler}>
                 <Icon space=".5ch" direction="ltr" icon="plus">
                     Add ingredient
                 </Icon>
-            </button>
+            </Button>
 
             <Cluster justify="center" align="baseline" space="var(--size-1)">
-                <button disabled={currentPage === 1} onClick={() => goToPage(1)}>
+                <Button disabled={currentPage === 1} clickHandler={() => goToPage(1)}>
                     First
-                </button>
-                <button disabled={currentPage === 1} onClick={previousPage}>
+                </Button>
+                <Button disabled={currentPage === 1} clickHandler={previousPage}>
                     Previous
-                </button>
+                </Button>
                 <span style={{ fontSize: "var(--font-size-0)", minInlineSize: "3em", textAlign: "center" }}>{currentPage}</span>
-                <button disabled={currentPage === totalPages} onClick={nextPage}>
+                <Button disabled={currentPage === totalPages} clickHandler={nextPage}>
                     Next
-                </button>
-                <button disabled={currentPage === totalPages} onClick={() => goToPage(totalPages)}>
+                </Button>
+                <Button disabled={currentPage === totalPages} clickHandler={() => goToPage(totalPages)}>
                     Last
-                </button>
+                </Button>
             </Cluster>
 
             <ul className={styles.ul}>
@@ -146,12 +147,12 @@ const IngredientList = ({ ingredients, setIngredients }) => {
                                             <span className={styles.displayName}>{display_name}</span>
                                         </Stack>
                                         <Cluster space="var(--size-1)">
-                                            <button className={styles.editButton} data-id={id} data-operation="update" onClick={clickHandler}>
+                                            <Button className={styles.editButton} data-id={id} data-operation="update" clickHandler={clickHandler}>
                                                 <Icon icon="edit-3" />
-                                            </button>
-                                            <button className={styles.deleteButton} data-id={id} data-operation="delete" onClick={clickHandler}>
+                                            </Button>
+                                            <Button className={styles.deleteButton} data-id={id} data-operation="delete" clickHandler={clickHandler}>
                                                 <Icon icon="trash-2" />
-                                            </button>
+                                            </Button>
                                         </Cluster>
                                     </header>
                                 </summary>

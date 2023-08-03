@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Cluster, Frame, Icon, Stack } from "../../primitives";
 import styles from "./recipe-list.module.scss";
+import Button from "../Common/Button";
 
 const RecipeCard = ({ recipe, handleClick }) => {
     const [isFullScreen, setIsFullScreen] = useState(false);
@@ -15,18 +16,7 @@ const RecipeCard = ({ recipe, handleClick }) => {
         };
     }, [recipe.id]);
 
-    const {
-        id,
-        display_name,
-        servings,
-        page_number,
-        total_kcal,
-        total_carbohydrate,
-        total_fat,
-        total_protein,
-        recipes_ingredients: ingredients,
-        recipes_sources: source,
-    } = recipe;
+    const { id, display_name, servings, page_number, total_kcal, total_carbohydrate, total_fat, total_protein, recipes_ingredients: ingredients, recipes_sources: source } = recipe;
 
     const toggleFullScreen = () => {
         setIsAnimatingFullScreen(true);
@@ -39,9 +29,7 @@ const RecipeCard = ({ recipe, handleClick }) => {
         setIsAnimatingFullScreen(false);
     };
 
-    const cardClassName = `${styles.details} ${isFullScreen ? styles.fullScreenCard : ""} ${
-        isAnimatingFullScreen ? styles.animateFullScreen : ""
-    }`;
+    const cardClassName = `${styles.details} ${isFullScreen ? styles.fullScreenCard : ""} ${isAnimatingFullScreen ? styles.animateFullScreen : ""}`;
 
     return (
         <details id={`recipeCard_${recipe.id}`} className={cardClassName} open={isFullScreen}>
@@ -73,25 +61,15 @@ const RecipeCard = ({ recipe, handleClick }) => {
                             gap: "var(--size-1)",
                         }}
                     >
-                        <button
-                            className={styles.editButton}
-                            data-id={id}
-                            data-operation="update"
-                            onClick={handleClick}
-                        >
+                        <Button className={styles.editButton} data-id={id} data-operation="update" clickHandler={handleClick}>
                             <Icon icon="edit-3" />
-                        </button>
-                        <button
-                            className={styles.deleteButton}
-                            data-id={id}
-                            data-operation="delete"
-                            onClick={handleClick}
-                        >
+                        </Button>
+                        <Button className={styles.deleteButton} data-id={id} data-operation="delete" clickHandler={handleClick}>
                             <Icon icon="trash" />
-                        </button>
-                        <button className={styles.expandButton} onClick={toggleFullScreen}>
+                        </Button>
+                        <Button className={styles.expandButton} clickHandler={toggleFullScreen}>
                             <Icon icon="maximize-2" />
-                        </button>
+                        </Button>
                     </div>
                 </header>
                 <Cluster space="var(--size-2)">
@@ -116,38 +94,26 @@ const RecipeCard = ({ recipe, handleClick }) => {
             {ingredients && (
                 <Stack>
                     <Cluster space="var(--size-1)">
-                        {ingredients.map(
-                            ({ ingredient_identifier, ingredients, recipes_macronutrients: macronutrients }) => {
-                                const primaryMacronutrient = Math.max(
-                                    macronutrients.carbohydrate,
-                                    macronutrients.fat,
-                                    macronutrients.protein
-                                );
+                        {ingredients.map(({ ingredient_identifier, ingredients, recipes_macronutrients: macronutrients }) => {
+                            const primaryMacronutrient = Math.max(macronutrients.carbohydrate, macronutrients.fat, macronutrients.protein);
 
-                                return (
-                                    <p
-                                        key={ingredient_identifier}
-                                        className={
-                                            macronutrients.carbohydrate === primaryMacronutrient
-                                                ? styles.highlightCarbohydrate
-                                                : macronutrients.fat === primaryMacronutrient
-                                                ? styles.highlightFat
-                                                : styles.highlightProtein
-                                        }
-                                        style={{
-                                            backgroundColor: "var(--surface2)",
-                                            borderRadius: "var(--radius-2)",
-                                            color: "var(--text1)",
-                                            fontSize: "var(--font-size-0)",
-                                            marginBlock: "0",
-                                            padding: "var(--size-1) var(--size-2)",
-                                        }}
-                                    >
-                                        {ingredients.display_name}
-                                    </p>
-                                );
-                            }
-                        )}
+                            return (
+                                <p
+                                    key={ingredient_identifier}
+                                    className={macronutrients.carbohydrate === primaryMacronutrient ? styles.highlightCarbohydrate : macronutrients.fat === primaryMacronutrient ? styles.highlightFat : styles.highlightProtein}
+                                    style={{
+                                        backgroundColor: "var(--surface2)",
+                                        borderRadius: "var(--radius-2)",
+                                        color: "var(--text1)",
+                                        fontSize: "var(--font-size-0)",
+                                        marginBlock: "0",
+                                        padding: "var(--size-1) var(--size-2)",
+                                    }}
+                                >
+                                    {ingredients.display_name}
+                                </p>
+                            );
+                        })}
                     </Cluster>
                     <ul style={{ listStyleType: "none", paddingInlineStart: "0" }}>
                         {ingredients.map(({ ingredients, quantity, unit }, index) => (
@@ -164,7 +130,6 @@ const RecipeCard = ({ recipe, handleClick }) => {
                 </Stack>
             )}
         </details>
-        
     );
 };
 

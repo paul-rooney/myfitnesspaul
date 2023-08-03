@@ -2,7 +2,7 @@
     display: grid;
     grid-template-columns: repeat(100, 1fr);
     grid-template-rows: repeat(2, 1rem);
-    
+
     border: 1px solid var(--surface2);
     min-block-size: 1rem;
     width: 100%;

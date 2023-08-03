@@ -8,7 +8,7 @@ html:has(dialog[open]) {
 }
 
 .dialog {
-    --surface1-light: hsl(var(--brand-hue) 25% 90% / 0.625);    
+    --surface1-light: hsl(var(--brand-hue) 25% 90% / 0.625);
     --surface1-dark: hsl(var(--brand-hue) 10% 10%);
     --surface1: var(--surface1-light);
 
@@ -49,13 +49,13 @@ html:has(dialog[open]) {
 
         .header {
             grid-row: 1;
-            
+
             .heading {
                 font-weight: var(--font-weight-3);
                 margin-block: 0;
             }
         }
-        
+
         .article {
             box-shadow: var(--inner-shadow-2);
             grid-row: 2;
@@ -110,7 +110,7 @@ html:has(dialog[open]) {
         border: var(--border-size-1) solid var(--surface2) !important;
         color: var(--text1) !important;
     }
-    
+
     .confirmButton {
         background-color: var(--red-12) !important;
         border: var(--border-size-1) solid var(--red-12) !important;

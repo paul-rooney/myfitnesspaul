@@ -32,7 +32,7 @@ const MacronutrientValues = ({ kcal, c = null, f = null, p = null, unit = null }
                 <div style={{ marginInlineStart: "auto" }}>
                     <Stack space="0">
                         <span className={styles.label}>Typical weight</span>
-                        <span style={{ textAlign: 'right' }}>{unit}g</span>
+                        <span style={{ textAlign: "right" }}>{unit}g</span>
                     </Stack>
                 </div>
             )}

@@ -1,6 +1,6 @@
 {
-    "short_name": "Weather",
-    "name": "Weather: Do I need an umbrella?",
+    "short_name": "MealMosaic",
+    "name": "MealMosaic: For a complete picture of meal planning",
     "icons": [
         {
             "src": "/images/icons-vector.svg",
@@ -40,7 +40,7 @@
             "icons": [{ "src": "/images/tomorrow.png", "sizes": "192x192" }]
         }
     ],
-    "description": "Weather forecast information",
+    "description": "Meal planning made simple",
     "screenshots": [
         {
             "src": "/images/screenshot1.png",

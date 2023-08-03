@@ -5,6 +5,7 @@ import { formatDate, formatDateISO, getPastDate, getFutureDate } from "../../uti
 import styles from "./logbook.module.scss";
 import MacronutrientDisplay from "../MacronutrientDisplay";
 import WeightDisplay from "../WeightDisplay";
+import Button from "../Common/Button";
 
 const getLog = async (table, columns = "*", matchedColumn, date) => {
     try {
@@ -147,13 +148,13 @@ const Logbook = ({ recipes }) => {
             {/* <WeightDisplay /> */}
             <MacronutrientDisplay date={date} />
             <Cluster justify="center" align="baseline">
-                <button data-direction="previous" onClick={adjustDate}>
+                <Button data-direction="previous" clickHandler={adjustDate}>
                     Previous
-                </button>
+                </Button>
                 <time>{formatDate(new Date(date))}</time>
-                <button data-direction="next" onClick={adjustDate}>
+                <Button data-direction="next" clickHandler={adjustDate}>
                     Next
-                </button>
+                </Button>
             </Cluster>
 
             <form onSubmit={logWeight}>
@@ -163,7 +164,7 @@ const Logbook = ({ recipes }) => {
                     </label>
                     <input id="weight" type="number" defaultValue={weight} step={0.25} />
                     <Cluster justify="end">
-                        <button className={styles.button}>Log weight</button>
+                        <Button type="submit">Log weight</Button>
                     </Cluster>
                 </Stack>
             </form>
@@ -180,42 +181,42 @@ const Logbook = ({ recipes }) => {
                     <Stack space="var(--size-1)">
                         <Cluster justify="space-between" align="baseline">
                             <label htmlFor="breakfast">Breakfast</label>
-                            <button className={styles.button} type="button" data-meal="breakfast" onClick={clickHandler}>
+                            <Button data-meal="breakfast" onClick={clickHandler}>
                                 <Icon space="0.5ch" direction="ltr" icon="plus">
                                     Add
                                 </Icon>
-                            </button>
+                            </Button>
                         </Cluster>
                         <input id="breakfast" list="recipes_list" placeholder={breakfast?.display_name} />
                     </Stack>
                     <Stack space="var(--size-1)">
                         <Cluster justify="space-between" align="baseline">
                             <label htmlFor="lunch">Lunch</label>
-                            <button className={styles.button} type="button" data-meal="lunch" onClick={clickHandler}>
+                            <Button data-meal="lunch" onClick={clickHandler}>
                                 <Icon space="0.5ch" direction="ltr" icon="plus">
                                     Add
                                 </Icon>
-                            </button>
+                            </Button>
                         </Cluster>
                         <input id="lunch" list="recipes_list" placeholder={lunch?.display_name} />
                     </Stack>
                     <Stack space="var(--size-1)">
                         <Cluster justify="space-between" align="center">
                             <label htmlFor="dinner">Dinner</label>
-                            <button className={styles.button} type="button" data-meal="dinner" onClick={clickHandler}>
+                            <Button data-meal="dinner" onClick={clickHandler}>
                                 <Icon space="0.5ch" direction="ltr" icon="plus">
                                     Add
                                 </Icon>
-                            </button>
+                            </Button>
                         </Cluster>
                         <input id="dinner" list="recipes_list" placeholder={dinner?.display_name} />
                     </Stack>
                     <Cluster justify="end">
-                        <button className={styles.button} type="submit">
+                        <Button variant="primary" type="submit">
                             <Icon space="1ch" direction="ltr" icon="check">
                                 Complete log
                             </Icon>
-                        </button>
+                        </Button>
                     </Cluster>
                 </Stack>
             </form>

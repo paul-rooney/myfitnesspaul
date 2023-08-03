@@ -1,4 +1,5 @@
 import { Center, Cover, Stack } from "../../primitives";
+import Button from "../Common/Button";
 import styles from "./sign-in-form.module.scss";
 
 const SignInForm = ({ handleSubmit }) => (
@@ -21,9 +22,9 @@ const SignInForm = ({ handleSubmit }) => (
                             </label>
                             <input className={styles.input} id="password" type="password" required />
                         </Stack>
-                        <button className={styles.submitButton} type="submit">
+                        <Button variant="primary" type="submit">
                             Sign in
-                        </button>
+                        </Button>
                     </Stack>
                 </form>
             </div>
