@@ -61,13 +61,13 @@ const RecipeCard = ({ recipe, handleClick }) => {
                             gap: "var(--size-1)",
                         }}
                     >
-                        <Button className={styles.editButton} data-id={id} data-operation="update" clickHandler={handleClick}>
+                        <Button variant="round" data-id={id} data-operation="update" clickHandler={handleClick}>
                             <Icon icon="edit-3" />
                         </Button>
-                        <Button className={styles.deleteButton} data-id={id} data-operation="delete" clickHandler={handleClick}>
+                        <Button variant="round" data-id={id} data-operation="delete" clickHandler={handleClick}>
                             <Icon icon="trash" />
                         </Button>
-                        <Button className={styles.expandButton} clickHandler={toggleFullScreen}>
+                        <Button variant="round" clickHandler={toggleFullScreen}>
                             <Icon icon="maximize-2" />
                         </Button>
                     </div>

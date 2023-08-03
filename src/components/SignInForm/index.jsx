@@ -1,5 +1,7 @@
 import { Center, Cover, Stack } from "../../primitives";
 import Button from "../Common/Button";
+import Input from "../Common/Input";
+import SecondaryHeading from "../Common/SecondaryHeading";
 import styles from "./sign-in-form.module.scss";
 
 const SignInForm = ({ handleSubmit }) => (
@@ -9,18 +11,12 @@ const SignInForm = ({ handleSubmit }) => (
                 <h1 className={styles.branding}>MealMosaic</h1>
                 <form className={styles.form} onSubmit={handleSubmit}>
                     <Stack space="var(--size-3)">
-                        <h2 className={styles.heading}>Sign in</h2>
+                        <SecondaryHeading>Sign in</SecondaryHeading>
                         <Stack space="var(--size-1)">
-                            <label className={styles.label} htmlFor="email">
-                                Email address
-                            </label>
-                            <input className={styles.input} id="email" type="email" required />
+                            <Input id="email" type="email" label="Email address" required autoCapitalize="none" />
                         </Stack>
                         <Stack space="var(--size-1)">
-                            <label className={styles.label} htmlFor="password">
-                                Password
-                            </label>
-                            <input className={styles.input} id="password" type="password" required />
+                            <Input id="password" type="password" label="Password" required />
                         </Stack>
                         <Button type="submit">
                             Sign in

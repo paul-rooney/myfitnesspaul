@@ -1,0 +1,6 @@
+.heading {
+    color: var(--text2);
+    font-size: var(--font-size-3);
+    letter-spacing: var(--font-letterspacing-0);
+    font-weight: 500;
+}

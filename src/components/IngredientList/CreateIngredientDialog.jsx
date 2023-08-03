@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Cluster, Stack } from "../../primitives";
+import Input from "../Common/Input";
 import Dialog from "../Dialog";
 import styles from "./ingredient-list.module.scss";
 
@@ -9,72 +10,29 @@ const CreateIngredientDialog = ({ handleSubmit }) => {
     return (
         <Dialog id="createIngredientDialog" title="Add ingredient" operation="create" submitHandler={handleSubmit}>
             <Stack>
-                <Stack space="var(--size-1)">
-                    <label className={styles.label} htmlFor="identifier">
-                        Identifier
-                    </label>
-                    <input id="identifier" required />
-                </Stack>
-                <Stack space="var(--size-1)">
-                    <label className={styles.label} htmlFor="grouping">
-                        Grouping <span>(optional)</span>
-                    </label>
-                    <input id="grouping" />
-                </Stack>
-                <Stack space="var(--size-1)">
-                    <label className={styles.label} htmlFor="display_name">
-                        Display name
-                    </label>
-                    <input id="display_name" required />
-                </Stack>
+                <Input id="identifier" label="Identifier" required />
+                <Input id="grouping" label="Grouping (optional)" />
+                <Input id="display_name" label="Display name" required />
                 <Cluster align="center" space="var(--size-1)">
                     <label className={styles.label} htmlFor="isBranded">
                         Brand product
                     </label>
                     <input style={{ order: "-1" }} id="isBranded" type="checkbox" onChange={() => setIsBranded(!isBranded)} />
                 </Cluster>
-                {isBranded && (
-                    <Stack space="var(--size-1)">
-                        <label className={styles.label} htmlFor="brand_name">
-                            Brand name
-                        </label>
-                        <input className={styles.input} id="brand_name" required />
-                    </Stack>
-                )}
-                <Stack space="var(--size-1)">
-                    <label className={styles.label} htmlFor="kcal">
-                        kcal
-                    </label>
-                    <input className={styles.input} id="kcal" type="number" min={0} max={900} step={1} />
+                {isBranded && <Input id="brand_name" label="Brand name" required />}
+                <Input id="kcal" label="kcal" type="number" min={0} max={900} step={1}>
                     <small className={styles.small}>per 100g/100ml</small>
-                </Stack>
-                <Stack space="var(--size-1)">
-                    <label className={styles.label} htmlFor="carbohydrate">
-                        Carbohydrate
-                    </label>
-                    <input className={styles.input} id="carbohydrate" type="number" min={0} max={100} step={0.1} />
+                </Input>
+                <Input id="carbohydrate" label="Carbohydrate" type="number" min={0} max={100} step={0.1}>
                     <small className={styles.small}>per 100g/100ml</small>
-                </Stack>
-                <Stack space="var(--size-1)">
-                    <label className={styles.label} htmlFor="fat">
-                        Fat
-                    </label>
-                    <input className={styles.input} id="fat" type="number" min={0} max={100} step={0.1} />
+                </Input>
+                <Input id="fat" label="Fat" type="number" min={0} max={100} step={0.1}>
                     <small className={styles.small}>per 100g/100ml</small>
-                </Stack>
-                <Stack space="var(--size-1)">
-                    <label className={styles.label} htmlFor="protein">
-                        Protein
-                    </label>
-                    <input className={styles.input} id="protein" type="number" min={0} max={100} step={0.1} />
+                </Input>
+                <Input id="protein" label="Protein" type="number" min={0} max={100} step={0.1}>
                     <small className={styles.small}>per 100g/100ml</small>
-                </Stack>
-                <Stack space="var(--size-1)">
-                    <label className={styles.label} htmlFor="avg_unit_weight">
-                        Average unit weight <span>(optional)</span>
-                    </label>
-                    <input className={styles.input} id="avg_unit_weight" type="number" min={0} max={1000} step={1} />
-                </Stack>
+                </Input>
+                <Input id="avg_unit_weight" label="Average unit weight (optional)" type="number" min={0} max={1000} step={1} />
             </Stack>
         </Dialog>
     );

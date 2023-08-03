@@ -1,5 +1,6 @@
 import { Cluster } from "../../primitives";
 import Button from "../Common/Button";
+import SecondaryHeading from "../Common/SecondaryHeading";
 import styles from "./dialog.module.scss";
 
 const Dialog = ({ id, title, submitHandler, closeHandler, operation, children }) => {
@@ -11,7 +12,7 @@ const Dialog = ({ id, title, submitHandler, closeHandler, operation, children })
         <dialog id={id} className={styles.dialog} onClose={closeHandler ?? null}>
             <form method="dialog" className={styles.form} data-operation={operation} autoComplete="off" onSubmit={submitHandler}>
                 <header className={styles.header}>
-                    <h3 className={styles.heading}>{title}</h3>
+                    <SecondaryHeading>{title}</SecondaryHeading>
                 </header>
                 <article className={styles.article}>{children}</article>
                 <footer className={styles.footer}>

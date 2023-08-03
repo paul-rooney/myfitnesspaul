@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { deleteRows, insertRows } from "../../supabase";
-import { Stack } from "../../primitives";
+import { Icon, Stack } from "../../primitives";
 import Dialog from "../Dialog";
 import styles from "./recipe-list.module.scss";
 import Button from "../Common/Button";
+import Input from "../Common/Input";
 
 const CreateRecipesIngredientsDialog = ({ recipe, ingredients }) => {
     const [recipeIngredients, setRecipeIngredients] = useState([]);
@@ -59,52 +60,36 @@ const CreateRecipesIngredientsDialog = ({ recipe, ingredients }) => {
 
     return (
         <Dialog id="createRecipesIngredientsDialog" title="Add ingredients" operation="create" submitHandler={submitHandler} closeHandler={closeHandler}>
-            <Stack space="var(--size-0)">
+            <Stack>
                 {recipeIngredients &&
                     recipeIngredients.map((item, index) => (
                         <p style={{ fontSize: "var(--size-0)", marginBlock: "0" }} key={index}>
                             {item.ingredient_identifier}
                         </p>
                     ))}
-            </Stack>
-            <Stack>
                 <input id="recipe_id" hidden value={recipe?.id} />
-                <Stack space="var(--size-1)">
-                    <label className={styles.label} htmlFor="ingredient_id">
-                        ingredient_id
-                    </label>
-                    <input id="ingredient_id" disabled required value={ingredientID ?? ""} />
-                </Stack>
-                <Stack space="var(--size-1)">
-                    <label className={styles.label} htmlFor="ingredient_identifier">
-                        Ingredient
-                    </label>
-                    <input id="ingredient_identifier" list="ingredients_list" onBlur={blurHandler} />
-                    <datalist id="ingredients_list">
-                        {ingredients.map((item) => (
-                            <option key={item.id}>{item.identifier}</option>
-                        ))}
-                    </datalist>
-                </Stack>
-                <Stack space="var(--size-1)">
-                    <label className={styles.label} htmlFor="quantity">
-                        Quantity
-                    </label>
-                    <input id="quantity" type="number" />
-                </Stack>
-                <Stack space="var(--size-1)">
-                    <label className={styles.label} htmlFor="unit">
-                        Unit <small>(optional)</small>
-                    </label>
-                    <input placeholder="Leave blank to use the typical unit weight" id="unit" list="units" />
-                    <datalist id="units">
-                        <option>g</option>
-                        <option>ml</option>
-                        <option>tbsp</option>
-                        <option>tsp</option>
-                    </datalist>
-                </Stack>
-                <Button clickHandler={addIngredientToList}>Add</Button>
+                <input id="ingredient_id" hidden required value={ingredientID ?? ""} />
+                <Input id="ingredient_identifier" label="Ingredient" list="ingredients_list" onBlur={blurHandler} />
+                <datalist id="ingredients_list">
+                    {ingredients.map((item) => (
+                        <option key={item.id}>{item.identifier}</option>
+                    ))}
+                </datalist>
+                <Input id="quantity" label="Quantity" type="number" />
+                <Input id="unit" label="Unit (optional)" list="units">
+                    <small className={styles.small}>Leave blank to use the typical unit weight</small>
+                </Input>
+                <datalist id="units">
+                    <option>g</option>
+                    <option>ml</option>
+                    <option>tbsp</option>
+                    <option>tsp</option>
+                </datalist>
+                <Button variant="primary" fullWidth clickHandler={addIngredientToList}>
+                    <Icon space="0.5ch" direction="ltr" icon="plus">
+                        Add
+                    </Icon>
+                </Button>
             </Stack>
         </Dialog>
     );

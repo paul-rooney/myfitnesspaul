@@ -3,6 +3,7 @@ import { Stack } from "../../primitives";
 import { supabase } from "../../supabase";
 import { debounce, groupBy } from "../../utilities";
 import styles from "./recipe-list.module.scss";
+import Input from "../Common/Input";
 
 const FilterRecipesWidget = ({ recipes, setFilteredRecipes }) => {
     const [caloriesFilterDisplayValue, setCaloriesFilterDisplayValue] = useState(500);
@@ -33,8 +34,7 @@ const FilterRecipesWidget = ({ recipes, setFilteredRecipes }) => {
     return (
         <Stack space="var(--size-3)">
             <Stack space="var(--size-1)">
-                <label className={styles.label}>Find recipes with&hellip;</label>
-                <input id="ingredients_filter" onChange={changeHandler} />
+                <Input id="ingredients_filter" label="Find recipes with&hellip;" changeHandler={changeHandler} />
             </Stack>
             {/* <div className={styles.caloriesFilter}>
                     <label className={styles.label}>With calories under&hellip;</label>

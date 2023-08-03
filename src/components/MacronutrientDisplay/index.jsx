@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../../supabase";
-import { calculateMacronutrientTotals, formatDateISO } from "../../utilities";
-import { Cluster } from "../../primitives";
+import { formatDateISO } from "../../utilities";
+import { Cluster, Stack } from "../../primitives";
 import StackedBar from "./StackedBar";
 
 const getStuff = async (table, columns = "*", date) => {
@@ -53,18 +53,16 @@ const MacronutrientDisplay = ({ date }) => {
     }, [date]);
 
     return (
-        <>
-            <Cluster>
-                {kcal && carbohydrate && fat && protein ? (
-                    <>
-                        Total kcal: {kcal}
-                        <StackedBar kcal={kcal} c={carbohydrate} f={fat} p={protein} />
-                    </>
-                ) : (
-                    <p>No data to display</p>
-                )}
-            </Cluster>
-        </>
+        <Stack space="var(--size-1)">
+            {kcal && carbohydrate && fat && protein ? (
+                <>
+                    <p style={{ fontSize: "var(--font-size-0)", textAlign: "center" }}>Total kcal: {kcal}</p>
+                    <StackedBar kcal={kcal} c={carbohydrate} f={fat} p={protein} />
+                </>
+            ) : (
+                <p style={{ fontSize: "var(--font-size-0)", textAlign: "center" }}>No data to display</p>
+            )}
+        </Stack>
     );
 };
 

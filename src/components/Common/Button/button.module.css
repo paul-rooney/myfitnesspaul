@@ -15,10 +15,29 @@
         background-color: var(--red-8);
         border: var(--border-size-1) solid var(--red-8);
         color: var(--red-0);
+
+        & svg {
+            stroke-width: 4;
+        }
     }
 
     &[data-variant="secondary"] {
-        color: var(--text2);
+        background-color: var(--gray-6);
+        border-color: var(--gray-6);
+        color: var(--gray-0);
+
+        & svg {
+            stroke-width: 4;
+        }
+    }
+
+    &[data-variant="round"] {
+        aspect-ratio: var(--ratio-square);
+        background-color: var(--surface2);
+        block-size: var(--size-6);
+        border: var(--border-size-1) solid var(--surface4);
+        border-radius: var(--radius-round);
+        box-shadow: var(--shadow-1);
     }
 
     &[data-full-width] {

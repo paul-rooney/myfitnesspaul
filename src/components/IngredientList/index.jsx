@@ -10,6 +10,7 @@ import DeleteIngredientDialog from "./DeleteIngredientDialog";
 import styles from "./ingredient-list.module.scss";
 import { stripNonAlphanumeric } from "../../utilities";
 import Button from "../Common/Button";
+import PrimaryHeading from "../Common/PrimaryHeading";
 
 const IngredientList = ({ ingredients, setIngredients }) => {
     const [filteredIngredients, setFilteredIngredients] = useState([]);
@@ -109,7 +110,7 @@ const IngredientList = ({ ingredients, setIngredients }) => {
 
     return (
         <Stack>
-            <h2 className={styles.heading}>Ingredients</h2>
+            <PrimaryHeading>Ingredients</PrimaryHeading>
 
             <FilterIngredientsForm ingredients={ingredients} setFilteredIngredients={setFilteredIngredients} />
 
@@ -147,10 +148,10 @@ const IngredientList = ({ ingredients, setIngredients }) => {
                                             <span className={styles.displayName}>{display_name}</span>
                                         </Stack>
                                         <Cluster space="var(--size-1)">
-                                            <Button className={styles.editButton} data-id={id} data-operation="update" clickHandler={clickHandler}>
+                                            <Button variant="round" data-id={id} data-operation="update" clickHandler={clickHandler}>
                                                 <Icon icon="edit-3" />
                                             </Button>
-                                            <Button className={styles.deleteButton} data-id={id} data-operation="delete" clickHandler={clickHandler}>
+                                            <Button variant="round" data-id={id} data-operation="delete" clickHandler={clickHandler}>
                                                 <Icon icon="trash-2" />
                                             </Button>
                                         </Cluster>

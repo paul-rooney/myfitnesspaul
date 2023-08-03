@@ -13,9 +13,7 @@ const StackedBar = ({ kcal, c, f, p }) => {
                     "--width": cWidth,
                 }}
             >
-                Carbohydrate
-                <br />
-                {Math.round(c)}&thinsp;<span className="text-transform:lowercase">g</span>
+                C {Math.round(c)}&thinsp;<span className="text-transform:lowercase">g</span>
             </span>
             <span
                 className={`${styles.bar} ${styles.barFat}`}
@@ -23,9 +21,7 @@ const StackedBar = ({ kcal, c, f, p }) => {
                     "--width": fWidth,
                 }}
             >
-                Fat
-                <br />
-                {Math.round(f)}&thinsp;<span className="text-transform:lowercase">g</span>
+                F {Math.round(f)}&thinsp;<span className="text-transform:lowercase">g</span>
             </span>
             <span
                 className={`${styles.bar} ${styles.barProtein}`}
@@ -33,9 +29,7 @@ const StackedBar = ({ kcal, c, f, p }) => {
                     "--width": pWidth,
                 }}
             >
-                Protein
-                <br />
-                {Math.round(p)}&thinsp;<span className="text-transform:lowercase">g</span>
+                P {Math.round(p)}&thinsp;<span className="text-transform:lowercase">g</span>
             </span>
         </div>
     );

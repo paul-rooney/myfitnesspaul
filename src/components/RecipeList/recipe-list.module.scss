@@ -52,18 +52,6 @@
                 letter-spacing: var(--font-letterspacing-3);
                 text-transform: uppercase;
             }
-
-            .expandButton,
-            .editButton,
-            .deleteButton {
-                aspect-ratio: var(--ratio-square);
-                background-color: var(--surface3);
-                block-size: var(--size-6);
-                border: var(--border-size-1) solid var(--surface2);
-                border-radius: var(--radius-round);
-                box-shadow: var(--shadow-1);
-                margin-inline-start: auto;
-            }
         }
     }
 
@@ -79,23 +67,6 @@
     font-weight: var(--font-weight-3);
     letter-spacing: var(--font-letterspacing-3);
     text-transform: uppercase;
-}
-
-.addButton {
-    background-color: var(--red-8);
-    block-size: var(--size-6);
-    border: var(--border-size-1) solid var(--red-8);
-    border-radius: var(--radius-1);
-    box-shadow: var(--shadow-1);
-    color: var(--red-0);
-    font-family: var(--font-mono);
-    font-size: var(--font-size-0);
-    letter-spacing: var(--font-letterspacing-1);
-    text-transform: uppercase;
-
-    & svg {
-        stroke-width: 4;
-    }
 }
 
 .caloriesFilter {
@@ -193,24 +164,6 @@
     position: relative;
 }
 
-.addIngredientButton {
-    margin-block-end: var(--size-4);
-    background-color: var(--red-8);
-    block-size: var(--size-6);
-    border: var(--border-size-1) solid var(--red-8);
-    border-radius: var(--radius-1);
-    box-shadow: var(--shadow-1);
-    color: var(--red-0);
-    font-family: var(--font-mono);
-    font-size: var(--font-size-0);
-    letter-spacing: var(--font-letterspacing-1);
-    text-transform: uppercase;
-
-    & svg {
-        stroke-width: 4;
-    }
-}
-
 .starRating {
     background-color: transparent;
     border: 0;
@@ -222,4 +175,12 @@
     &.active svg {
         fill: var(--yellow-6);
     }
+}
+
+.small {
+    font-family: var(--font-mono);
+    font-size: var(--font-size-00);
+    font-weight: var(--font-weight-3);
+    letter-spacing: var(--font-letterspacing-3);
+    text-transform: uppercase;
 }

@@ -12,6 +12,7 @@ import UpdateRecipeDialog from "./UpdateRecipeDialog";
 import DeleteRecipeDialog from "./Dialogs/DeleteRecipeDialog";
 import useSessionStorage from "../../hooks/useSessionStorage";
 import Button from "../Common/Button";
+import PrimaryHeading from "../Common/PrimaryHeading";
 
 const RecipeList = ({ ingredients, recipes }) => {
     const [filteredRecipes, setFilteredRecipes] = useState([]);
@@ -122,7 +123,7 @@ const RecipeList = ({ ingredients, recipes }) => {
 
     return (
         <Stack>
-            <h2 className={styles.heading}>Recipes</h2>
+            <PrimaryHeading>Recipes</PrimaryHeading>
 
             {/* <FilterRecipesWidget setFilteredRecipes={setFilteredRecipes} /> */}
 

@@ -4,6 +4,9 @@ import { supabase } from "../../supabase";
 import { groupBy, shuffleArray } from "../../utilities";
 import styles from "./meal-planner.module.scss";
 import Button from "../Common/Button";
+import PrimaryHeading from "../Common/PrimaryHeading";
+import Input from "../Common/Input";
+import SecondaryHeading from "../Common/SecondaryHeading";
 
 function getRandomCombinations(objects, range1, range2, n) {
     // Shuffle the objects array
@@ -214,87 +217,69 @@ const MealPlanner = ({ recipes }) => {
 
     return (
         <Stack>
-            <h2 className={styles.heading}>Meal Planner</h2>
+            <PrimaryHeading>Meal Planner</PrimaryHeading>
 
-            <details className={styles.details} open>
-                <summary>
-                    <h3>Meal Planner</h3>
-                </summary>
-                <form onSubmit={submitHandler}>
-                    <Stack space="var(--size-2)">
-                        <Switcher threshold="280px" space="var(--size-1)" limit="2">
-                            <Stack space="var(--size-1)">
-                                <label className={styles.label}>Minimum kcal</label>
-                                <input id="minKcal" className={styles.input} type="number" step={10} defaultValue={weight && Math.round(weight * 10 - 50)}></input>
-                            </Stack>
-                            <Stack space="var(--size-1)">
-                                <label className={styles.label}>Maximum kcal</label>
-                                <input id="maxKcal" className={styles.input} type="number" step={10} defaultValue={weight && Math.round(weight * 10 + 50)}></input>
-                            </Stack>
-                        </Switcher>
-                        <Switcher threshold="280px" space="var(--size-1)" limit="3">
-                            <Stack space="var(--size-1)">
-                                <label className={styles.label}>Minimum protein</label>
-                                <input id="minProtein" className={styles.input} type="number" step={1} defaultValue={weight && Math.round(weight * 0.7)}></input>
-                            </Stack>
-                            <Stack space="var(--size-1)">
-                                <label className={styles.label}>Maximum protein</label>
-                                <input id="maxProtein" className={styles.input} type="number" step={1} defaultValue={weight && Math.round(weight * 1.1)}></input>
-                            </Stack>
-                        </Switcher>
-                        <Stack space="var(--size-1)">
-                            <label className={styles.label}>Number of days</label>
-                            <input id="numDays" className={styles.input} type="number" min={1} max={14} step={1} defaultValue={7}></input>
-                        </Stack>
-                        <Button variant="primary" fullWidth type="submit">
-                            <Icon space=".5ch" direction="ltr" icon="plus">
-                                Generate meal plan
-                            </Icon>
-                        </Button>
+            <form onSubmit={submitHandler}>
+                <Stack space="var(--size-2)">
+                    <Switcher threshold="280px" space="var(--size-1)" limit="2">
+                        <Input id="minKcal" label="Minimum kcal" type="number" step={10} defaultValue={1450} />
+                        <Input id="maxKcal" label="Maximum kcal" type="number" step={10} defaultValue={1550} />
+                    </Switcher>
+                    <Switcher threshold="280px" space="var(--size-1)" limit="3">
+                        <Input id="minProtein" label="Minimum protein" type="number" step={1} defaultValue={weight && Math.round(weight * 0.7)} />
+                        <Input id="maxProtein" label="Maximum protein" type="number" step={1} defaultValue={weight && Math.round(weight * 1.1)} />
+                    </Switcher>
+                    <Stack space="var(--size-1)">
+                        <Input id="numDays" label="Number of days" type="number" min={1} max={14} step={1} defaultValue={7} />
                     </Stack>
-                </form>
-                <Grid min="150px">
-                    {mealPlan.length > 0
-                        ? mealPlan.map((day, dayIndex) => (
-                              <div style={{ fontSize: "var(--font-size-0)" }} key={`${day}-${dayIndex}`}>
-                                  <Stack key={dayIndex} space="var(--size-2)">
-                                      <Cluster justify="space-between" align="baseline">
-                                          <h3>Day {dayIndex + 1}</h3>
-                                          <Button clickHandler={() => updateMealPlan(dayIndex, [1400, 1550], [120, 160], 1)}>
-                                              <Icon direction="ltr" icon="refresh-cw" />
-                                          </Button>
-                                      </Cluster>
-                                      {day.map((meal, mealIndex) => (
-                                          <button key={`${meal.id}-${dayIndex}`} type="button" onClick={() => lockMeal(dayIndex, mealIndex)} style={meal?.is_locked ? { backgroundColor: "blue" } : {}}>
-                                              <Stack space="var(--size-1)">
-                                                  <span style={{ color: "var(--blue-10)", fontWeight: "600" }}>{meal.display_name}</span>
-                                                  <Cluster>
-                                                      <span>kcal: {meal.kcal}</span>
+                    <Button variant="primary" fullWidth type="submit">
+                        <Icon space=".5ch" direction="ltr" icon="plus">
+                            Generate meal plan
+                        </Icon>
+                    </Button>
+                </Stack>
+            </form>
+            <Grid min="150px">
+                {mealPlan.length > 0
+                    ? mealPlan.map((day, dayIndex) => (
+                          <div style={{ fontSize: "var(--font-size-0)" }} key={`${day}-${dayIndex}`}>
+                              <Stack key={dayIndex} space="var(--size-2)">
+                                  <Cluster justify="space-between" align="baseline">
+                                      <h3>Day {dayIndex + 1}</h3>
+                                      <Button clickHandler={() => updateMealPlan(dayIndex, [1400, 1550], [120, 160], 1)}>
+                                          <Icon direction="ltr" icon="refresh-cw" />
+                                      </Button>
+                                  </Cluster>
+                                  {day.map((meal, mealIndex) => (
+                                      <button key={`${meal.id}-${dayIndex}`} type="button" onClick={() => lockMeal(dayIndex, mealIndex)} style={meal?.is_locked ? { backgroundColor: "blue" } : {}}>
+                                          <Stack space="var(--size-1)">
+                                              <span style={{ color: "var(--blue-10)", fontWeight: "600" }}>{meal.display_name}</span>
+                                              <Cluster>
+                                                  <span>kcal: {meal.kcal}</span>
 
-                                                      <span>Protein: {meal.protein}</span>
-                                                  </Cluster>
-                                              </Stack>
-                                          </button>
-                                      ))}
-                                      <Cluster>
-                                          <Stack>
-                                              <span>Total kcal:</span>
-                                              {day.reduce((acc, meal) => meal.kcal + acc, 0)}
+                                                  <span>Protein: {meal.protein}</span>
+                                              </Cluster>
                                           </Stack>
-                                          <Stack>
-                                              <span>Total protein:</span>
-                                              {day.reduce((acc, meal) => meal.protein + acc, 0)}
-                                          </Stack>
-                                      </Cluster>
-                                  </Stack>
-                              </div>
-                          ))
-                        : null}
-                </Grid>
-            </details>
+                                      </button>
+                                  ))}
+                                  <Cluster>
+                                      <Stack>
+                                          <span>Total kcal:</span>
+                                          {day.reduce((acc, meal) => meal.kcal + acc, 0)}
+                                      </Stack>
+                                      <Stack>
+                                          <span>Total protein:</span>
+                                          {day.reduce((acc, meal) => meal.protein + acc, 0)}
+                                      </Stack>
+                                  </Cluster>
+                              </Stack>
+                          </div>
+                      ))
+                    : null}
+            </Grid>
             <details className={styles.details} open>
                 <summary>
-                    <h3>Shopping list</h3>
+                    <SecondaryHeading>Shopping List</SecondaryHeading>
                 </summary>
                 <Stack>
                     <Button fullWidth clickHandler={generateShoppingList}>
@@ -336,7 +321,7 @@ const MealPlanner = ({ recipes }) => {
 
                                                       return acc + q;
                                                   }, 0)}
-                                                  {value.map(item => item.unit).every((currentValue) => ["g", "ml", "tsp", "tbsp"].includes(currentValue)) ? "g" : null}
+                                                  {value.map((item) => item.unit).every((currentValue) => ["g", "ml", "tsp", "tbsp"].includes(currentValue)) ? "g" : null}
                                               </span>
                                           </Cluster>
                                       );

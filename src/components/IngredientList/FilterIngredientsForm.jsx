@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from "react";
 import { debounce } from "../../utilities";
-import styles from "./ingredient-list.module.scss";
+import Input from "../Common/Input";
 
 const FilterIngredientsForm = ({ ingredients, setFilteredIngredients }) => {
     useEffect(() => {
@@ -15,14 +15,7 @@ const FilterIngredientsForm = ({ ingredients, setFilteredIngredients }) => {
         }, 250);
     }, [ingredients]);
 
-    return (
-        <fieldset className={styles.fieldset}>
-            <label className={styles.label} htmlFor="search">
-                Search ingredients
-            </label>
-            <input className={styles.searchInput} id="search" type="search" onChange={changeHandler} />
-        </fieldset>
-    );
+    return <Input id="search" label="Search ingredients&hellip;" type="search" changeHandler={changeHandler} />;
 };
 
 export default FilterIngredientsForm;

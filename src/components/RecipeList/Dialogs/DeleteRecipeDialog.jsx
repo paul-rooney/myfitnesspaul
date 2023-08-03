@@ -1,4 +1,5 @@
 import { Stack } from "../../../primitives";
+import Input from "../../Common/Input";
 import Dialog from "../../Dialog";
 import styles from "./delete-recipe-dialog.module.scss";
 
@@ -7,18 +8,8 @@ const DeleteRecipeDialog = ({ recipe, handleSubmit }) => (
         <Stack>
             <input id="source" hidden defaultValue={recipe.source} />
             <input id="id" hidden defaultValue={recipe.id} />
-            <Stack space="var(--size-1)">
-                <label className={styles.label} htmlFor="display_name">
-                    Display name
-                </label>
-                <input name="display_name" id="display_name" required disabled defaultValue={recipe.display_name} />
-            </Stack>
-            <Stack space="var(--size-1)">
-                <label className={styles.label} htmlFor="servings">
-                    Number of servings
-                </label>
-                <input id="servings" type="number" required disabled defaultValue={recipe.servings} />
-            </Stack>
+            <Input name="display_name" id="display_name" label="Display name" required disabled defaultValue={recipe.display_name} />
+            <Input id="servings" label="Number of servings" type="number" required disabled defaultValue={recipe.servings} />
         </Stack>
     </Dialog>
 );

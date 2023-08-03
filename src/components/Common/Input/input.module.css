@@ -1,0 +1,33 @@
+.label {
+    font-size: var(--font-size-0);
+}
+
+.input {
+    border: 0;
+    border-block-end: var(--border-size-2) solid var(--gray-3);
+    padding: var(--size-2);
+}
+
+[data-variant="fancy"] {
+    --border-size: var(--border-size-2);
+
+    display: grid;
+    grid-template-columns: 1fr max-content;
+    align-items: stretch;
+    column-gap: var(--size-1);
+
+    .label {
+        grid-column: 1 / -1;
+        grid-row: 1;
+    }
+
+    .input {
+        grid-column: 1;
+        grid-row: 2;
+    }
+
+    > *:not(label, input) {
+        block-size: auto;
+        max-block-size: calc(100% - (var(--border-size-2) * 3));
+    }
+}
