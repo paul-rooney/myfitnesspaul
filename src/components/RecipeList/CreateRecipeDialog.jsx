@@ -5,7 +5,7 @@ import Dialog from "../Dialog";
 const CreateRecipeDialog = ({ sources, handleSubmit }) => (
     <Dialog id="createRecipeDialog" title="Add recipe" operation="create" submitHandler={handleSubmit}>
         <Stack>
-            <Input name="display_name" id="display_name" label="Display name" required />
+            <Input id="display_name" label="Display name" required />
             <Input id="servings" label="Number of servings" type="number" required />
             <Input id="source" label="Source" list="sources_list" />
             <datalist id="sources_list">

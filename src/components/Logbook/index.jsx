@@ -162,6 +162,12 @@ const Logbook = ({ recipes }) => {
 
             <MacronutrientDisplay date={date} />
 
+            {/* 
+            
+            TODO: If date is in the past, require confirmation to enable form fields for update  
+            
+            */}
+
             <form onSubmit={logWeight}>
                 <Stack space="var(--size-1)">
                     <Input id="weight" label="Weight" type="number" step={0.25} defaultValue={weight} variant="fancy">
@@ -181,7 +187,7 @@ const Logbook = ({ recipes }) => {
                 <Stack>
                     <Stack space="var(--size-1)">
                         <Input id="breakfast" label="Breakfast" list="recipes_list" placeholder={breakfast?.display_name} variant="fancy">
-                            <Button variant="secondary" data-meal="breakfast" onClick={clickHandler}>
+                            <Button variant="secondary" data-meal="breakfast" clickHandler={clickHandler}>
                                 <Icon space="0.5ch" direction="ltr" icon="plus">
                                     Add
                                 </Icon>
@@ -190,7 +196,7 @@ const Logbook = ({ recipes }) => {
                     </Stack>
                     <Stack space="var(--size-1)">
                         <Input id="lunch" label="Lunch" list="recipes_list" placeholder={lunch?.display_name} variant="fancy">
-                            <Button variant="secondary" data-meal="lunch" onClick={clickHandler}>
+                            <Button variant="secondary" data-meal="lunch" clickHandler={clickHandler}>
                                 <Icon space="0.5ch" direction="ltr" icon="plus">
                                     Add
                                 </Icon>
@@ -199,7 +205,7 @@ const Logbook = ({ recipes }) => {
                     </Stack>
                     <Stack space="var(--size-1)">
                         <Input id="dinner" label="Dinner" list="recipes_list" placeholder={dinner?.display_name} variant="fancy">
-                            <Button variant="secondary" data-meal="dinner" onClick={clickHandler}>
+                            <Button variant="secondary" data-meal="dinner" clickHandler={clickHandler}>
                                 <Icon space="0.5ch" direction="ltr" icon="plus">
                                     Add
                                 </Icon>

@@ -67,8 +67,8 @@ const CreateRecipesIngredientsDialog = ({ recipe, ingredients }) => {
                             {item.ingredient_identifier}
                         </p>
                     ))}
-                <input id="recipe_id" hidden value={recipe?.id} />
-                <input id="ingredient_id" hidden required value={ingredientID ?? ""} />
+                <input id="recipe_id" hidden defaultValue={recipe?.id} />
+                <input id="ingredient_id" hidden required defaultValue={ingredientID ?? ""} />
                 <Input id="ingredient_identifier" label="Ingredient" list="ingredients_list" onBlur={blurHandler} />
                 <datalist id="ingredients_list">
                     {ingredients.map((item) => (

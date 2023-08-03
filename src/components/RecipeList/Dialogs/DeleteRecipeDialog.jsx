@@ -8,7 +8,7 @@ const DeleteRecipeDialog = ({ recipe, handleSubmit }) => (
         <Stack>
             <input id="source" hidden defaultValue={recipe.source} />
             <input id="id" hidden defaultValue={recipe.id} />
-            <Input name="display_name" id="display_name" label="Display name" required disabled defaultValue={recipe.display_name} />
+            <Input id="display_name" label="Display name" required disabled defaultValue={recipe.display_name} />
             <Input id="servings" label="Number of servings" type="number" required disabled defaultValue={recipe.servings} />
         </Stack>
     </Dialog>
