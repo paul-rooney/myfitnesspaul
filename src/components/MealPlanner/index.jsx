@@ -51,7 +51,7 @@ function getRandomCombinations(objects, range1, range2, n) {
 
 const readRows = async (table, columns = "*", arr) => {
     try {
-        const { data, error } = await supabase.from(table).select(columns).in("recipe_id", arr);
+        const { data, error } = await supabase.from(table).select(columns).in("id", arr);
         if (error) {
             throw new Error(error.message);
         }
@@ -75,6 +75,7 @@ const read = async (table, columns = "*") => {
 
 const getWeight = async () => {
     const getMeanWeight = (arr) => arr.reduce((acc, value) => acc + value, 0) / arr.length;
+
 
     const weightData = await read("users_weight");
     // const { weight } = weightData.pop();
@@ -174,12 +175,44 @@ const MealPlanner = ({ recipes }) => {
 
     const generateShoppingList = () => {
         let arr = mealPlan.flat().map((item) => item.id);
+        // console.log(arr);
 
-        readRows("recipes_ingredients", `id, recipe_id, quantity, unit, ingredients (id, display_name)`, arr).then((ingredients) => {
+        // readRows("recipes_ingredients", `id, recipe_id, quantity, unit, ingredients (id, display_name)`, arr).then(
+        // (ingredients) => {
+        // const groupedMealsWithIngredients = mealPlan
+        //     .flat()
+        //     .map((meal) =>
+        //         ingredients
+        //             .filter((item) => meal.id === item.recipe_id)
+        //             .map((item) => ({
+        //                 ...meal,
+        //                 ingredient_id: item.ingredients.id,
+        //                 ingredient_display_name: item.ingredients.display_name,
+        //                 quantity: item.quantity,
+        //                 unit: item.unit,
+        //             }))
+        //     )
+        //     .flat();
+
+        // setShoppingList(Object.entries(groupBy(groupedMealsWithIngredients, "ingredient_display_name")));
+        //     }
+        // );
+
+        readRows(
+            "recipes",
+            `servings, recipes_ingredients (id, recipe_id, quantity, unit, ingredients (id, display_name))`,
+            arr
+        ).then((ingredients) => {
+            let x = ingredients.flatMap((item) =>
+                item.recipes_ingredients.map((ingredient) => {
+                    ingredient.servings = item.servings;
+                    return ingredient;
+                })
+            );
             const groupedMealsWithIngredients = mealPlan
                 .flat()
                 .map((meal) =>
-                    ingredients
+                    x
                         .filter((item) => meal.id === item.recipe_id)
                         .map((item) => ({
                             ...meal,
@@ -187,6 +220,7 @@ const MealPlanner = ({ recipes }) => {
                             ingredient_display_name: item.ingredients.display_name,
                             quantity: item.quantity,
                             unit: item.unit,
+                            servings: item.servings
                         }))
                 )
                 .flat();
@@ -319,7 +353,7 @@ const MealPlanner = ({ recipes }) => {
                                                               break;
                                                       }
 
-                                                      return acc + q;
+                                                      return (acc + q) / item.servings;
                                                   }, 0)}
                                                   {value.map((item) => item.unit).every((currentValue) => ["g", "ml", "tsp", "tbsp"].includes(currentValue)) ? "g" : null}
                                               </span>
