@@ -246,7 +246,7 @@ const MealPlanner = ({ recipes }) => {
                             <label className={styles.label}>Number of days</label>
                             <input id="numDays" className={styles.input} type="number" min={1} max={14} step={1} defaultValue={7}></input>
                         </Stack>
-                        <Button variant="primary" type="submit">
+                        <Button variant="primary" fullWidth type="submit">
                             <Icon space=".5ch" direction="ltr" icon="plus">
                                 Generate meal plan
                             </Icon>
@@ -296,23 +296,24 @@ const MealPlanner = ({ recipes }) => {
                 <summary>
                     <h3>Shopping list</h3>
                 </summary>
-                <Button clickHandler={generateShoppingList}>Generate shopping list</Button>
-                <Grid space="var(--size-2)">
-                    {shoppingList.length > 1
-                        ? shoppingList
-                              .sort((a, b) =>
-                                  new Intl.Collator(undefined, {
-                                      sensitivity: "base",
-                                      ignorePunctuation: true,
-                                  }).compare(a[0], b[0])
-                              )
-                              .map(([, value]) => {
-                                  return (
-                                      <div style={{ fontSize: "var(--font-size-0)" }} key={value.id}>
-                                          <Cluster space="var(--size-3)">
+                <Stack>
+                    <Button fullWidth clickHandler={generateShoppingList}>
+                        Generate shopping list
+                    </Button>
+                    <Stack space="var(--size-2)">
+                        {shoppingList.length > 1
+                            ? shoppingList
+                                  .sort((a, b) =>
+                                      new Intl.Collator(undefined, {
+                                          sensitivity: "base",
+                                          ignorePunctuation: true,
+                                      }).compare(a[0], b[0])
+                                  )
+                                  .map(([, value]) => {
+                                      return (
+                                          <Cluster justify="space-between" space="var(--size-3)" style={{ fontSize: "var(--font-size-0)" }} key={value.id}>
                                               <span>{value[0].ingredient_display_name}</span>
                                               <span key={value.id}>
-                                                  Total:{" "}
                                                   {value.reduce((acc, item) => {
                                                       let q;
 
@@ -335,13 +336,14 @@ const MealPlanner = ({ recipes }) => {
 
                                                       return acc + q;
                                                   }, 0)}
+                                                  {value.map(item => item.unit).every((currentValue) => ["g", "ml", "tsp", "tbsp"].includes(currentValue)) ? "g" : null}
                                               </span>
                                           </Cluster>
-                                      </div>
-                                  );
-                              })
-                        : null}
-                </Grid>
+                                      );
+                                  })
+                            : null}
+                    </Stack>
+                </Stack>
             </details>
         </Stack>
     );

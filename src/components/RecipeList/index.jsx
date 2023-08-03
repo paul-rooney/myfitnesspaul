@@ -126,7 +126,7 @@ const RecipeList = ({ ingredients, recipes }) => {
 
             {/* <FilterRecipesWidget setFilteredRecipes={setFilteredRecipes} /> */}
 
-            <Button variant="primary" data-operation="create" clickHandler={clickHandler}>
+            <Button variant="primary" fullWidth data-operation="create" clickHandler={clickHandler}>
                 <Icon space=".5ch" direction="ltr" icon="plus">
                     Add recipe
                 </Icon>

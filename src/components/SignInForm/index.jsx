@@ -22,7 +22,7 @@ const SignInForm = ({ handleSubmit }) => (
                             </label>
                             <input className={styles.input} id="password" type="password" required />
                         </Stack>
-                        <Button variant="primary" type="submit">
+                        <Button type="submit">
                             Sign in
                         </Button>
                     </Stack>

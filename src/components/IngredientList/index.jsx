@@ -113,7 +113,7 @@ const IngredientList = ({ ingredients, setIngredients }) => {
 
             <FilterIngredientsForm ingredients={ingredients} setFilteredIngredients={setFilteredIngredients} />
 
-            <Button variant="primary" data-operation="create" clickHandler={clickHandler}>
+            <Button variant="primary" fullWidth data-operation="create" clickHandler={clickHandler}>
                 <Icon space=".5ch" direction="ltr" icon="plus">
                     Add ingredient
                 </Icon>

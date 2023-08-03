@@ -117,8 +117,6 @@ const UpdateRecipeDialog = ({ recipe, ingredients }) => {
             });
     };
 
-    console.log(pageNumber);
-
     return (
         <Dialog id="updateRecipeDialog" title="Update recipe" submitHandler={submitHandler}>
             <Stack>

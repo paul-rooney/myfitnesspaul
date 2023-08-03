@@ -1,9 +1,13 @@
 .button {
+    background-color: var(--surface2);
     block-size: var(--size-6);
+    border: var(--border-size-1) solid var(--surface4);
     border-radius: var(--radius-1);
     box-shadow: var(--shadow-1);
+    color: var(--text1);
     font-family: var(--font-mono);
     font-size: var(--font-size-0);
+    inline-size: fit-content;
     letter-spacing: var(--font-letterspacing-1);
     text-transform: uppercase;
 
@@ -13,10 +17,11 @@
         color: var(--red-0);
     }
 
-    &[data-variant="default"],
     &[data-variant="secondary"] {
-        background-color: var(--surface2);
-        border: var(--border-size-1) solid var(--surface4);
-        color: var(--text1);
+        color: var(--text2);
+    }
+
+    &[data-full-width] {
+        inline-size: 100%;
     }
 }
