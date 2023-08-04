@@ -23,12 +23,7 @@ function getRandomCombinations(objects, range1, range2, n) {
         const newKcalSum = kcalSum + currentObject.kcal;
         const newProteinSum = proteinSum + currentObject.protein;
 
-        if (
-            newKcalSum >= range1[0] &&
-            newKcalSum <= range1[1] &&
-            newProteinSum >= range2[0] &&
-            newProteinSum <= range2[1]
-        ) {
+        if (newKcalSum >= range1[0] && newKcalSum <= range1[1] && newProteinSum >= range2[0] && newProteinSum <= range2[1]) {
             const combination = [...arr, currentObject];
             const combinationString = JSON.stringify(combination);
 
@@ -230,11 +225,7 @@ const MealPlanner = ({ recipes }) => {
         //     }
         // );
 
-        readRows(
-            "recipes",
-            `servings, recipes_ingredients (id, recipe_id, quantity, unit, ingredients (id, display_name))`,
-            arr
-        ).then((ingredients) => {
+        readRows("recipes", `servings, recipes_ingredients (id, recipe_id, quantity, unit, ingredients (id, display_name))`, arr).then((ingredients) => {
             let x = ingredients.flatMap((item) =>
                 item.recipes_ingredients.map((ingredient) => {
                     ingredient.servings = item.servings;
@@ -286,56 +277,18 @@ const MealPlanner = ({ recipes }) => {
             <form onSubmit={submitHandler}>
                 <Stack space="var(--size-2)">
                     <Switcher threshold="280px" space="var(--size-1)" limit="2">
-                        <Input
-                            id="minKcal"
-                            label="Minimum kcal"
-                            type="number"
-                            step={10}
-                            value={minKcal}
-                            changeHandler={changeHandler}
-                        />
-                        <Input
-                            id="maxKcal"
-                            label="Maximum kcal"
-                            type="number"
-                            step={10}
-                            value={maxKcal}
-                            changeHandler={changeHandler}
-                        />
+                        <Input id="minKcal" label="Minimum kcal" type="number" step={10} value={minKcal} changeHandler={changeHandler} />
+                        <Input id="maxKcal" label="Maximum kcal" type="number" step={10} value={maxKcal} changeHandler={changeHandler} />
                     </Switcher>
                     <Switcher threshold="280px" space="var(--size-1)" limit="3">
-                        <Input
-                            id="minProtein"
-                            label="Minimum protein"
-                            type="number"
-                            step={1}
-                            value={minProtein}
-                            changeHandler={changeHandler}
-                        />
-                        <Input
-                            id="maxProtein"
-                            label="Maximum protein"
-                            type="number"
-                            step={1}
-                            value={maxProtein}
-                            changeHandler={changeHandler}
-                        />
+                        <Input id="minProtein" label="Minimum protein" type="number" step={1} value={minProtein} changeHandler={changeHandler} />
+                        <Input id="maxProtein" label="Maximum protein" type="number" step={1} value={maxProtein} changeHandler={changeHandler} />
                     </Switcher>
                     <Stack space="var(--size-1)">
-                        <Input
-                            id="numDays"
-                            label="Number of days"
-                            type="number"
-                            min={1}
-                            max={14}
-                            step={1}
-                            defaultValue={7}
-                        />
+                        <Input id="numDays" label="Number of days" type="number" min={1} max={14} step={1} defaultValue={7} />
                     </Stack>
                     <Button variant="primary" fullWidth type="submit">
-                        <Icon space=".5ch" direction="ltr" icon="plus">
-                            Generate meal plan
-                        </Icon>
+                        Generate meal plan
                     </Button>
                 </Stack>
             </form>
@@ -346,25 +299,14 @@ const MealPlanner = ({ recipes }) => {
                               <Stack key={dayIndex} space="var(--size-2)">
                                   <Cluster justify="space-between" align="baseline">
                                       <h3>Day {dayIndex + 1}</h3>
-                                      <Button
-                                          clickHandler={() =>
-                                              updateMealPlan(dayIndex, [minKcal, maxKcal], [minProtein, maxProtein], 1)
-                                          }
-                                      >
+                                      <Button clickHandler={() => updateMealPlan(dayIndex, [minKcal, maxKcal], [minProtein, maxProtein], 1)}>
                                           <Icon direction="ltr" icon="refresh-cw" />
                                       </Button>
                                   </Cluster>
                                   {day.map((meal, mealIndex) => (
-                                      <button
-                                          key={`${meal.id}-${dayIndex}`}
-                                          type="button"
-                                          onClick={() => lockMeal(dayIndex, mealIndex)}
-                                          style={meal?.is_locked ? { backgroundColor: "blue" } : {}}
-                                      >
+                                      <button key={`${meal.id}-${dayIndex}`} type="button" onClick={() => lockMeal(dayIndex, mealIndex)} style={meal?.is_locked ? { backgroundColor: "blue" } : {}}>
                                           <Stack space="var(--size-1)">
-                                              <span style={{ color: "var(--blue-10)", fontWeight: "600" }}>
-                                                  {meal.display_name}
-                                              </span>
+                                              <span style={{ color: "var(--blue-10)", fontWeight: "600" }}>{meal.display_name}</span>
                                               <Cluster>
                                                   <span>kcal: {meal.kcal}</span>
 
@@ -407,12 +349,7 @@ const MealPlanner = ({ recipes }) => {
                                   )
                                   .map(([, value]) => {
                                       return (
-                                          <Cluster
-                                              justify="space-between"
-                                              space="var(--size-3)"
-                                              style={{ fontSize: "var(--font-size-0)" }}
-                                              key={value.id}
-                                          >
+                                          <Cluster justify="space-between" space="var(--size-3)" style={{ fontSize: "var(--font-size-0)" }} key={value.id}>
                                               <span>{value[0].ingredient_display_name}</span>
                                               <span key={value.id}>
                                                   {value.reduce((acc, item) => {
@@ -437,13 +374,7 @@ const MealPlanner = ({ recipes }) => {
 
                                                       return Math.ceil((acc + q) / item.servings);
                                                   }, 0)}
-                                                  {value
-                                                      .map((item) => item.unit)
-                                                      .every((currentValue) =>
-                                                          ["g", "ml", "tsp", "tbsp"].includes(currentValue)
-                                                      )
-                                                      ? "g"
-                                                      : null}
+                                                  {value.map((item) => item.unit).every((currentValue) => ["g", "ml", "tsp", "tbsp"].includes(currentValue)) ? "g" : null}
                                               </span>
                                           </Cluster>
                                       );
