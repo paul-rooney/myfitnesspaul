@@ -3,4 +3,6 @@
     font-size: var(--font-size-3);
     letter-spacing: var(--font-letterspacing-0);
     font-weight: 500;
+    margin-block-start: 0.5rem;
+    margin-block-end: 0.5rem;
 }

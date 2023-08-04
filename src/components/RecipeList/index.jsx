@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
-import { Cluster, Icon, Stack } from "../../primitives";
+import { Icon, Stack } from "../../primitives";
 import { deleteRows, insertRows, readRows, updateRows } from "../../supabase";
 import RecipeCard from "./RecipeCard";
 import CreateRecipeDialog from "./CreateRecipeDialog";
 import CreateRecipesIngredientsDialog from "./CreateRecipesIngredientsDialog";
 import styles from "./recipe-list.module.scss";
 import { stripNonAlphanumeric } from "../../utilities";
-import usePagination from "../../hooks/usePagination";
 import FilterRecipesWidget from "./FilterRecipesWidget";
 import UpdateRecipeDialog from "./UpdateRecipeDialog";
 import DeleteRecipeDialog from "./Dialogs/DeleteRecipeDialog";
 import useSessionStorage from "../../hooks/useSessionStorage";
 import Button from "../Common/Button";
 import PrimaryHeading from "../Common/PrimaryHeading";
+import Paginator from "../Common/Paginator";
 
 const RecipeList = ({ ingredients, recipes }) => {
     const [filteredRecipes, setFilteredRecipes] = useState([]);
@@ -20,21 +20,8 @@ const RecipeList = ({ ingredients, recipes }) => {
     const [recipeToUpdate, setRecipeToUpdate] = useState({});
     const [recipeToDelete, setRecipeToDelete] = useState({});
     const [sources, setSources] = useSessionStorage("recipes_sources", []);
-
-    const itemsPerPage = 10;
-    const totalPages = Math.ceil(recipes.length / itemsPerPage);
-    const { currentPage, goToPage, nextPage, previousPage } = usePagination(totalPages);
-
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const displayedItems = filteredRecipes
-        .sort((a, b) =>
-            new Intl.Collator(undefined, {
-                sensitivity: "base",
-                ignorePunctuation: true,
-            }).compare(a.display_name, b.display_name)
-        )
-        .slice(startIndex, endIndex);
+    const [startIndex, setStartIndex] = useState(0);
+    const [endIndex, setEndIndex] = useState(0);
 
     useEffect(() => {
         const recipes_sources = sessionStorage.getItem("recipes_sources");
@@ -133,29 +120,23 @@ const RecipeList = ({ ingredients, recipes }) => {
                 </Icon>
             </Button>
 
-            <Cluster justify="center" align="baseline" space="var(--size-1)">
-                <Button disabled={currentPage === 1} clickHandler={() => goToPage(1)}>
-                    First
-                </Button>
-                <Button disabled={currentPage === 1} clickHandler={previousPage}>
-                    Previous
-                </Button>
-                <span style={{ fontSize: "var(--font-size-0)", minInlineSize: "3em", textAlign: "center" }}>{currentPage}</span>
-                <Button disabled={currentPage === totalPages} clickHandler={nextPage}>
-                    Next
-                </Button>
-                <Button disabled={currentPage === totalPages} clickHandler={() => goToPage(totalPages)}>
-                    Last
-                </Button>
-            </Cluster>
+            <Paginator arrayToPaginate={recipes} itemsPerPage={10} setStartIndex={setStartIndex} setEndIndex={setEndIndex} />
 
             <ul className={styles.ul}>
-                {displayedItems.length > 0 ? (
-                    displayedItems.map((recipe) => (
-                        <li className={styles.li} key={recipe.id}>
-                            <RecipeCard recipe={recipe} handleClick={clickHandler} />
-                        </li>
-                    ))
+                {filteredRecipes.length > 0 ? (
+                    filteredRecipes
+                        .sort((a, b) =>
+                            new Intl.Collator(undefined, {
+                                sensitivity: "base",
+                                ignorePunctuation: true,
+                            }).compare(a.display_name, b.display_name)
+                        )
+                        .slice(startIndex, endIndex)
+                        .map((recipe) => (
+                            <li className={styles.li} key={recipe.id}>
+                                <RecipeCard recipe={recipe} handleClick={clickHandler} />
+                            </li>
+                        ))
                 ) : (
                     <li>No recipes found</li>
                 )}

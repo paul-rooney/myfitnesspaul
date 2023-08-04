@@ -44,3 +44,7 @@
         inline-size: 100%;
     }
 }
+
+[disabled] {
+    opacity: 0.625;
+}

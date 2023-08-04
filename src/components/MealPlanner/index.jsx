@@ -435,7 +435,7 @@ const MealPlanner = ({ recipes }) => {
                                                               break;
                                                       }
 
-                                                      return Math.round((acc + q) / item.servings);
+                                                      return Math.ceil((acc + q) / item.servings);
                                                   }, 0)}
                                                   {value
                                                       .map((item) => item.unit)
