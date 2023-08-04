@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import usePagination from "../../../hooks/usePagination";
 import { Cluster, Icon } from "../../../primitives";
 import Button from "../Button";
@@ -8,8 +9,10 @@ const Paginator = ({ arrayToPaginate, itemsPerPage, setStartIndex, setEndIndex }
     const start = (currentPage - 1) * itemsPerPage;
     const end = start + itemsPerPage;
 
-    setStartIndex(start);
-    setEndIndex(end);
+    useEffect(() => {
+        setStartIndex(start);
+        setEndIndex(end);
+    }, [currentPage]);
 
     return (
         <Cluster justify="center" align="baseline" space="var(--size-1)">

@@ -1,15 +1,14 @@
 import { useEffect, useState } from "react";
-import { Cluster, Icon, Grid, Stack, Switcher } from "../../primitives";
+import { Stack, Switcher } from "../../primitives";
 import { supabase } from "../../supabase";
-import { groupBy, shuffleArray } from "../../utilities";
-import styles from "./meal-planner.module.scss";
+import { shuffleArray } from "../../utilities";
 import Button from "../Common/Button";
 import PrimaryHeading from "../Common/PrimaryHeading";
 import Input from "../Common/Input";
-import SecondaryHeading from "../Common/SecondaryHeading";
+import MealPlan from "./MealPlan";
+import ShoppingList from "./ShoppingList";
 
 function getRandomCombinations(objects, range1, range2, n) {
-    // Shuffle the objects array
     const shuffledObjects = shuffleArray(objects);
 
     const combinations = [];
@@ -49,18 +48,6 @@ function getRandomCombinations(objects, range1, range2, n) {
     return combinations.slice(0, n);
 }
 
-const readRows = async (table, columns = "*", arr) => {
-    try {
-        const { data, error } = await supabase.from(table).select(columns).in("id", arr);
-        if (error) {
-            throw new Error(error.message);
-        }
-        return data;
-    } catch (error) {
-        console.error("An error occurred: ", error);
-    }
-};
-
 const read = async (table, columns = "*") => {
     try {
         const { data, error } = await supabase.from(table).select(columns);
@@ -89,13 +76,13 @@ const mifflinStJeorEquation = (weight, height, age) => {
 };
 
 const MealPlanner = ({ recipes }) => {
+    // TODO: Use useReducer here ⬇️
     const [weight, setWeight] = useState(null);
     const [minKcal, setMinKcal] = useState(1450);
     const [maxKcal, setMaxKcal] = useState(1550);
     const [minProtein, setMinProtein] = useState(105);
     const [maxProtein, setMaxProtein] = useState(165);
     const [mealPlan, setMealPlan] = useState([]);
-    const [shoppingList, setShoppingList] = useState([]);
 
     useEffect(() => {
         getWeight().then((weightValue) => setWeight(weightValue));
@@ -109,19 +96,19 @@ const MealPlanner = ({ recipes }) => {
 
         switch (id) {
             case "minKcal":
-                setMinKcal(value);
+                setMinKcal(value ?? 0);
                 break;
 
             case "maxKcal":
-                setMaxKcal(value);
+                setMaxKcal(value ?? 0);
                 break;
 
             case "minProtein":
-                setMinProtein(value);
+                setMinProtein(value ?? 0);
                 break;
 
             case "maxProtein":
-                setMaxProtein(value);
+                setMaxProtein(value ?? 0);
                 break;
 
             default:
@@ -182,7 +169,6 @@ const MealPlanner = ({ recipes }) => {
             })
             .flat()
             .filter((meal) => meal !== undefined);
-        console.log(lockedMeals);
 
         const numbers = recipes.map((recipe) => ({
             id: recipe.id,
@@ -199,58 +185,6 @@ const MealPlanner = ({ recipes }) => {
 
             setMealPlan(newArr);
         }
-    };
-
-    const generateShoppingList = () => {
-        let arr = mealPlan.flat().map((item) => item.id);
-        // console.log(arr);
-
-        // readRows("recipes_ingredients", `id, recipe_id, quantity, unit, ingredients (id, display_name)`, arr).then(
-        // (ingredients) => {
-        // const groupedMealsWithIngredients = mealPlan
-        //     .flat()
-        //     .map((meal) =>
-        //         ingredients
-        //             .filter((item) => meal.id === item.recipe_id)
-        //             .map((item) => ({
-        //                 ...meal,
-        //                 ingredient_id: item.ingredients.id,
-        //                 ingredient_display_name: item.ingredients.display_name,
-        //                 quantity: item.quantity,
-        //                 unit: item.unit,
-        //             }))
-        //     )
-        //     .flat();
-
-        // setShoppingList(Object.entries(groupBy(groupedMealsWithIngredients, "ingredient_display_name")));
-        //     }
-        // );
-
-        readRows("recipes", `servings, recipes_ingredients (id, recipe_id, quantity, unit, ingredients (id, display_name))`, arr).then((ingredients) => {
-            let x = ingredients.flatMap((item) =>
-                item.recipes_ingredients.map((ingredient) => {
-                    ingredient.servings = item.servings;
-                    return ingredient;
-                })
-            );
-            const groupedMealsWithIngredients = mealPlan
-                .flat()
-                .map((meal) =>
-                    x
-                        .filter((item) => meal.id === item.recipe_id)
-                        .map((item) => ({
-                            ...meal,
-                            ingredient_id: item.ingredients.id,
-                            ingredient_display_name: item.ingredients.display_name,
-                            quantity: item.quantity,
-                            unit: item.unit,
-                            servings: item.servings,
-                        }))
-                )
-                .flat();
-
-            setShoppingList(Object.entries(groupBy(groupedMealsWithIngredients, "ingredient_display_name")));
-        });
     };
 
     const lockMeal = (dayIndex, mealIndex) => {
@@ -278,112 +212,23 @@ const MealPlanner = ({ recipes }) => {
             <form onSubmit={submitHandler}>
                 <Stack space="var(--size-2)">
                     <Switcher threshold="280px" space="var(--size-1)" limit="2">
-                        <Input id="minKcal" label="Minimum kcal" type="number" step={10} value={minKcal} changeHandler={changeHandler} />
-                        <Input id="maxKcal" label="Maximum kcal" type="number" step={10} value={maxKcal} changeHandler={changeHandler} />
+                        <Input id="minKcal" label="Minimum kcal" type="number" step={1} value={minKcal} changeHandler={changeHandler} />
+                        <Input id="maxKcal" label="Maximum kcal" type="number" step={1} value={maxKcal} changeHandler={changeHandler} />
                     </Switcher>
                     <Switcher threshold="280px" space="var(--size-1)" limit="3">
                         <Input id="minProtein" label="Minimum protein" type="number" step={1} value={minProtein} changeHandler={changeHandler} />
                         <Input id="maxProtein" label="Maximum protein" type="number" step={1} value={maxProtein} changeHandler={changeHandler} />
                     </Switcher>
-                    <Stack space="var(--size-1)">
-                        <Input id="numDays" label="Number of days" type="number" min={1} max={14} step={1} defaultValue={7} />
-                    </Stack>
+                    <Input id="numDays" label="Number of days" type="number" min={1} max={14} step={1} defaultValue={7} />
                     <Button variant="primary" fullWidth type="submit">
                         Generate meal plan
                     </Button>
                 </Stack>
             </form>
-            <Grid min="150px">
-                {mealPlan.length > 0
-                    ? mealPlan.map((day, dayIndex) => (
-                          <div style={{ fontSize: "var(--font-size-0)" }} key={`${day}-${dayIndex}`}>
-                              <Stack key={dayIndex} space="var(--size-2)">
-                                  <Cluster justify="space-between" align="baseline">
-                                      <h3>Day {dayIndex + 1}</h3>
-                                      <Button clickHandler={() => updateMealPlan(dayIndex, [minKcal, maxKcal], [minProtein, maxProtein], 1)}>
-                                          <Icon direction="ltr" icon="refresh-cw" />
-                                      </Button>
-                                  </Cluster>
-                                  {day.map((meal, mealIndex) => (
-                                      <button key={`${meal.id}-${dayIndex}`} type="button" onClick={() => lockMeal(dayIndex, mealIndex)} style={meal?.is_locked ? { backgroundColor: "blue" } : {}}>
-                                          <Stack space="var(--size-1)">
-                                              <span style={{ color: "var(--blue-10)", fontWeight: "600" }}>{meal.display_name}</span>
-                                              <Cluster>
-                                                  <span>kcal: {meal.kcal}</span>
 
-                                                  <span>Protein: {meal.protein}</span>
-                                              </Cluster>
-                                          </Stack>
-                                      </button>
-                                  ))}
-                                  <Cluster>
-                                      <Stack>
-                                          <span>Total kcal:</span>
-                                          {day.reduce((acc, meal) => meal.kcal + acc, 0)}
-                                      </Stack>
-                                      <Stack>
-                                          <span>Total protein:</span>
-                                          {day.reduce((acc, meal) => meal.protein + acc, 0)}
-                                      </Stack>
-                                  </Cluster>
-                              </Stack>
-                          </div>
-                      ))
-                    : null}
-            </Grid>
-            <details className={styles.details} open>
-                <summary>
-                    <SecondaryHeading>Shopping List</SecondaryHeading>
-                </summary>
-                <Stack>
-                    <Button fullWidth clickHandler={generateShoppingList}>
-                        Generate shopping list
-                    </Button>
-                    <Stack space="var(--size-2)">
-                        {shoppingList.length > 1
-                            ? shoppingList
-                                  .sort((a, b) =>
-                                      new Intl.Collator(undefined, {
-                                          sensitivity: "base",
-                                          ignorePunctuation: true,
-                                      }).compare(a[0], b[0])
-                                  )
-                                  .map(([, value]) => {
-                                      return (
-                                          <Cluster justify="space-between" space="var(--size-3)" style={{ fontSize: "var(--font-size-0)" }} key={value.id}>
-                                              <span>{value[0].ingredient_display_name}</span>
-                                              <span key={value.id}>
-                                                  {value.reduce((acc, item) => {
-                                                      let q;
+            <MealPlan mealPlan={mealPlan} updateMealPlan={updateMealPlan} lockMeal={lockMeal} minKcal={minKcal} maxKcal={maxKcal} minProtein={minProtein} maxProtein={maxProtein} />
 
-                                                      switch (item.unit) {
-                                                          case "tsp":
-                                                              q = item.quantity * 5;
-                                                              break;
-                                                          case "tbsp":
-                                                              q = item.quantity * 15;
-                                                              break;
-                                                          case "pint":
-                                                              q = item.quantity * 568;
-                                                              break;
-                                                          case "g":
-                                                          case "ml":
-                                                          default:
-                                                              q = item.quantity;
-                                                              break;
-                                                      }
-
-                                                      return Math.ceil((acc + q) / item.servings);
-                                                  }, 0)}
-                                                  {value.map((item) => item.unit).every((currentValue) => ["g", "ml", "tsp", "tbsp"].includes(currentValue)) ? "g" : null}
-                                              </span>
-                                          </Cluster>
-                                      );
-                                  })
-                            : null}
-                    </Stack>
-                </Stack>
-            </details>
+            {mealPlan.length > 1 && <ShoppingList mealPlan={mealPlan} />}
         </Stack>
     );
 };

@@ -1,17 +1,16 @@
 import { useEffect, useState } from "react";
-import { Cluster, Icon, Stack } from "../../primitives";
+import { Icon, Stack } from "../../primitives";
 import { insertRows, updateRows, deleteRows } from "../../supabase";
 import FilterIngredientsForm from "./FilterIngredientsForm";
-import MacronutrientValues from "./MacronutrientValues";
 import CreateIngredientDialog from "./CreateIngredientDialog";
 import UpdateIngredientDialog from "./UpdateIngredientDialog";
 import DeleteIngredientDialog from "./DeleteIngredientDialog";
-import styles from "./ingredient-list.module.scss";
 import { stripNonAlphanumeric } from "../../utilities";
 import Button from "../Common/Button";
 import PrimaryHeading from "../Common/PrimaryHeading";
 import IngredientCard from "./IngredientCard";
 import Paginator from "../Common/Paginator";
+import EmptyState from "../Common/EmptyState";
 
 const IngredientList = ({ ingredients }) => {
     const [filteredIngredients, setFilteredIngredients] = useState([]);
@@ -109,7 +108,7 @@ const IngredientList = ({ ingredients }) => {
 
             <Paginator arrayToPaginate={ingredients} itemsPerPage={10} setStartIndex={setStartIndex} setEndIndex={setEndIndex} />
 
-            <ul className={styles.ul}>
+            <Stack space="var(--size-1)" role="list">
                 {filteredIngredients.length > 0 ? (
                     filteredIngredients
                         .sort((a, b) => {
@@ -118,34 +117,11 @@ const IngredientList = ({ ingredients }) => {
                             return 0;
                         })
                         .slice(startIndex, endIndex)
-                        .map(({ brand_name, carbohydrate, display_name, fat, id, kcal, protein, avg_unit_weight }) => (
-                            <li className={styles.li} key={id}>
-                                <IngredientCard />
-                                <details className={styles.details}>
-                                    <summary className={styles.summary}>
-                                        <header className={styles.header}>
-                                            <Stack space="0">
-                                                {brand_name && <span className={styles.brandName}>{brand_name}</span>}
-                                                <span className={styles.displayName}>{display_name}</span>
-                                            </Stack>
-                                            <Cluster space="var(--size-1)">
-                                                <Button variant="round" data-id={id} data-operation="update" clickHandler={clickHandler}>
-                                                    <Icon icon="edit-3" />
-                                                </Button>
-                                                <Button variant="round" data-id={id} data-operation="delete" clickHandler={clickHandler}>
-                                                    <Icon icon="trash-2" />
-                                                </Button>
-                                            </Cluster>
-                                        </header>
-                                    </summary>
-                                    <MacronutrientValues kcal={kcal} c={carbohydrate} f={fat} p={protein} unit={avg_unit_weight} />
-                                </details>
-                            </li>
-                        ))
+                        .map((ingredient) => <IngredientCard ingredient={ingredient} clickHandler={clickHandler} role="listitem" key={ingredient.id} />)
                 ) : (
-                    <li>No ingredients found</li>
+                    <EmptyState role="listitem">No ingredients to display</EmptyState>
                 )}
-            </ul>
+            </Stack>
 
             <CreateIngredientDialog handleSubmit={submitHandler} />
             <UpdateIngredientDialog ingredient={ingredientToUpdate} handleSubmit={submitHandler} />

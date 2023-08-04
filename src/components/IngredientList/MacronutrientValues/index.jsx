@@ -1,5 +1,6 @@
-import { Cluster, Stack } from "../../primitives";
-import styles from "./ingredient-list.module.scss";
+import { Cluster, Stack } from "../../../primitives";
+// import styles from "./ingredient-list.module.scss";
+import styles from "./macronutrient-values.module.css";
 
 const MacronutrientValues = ({ kcal, c = null, f = null, p = null, unit = null }) => {
     const primaryMacronutrient = Math.max(c, f, p);

@@ -1,0 +1,32 @@
+.details[open] .header {
+    margin-block-end: var(--size-2);
+}
+
+.summary::marker {
+    content: "";
+}
+
+.header {
+    align-items: start;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    margin-block-end: 0;
+}
+
+.displayName {
+    font-size: calc(var(--font-size-1) * 0.875);
+    inline-size: fit-content;
+}
+
+.brandName {
+    font-family: var(--font-mono);
+    font-size: var(--font-size-00);
+    font-weight: var(--font-weight-3);
+    letter-spacing: var(--font-letterspacing-3);
+    text-transform: uppercase;
+}
+
+.buttons {
+    min-inline-size: max-content;
+}

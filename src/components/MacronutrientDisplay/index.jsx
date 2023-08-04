@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../../supabase";
 import { formatDateISO } from "../../utilities";
-import { Cluster, Stack } from "../../primitives";
+import { Stack } from "../../primitives";
 import StackedBar from "./StackedBar";
+import EmptyState from "../Common/EmptyState";
 
 const getStuff = async (table, columns = "*", date) => {
     try {
@@ -60,7 +61,7 @@ const MacronutrientDisplay = ({ date }) => {
                     <StackedBar kcal={kcal} c={carbohydrate} f={fat} p={protein} />
                 </>
             ) : (
-                <p style={{ fontSize: "var(--font-size-0)", textAlign: "center" }}>No data to display</p>
+                <EmptyState>No data to display</EmptyState>
             )}
         </Stack>
     );

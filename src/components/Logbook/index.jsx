@@ -128,7 +128,7 @@ const Logbook = ({ recipes }) => {
     };
 
     const adjustDate = (event) => {
-        const { direction } = event.target.dataset;
+        const { direction } = event.target.closest("button").dataset;
 
         switch (direction) {
             case "previous":
@@ -152,11 +152,15 @@ const Logbook = ({ recipes }) => {
 
             <Cluster justify="center" align="baseline">
                 <Button data-direction="previous" clickHandler={adjustDate}>
-                    Previous
+                    <Icon space="0.5ch" direction="ltr" icon="chevron-left">
+                        Previous
+                    </Icon>
                 </Button>
                 <time>{formatDate(new Date(date))}</time>
                 <Button data-direction="next" clickHandler={adjustDate}>
-                    Next
+                    <Icon space="0.5ch" icon="chevron-right">
+                        Next
+                    </Icon>
                 </Button>
             </Cluster>
 
@@ -169,11 +173,13 @@ const Logbook = ({ recipes }) => {
             */}
 
             <form onSubmit={logWeight}>
-                <Stack space="var(--size-1)">
-                    <Input id="weight" label="Weight" type="number" step={0.25} defaultValue={weight} variant="fancy">
-                        <Button variant="secondary" type="submit">Log weight</Button>
-                    </Input>
-                </Stack>
+                <Input id="weight" label="Weight" type="number" step={0.25} defaultValue={weight} variant="fancy">
+                    <Button variant="secondary" type="submit">
+                        <Icon space="0.5ch" direction="ltr" icon="plus">
+                            Log weight
+                        </Icon>
+                    </Button>
+                </Input>
             </form>
 
             <form onSubmit={submitHandler}>
@@ -185,33 +191,27 @@ const Logbook = ({ recipes }) => {
                     ))}
                 </datalist>
                 <Stack>
-                    <Stack space="var(--size-1)">
-                        <Input id="breakfast" label="Breakfast" list="recipes_list" placeholder={breakfast?.display_name} variant="fancy">
-                            <Button variant="secondary" data-meal="breakfast" clickHandler={clickHandler}>
-                                <Icon space="0.5ch" direction="ltr" icon="plus">
-                                    Add
-                                </Icon>
-                            </Button>
-                        </Input>
-                    </Stack>
-                    <Stack space="var(--size-1)">
-                        <Input id="lunch" label="Lunch" list="recipes_list" placeholder={lunch?.display_name} variant="fancy">
-                            <Button variant="secondary" data-meal="lunch" clickHandler={clickHandler}>
-                                <Icon space="0.5ch" direction="ltr" icon="plus">
-                                    Add
-                                </Icon>
-                            </Button>
-                        </Input>
-                    </Stack>
-                    <Stack space="var(--size-1)">
-                        <Input id="dinner" label="Dinner" list="recipes_list" placeholder={dinner?.display_name} variant="fancy">
-                            <Button variant="secondary" data-meal="dinner" clickHandler={clickHandler}>
-                                <Icon space="0.5ch" direction="ltr" icon="plus">
-                                    Add
-                                </Icon>
-                            </Button>
-                        </Input>
-                    </Stack>
+                    <Input id="breakfast" label="Breakfast" list="recipes_list" placeholder={breakfast?.display_name} variant="fancy">
+                        <Button variant="secondary" data-meal="breakfast" clickHandler={clickHandler}>
+                            <Icon space="0.5ch" direction="ltr" icon="plus">
+                                Add
+                            </Icon>
+                        </Button>
+                    </Input>
+                    <Input id="lunch" label="Lunch" list="recipes_list" placeholder={lunch?.display_name} variant="fancy">
+                        <Button variant="secondary" data-meal="lunch" clickHandler={clickHandler}>
+                            <Icon space="0.5ch" direction="ltr" icon="plus">
+                                Add
+                            </Icon>
+                        </Button>
+                    </Input>
+                    <Input id="dinner" label="Dinner" list="recipes_list" placeholder={dinner?.display_name} variant="fancy">
+                        <Button variant="secondary" data-meal="dinner" clickHandler={clickHandler}>
+                            <Icon space="0.5ch" direction="ltr" icon="plus">
+                                Add
+                            </Icon>
+                        </Button>
+                    </Input>
                     <Cluster justify="end">
                         <Button variant="primary" fullWidth type="submit">
                             <Icon space="1ch" direction="ltr" icon="check">

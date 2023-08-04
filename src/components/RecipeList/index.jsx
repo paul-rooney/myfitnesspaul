@@ -13,6 +13,7 @@ import useSessionStorage from "../../hooks/useSessionStorage";
 import Button from "../Common/Button";
 import PrimaryHeading from "../Common/PrimaryHeading";
 import Paginator from "../Common/Paginator";
+import EmptyState from "../Common/EmptyState";
 
 const RecipeList = ({ ingredients, recipes }) => {
     const [filteredRecipes, setFilteredRecipes] = useState([]);
@@ -138,7 +139,7 @@ const RecipeList = ({ ingredients, recipes }) => {
                             </li>
                         ))
                 ) : (
-                    <li>No recipes found</li>
+                    <li><EmptyState>No recipes to display</EmptyState></li>
                 )}
             </ul>
 
