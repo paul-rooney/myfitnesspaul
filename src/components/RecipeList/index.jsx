@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import { Icon, Stack } from "../../primitives";
 import { deleteRows, insertRows, readRows, updateRows } from "../../supabase";
-import RecipeCard from "./RecipeCard";
+import RecipeCard from "./RecipeCard/RecipeCard";
 import CreateRecipeDialog from "./CreateRecipeDialog";
 import CreateRecipesIngredientsDialog from "./CreateRecipesIngredientsDialog";
-import styles from "./recipe-list.module.scss";
-import { stripNonAlphanumeric } from "../../utilities";
+import { sortAlphabetical, stripNonAlphanumeric } from "../../utilities";
 import FilterRecipesWidget from "./FilterRecipesWidget";
 import UpdateRecipeDialog from "./UpdateRecipeDialog";
 import DeleteRecipeDialog from "./Dialogs/DeleteRecipeDialog";
@@ -93,13 +92,11 @@ const RecipeList = ({ ingredients, recipes }) => {
                 recipe.id = id.value;
                 updateRows("recipes", recipe);
                 setRecipeToUpdate({});
-
                 break;
 
             case "delete":
                 deleteRows("recipes", id.value);
                 setRecipeToDelete({});
-
                 break;
 
             default:
@@ -123,25 +120,18 @@ const RecipeList = ({ ingredients, recipes }) => {
 
             <Paginator arrayToPaginate={recipes} itemsPerPage={10} setStartIndex={setStartIndex} setEndIndex={setEndIndex} />
 
-            <ul className={styles.ul}>
+            <Stack space="var(--size-1)" role="list">
                 {filteredRecipes.length > 0 ? (
                     filteredRecipes
-                        .sort((a, b) =>
-                            new Intl.Collator(undefined, {
-                                sensitivity: "base",
-                                ignorePunctuation: true,
-                            }).compare(a.display_name, b.display_name)
-                        )
+                        .sort((a, b) => sortAlphabetical(a, b, "display_name"))
                         .slice(startIndex, endIndex)
                         .map((recipe) => (
-                            <li className={styles.li} key={recipe.id}>
-                                <RecipeCard recipe={recipe} handleClick={clickHandler} />
-                            </li>
+                                <RecipeCard recipe={recipe} handleClick={clickHandler} role="listitem" key={recipe.id} />
                         ))
                 ) : (
-                    <li><EmptyState>No recipes to display</EmptyState></li>
+                    <EmptyState>No recipes to display</EmptyState>
                 )}
-            </ul>
+            </Stack>
 
             <CreateRecipeDialog sources={sources} handleSubmit={submitHandler} />
             <CreateRecipesIngredientsDialog ingredients={ingredients} recipe={newRecipe} />

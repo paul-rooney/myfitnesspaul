@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Cluster, Stack } from "../../../primitives";
 import Button from "../../Common/Button";
-import { groupBy } from "../../../utilities";
+import { groupBy, sortAlphabetical } from "../../../utilities";
 import { supabase } from "../../../supabase";
 
 const readRows = async (table, columns = "*", arr) => {
@@ -57,12 +57,7 @@ const ShoppingList = ({ mealPlan }) => {
             <Stack space="var(--size-2)">
                 {shoppingList.length > 0
                     ? shoppingList
-                          .sort((a, b) =>
-                              new Intl.Collator(undefined, {
-                                  sensitivity: "base",
-                                  ignorePunctuation: true,
-                              }).compare(a[0], b[0])
-                          )
+                          .sort((a, b) => sortAlphabetical(a, b, 0))
                           .map(([, value], index) => {
                               return (
                                   <Cluster justify="space-between" space="var(--size-3)" style={{ fontSize: "var(--font-size-0)" }} key={index}>

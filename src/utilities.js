@@ -11,22 +11,12 @@ export const debounce = (callback, wait) => {
 
 export const groupBy = (arr, key) => arr.reduce((acc, item) => ((acc[item[key]] = [...(acc[item[key]] || []), item]), acc), {});
 
-// const groupBy = (arr, key) => arr.reduce((acc, item) => {
-//     // Get the value of the specified key from the current item
-//     const keyValue = item[key];
-
-//     // Check if the key already exists in the accumulator object
-//     if (keyValue in acc) {
-//       // If the key exists, append the current item to its corresponding array
-//       acc[keyValue].push(item);
-//     } else {
-//       // If the key does not exist, create a new array with the current item and assign it to the key in the accumulator object
-//       acc[keyValue] = [item];
-//     }
-
-//     // Return the updated accumulator object for the next iteration
-//     return acc;
-//   }, {});
+export const sortAlphabetical = (a, b, key) => {
+    return new Intl.Collator(undefined, {
+        sensitivity: "base",
+        ignorePunctuation: true,
+    }).compare(a[key], b[key]);
+};
 
 export const stripNonAlphanumeric = (str) => str.replace(/[^a-zA-Z0-9\s]/g, "");
 

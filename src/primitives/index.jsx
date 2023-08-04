@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import feather from "./feather-sprite.svg";
-import "./index.scss";
+import "./index.css";
 
 export const Box = ({ padding = "var(--size-3)", borderWidth = "0", children, ...attributes }) => {
     const i = `box-${[padding, borderWidth].join("-")}`;

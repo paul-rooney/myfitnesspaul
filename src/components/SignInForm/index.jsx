@@ -12,7 +12,7 @@ const SignInForm = ({ handleSubmit }) => (
                 {/* TODO: Replace with logo */}
                 <h1 className={styles.branding}>MealMosaic</h1>
                 <Card>
-                    <form onSubmit={handleSubmit}>
+                    <form onSubmit={handleSubmit} className={styles.form}>
                         <Stack space="var(--size-3)">
                             <SecondaryHeading>Sign in</SecondaryHeading>
                             <Input id="email" type="email" label="Email address" required autoCapitalize="none" />

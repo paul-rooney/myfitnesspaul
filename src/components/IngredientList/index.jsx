@@ -106,7 +106,7 @@ const IngredientList = ({ ingredients }) => {
                 </Icon>
             </Button>
 
-            <Paginator arrayToPaginate={ingredients} itemsPerPage={10} setStartIndex={setStartIndex} setEndIndex={setEndIndex} />
+            <Paginator arrayToPaginate={filteredIngredients} itemsPerPage={10} setStartIndex={setStartIndex} setEndIndex={setEndIndex} />
 
             <Stack space="var(--size-1)" role="list">
                 {filteredIngredients.length > 0 ? (

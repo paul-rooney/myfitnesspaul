@@ -1,0 +1,5 @@
+.currentPage {
+    font-size: var(--font-size-0);
+    min-inline-size: 3em;
+    text-align: center;
+}

@@ -50,6 +50,8 @@
         stroke: currentColor;
         stroke-width: 2;
         stroke-linecap: round;
+        /* Set to square for this project */
+        stroke-linecap: square;
         stroke-linejoin: round;
     }
 }

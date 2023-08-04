@@ -6,3 +6,7 @@
     margin-block: var(--size-6);
     text-align: center;
 }
+
+.form {
+    min-inline-size: min(250px, 80vw);
+}
