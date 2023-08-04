@@ -92,19 +92,20 @@ const MealPlanner = ({ recipes }) => {
     const [weight, setWeight] = useState(null);
     const [minKcal, setMinKcal] = useState(1450);
     const [maxKcal, setMaxKcal] = useState(1550);
-    const [minProtein, setMinProtein] = useState(weight ? weight * 0.7 : 105);
-    const [maxProtein, setMaxProtein] = useState(weight ? weight * 1.1 : 165);
+    const [minProtein, setMinProtein] = useState(105);
+    const [maxProtein, setMaxProtein] = useState(165);
     const [mealPlan, setMealPlan] = useState([]);
     const [shoppingList, setShoppingList] = useState([]);
 
     useEffect(() => {
         getWeight().then((weightValue) => setWeight(weightValue));
+        // ⬆️ what is this doing?
+        setMinProtein(Math.round(weight * 0.7));
+        setMaxProtein(Math.round(weight * 1.1));
     }, [weight]);
 
     const changeHandler = (event) => {
         const { value, id } = event.target;
-
-        if (!value) return;
 
         switch (id) {
             case "minKcal":
