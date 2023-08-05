@@ -108,7 +108,7 @@ const UpdateRecipeDialog = ({ recipe, ingredients }) => {
             page_number: pageNumber,
         };
 
-        // this handler being called within this component is preventing the handler running for changes to display name and servings
+        // TODO: Fix -- this handler being called within this component is preventing the handler running for changes to display name and servings
         updateRows("recipes", payload).catch((error) => console.error(error));
 
         insertRows("recipes_ingredients", recipeIngredients)

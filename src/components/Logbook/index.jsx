@@ -23,13 +23,13 @@ const getLog = async (table, columns = "*", matchedColumn, date) => {
 
 const Logbook = ({ recipes }) => {
     const [date, setDate] = useState(formatDateISO(new Date()));
-    const [weight, setWeight] = useState(null);
+    const [weight, setWeight] = useState(0);
     const [breakfast, setBreakfast] = useState({});
     const [lunch, setLunch] = useState({});
     const [dinner, setDinner] = useState({});
 
     useEffect(() => {
-        getLog("users_weight", "weight", "date_entered", date).then(([entry]) => setWeight(entry?.weight));
+        getLog("users_weight", "weight", "date_entered", date).then(([entry]) => setWeight((previous) => entry?.weight ? entry.weight : previous));
 
         getLog("users_logs", "*, recipes (display_name)", "meal_date", date).then((data) => {
             setBreakfast({});
@@ -58,6 +58,12 @@ const Logbook = ({ recipes }) => {
             });
         });
     }, [date]);
+
+    const changeHandler = (event) => {
+        const { value } = event.target;
+
+        setWeight(value);
+    };
 
     const clickHandler = async (event) => {
         const { data } = await supabase.auth.getSession();
@@ -173,7 +179,15 @@ const Logbook = ({ recipes }) => {
             */}
 
             <form onSubmit={logWeight}>
-                <Input id="weight" label="Weight" type="number" step={0.25} defaultValue={weight} variant="fancy">
+                <Input
+                    id="weight"
+                    label="Weight"
+                    type="number"
+                    step={0.25}
+                    value={weight}
+                    changeHandler={changeHandler}
+                    variant="fancy"
+                >
                     <Button variant="secondary" type="submit">
                         <Icon space="0.5ch" direction="ltr" icon="plus">
                             Log weight
@@ -191,21 +205,39 @@ const Logbook = ({ recipes }) => {
                     ))}
                 </datalist>
                 <Stack>
-                    <Input id="breakfast" label="Breakfast" list="recipes_list" placeholder={breakfast?.display_name} variant="fancy">
+                    <Input
+                        id="breakfast"
+                        label="Breakfast"
+                        list="recipes_list"
+                        placeholder={breakfast?.display_name}
+                        variant="fancy"
+                    >
                         <Button variant="secondary" data-meal="breakfast" clickHandler={clickHandler}>
                             <Icon space="0.5ch" direction="ltr" icon="plus">
                                 Add
                             </Icon>
                         </Button>
                     </Input>
-                    <Input id="lunch" label="Lunch" list="recipes_list" placeholder={lunch?.display_name} variant="fancy">
+                    <Input
+                        id="lunch"
+                        label="Lunch"
+                        list="recipes_list"
+                        placeholder={lunch?.display_name}
+                        variant="fancy"
+                    >
                         <Button variant="secondary" data-meal="lunch" clickHandler={clickHandler}>
                             <Icon space="0.5ch" direction="ltr" icon="plus">
                                 Add
                             </Icon>
                         </Button>
                     </Input>
-                    <Input id="dinner" label="Dinner" list="recipes_list" placeholder={dinner?.display_name} variant="fancy">
+                    <Input
+                        id="dinner"
+                        label="Dinner"
+                        list="recipes_list"
+                        placeholder={dinner?.display_name}
+                        variant="fancy"
+                    >
                         <Button variant="secondary" data-meal="dinner" clickHandler={clickHandler}>
                             <Icon space="0.5ch" direction="ltr" icon="plus">
                                 Add

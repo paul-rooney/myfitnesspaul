@@ -9,6 +9,8 @@ import SignInForm from "./components/SignInForm";
 import SnapTabs from "./components/SnapTabs";
 import styles from "./app.module.scss";
 
+const recipesQuery = `id, display_name, servings, page_number, rating, effort, recipes_ingredients (ingredients!recipes_ingredients_ingredient_id_fkey (display_name), id, ingredient_identifier, quantity, unit, recipes_macronutrients (kcal, carbohydrate, fat, protein)), recipes_sources (source, author, thumbnail_url)`;
+
 const App = () => {
     const [session, setSession] = useState(null);
     const [ingredients, setIngredients] = useSessionStorage("ingredients", []);
@@ -27,26 +29,8 @@ const App = () => {
     useEffect(() => {
         if (!session) return;
 
-        const ingredients = sessionStorage.getItem("ingredients");
-
-        if (ingredients && JSON.parse(ingredients).length) return;
-
         readRows("ingredients").then((ingredients) => setIngredients(ingredients));
-    }, [session]);
-
-    useEffect(() => {
-        if (!session) return;
-
-        const recipes = sessionStorage.getItem("recipes");
-
-        if (recipes && JSON.parse(recipes).length) return;
-
-        readRows(
-            "recipes",
-            `id, display_name, servings, page_number, rating, effort,
-                recipes_ingredients (ingredients!recipes_ingredients_ingredient_id_fkey (display_name), id, ingredient_identifier, quantity, unit, recipes_macronutrients (kcal, carbohydrate, fat, protein)),
-                recipes_sources (source, author, thumbnail_url)`
-        ).then((recipes) => setRecipes(calculateMacronutrientTotals(recipes)));
+        readRows("recipes", recipesQuery).then((recipes) => setRecipes(calculateMacronutrientTotals(recipes)));
     }, [session]);
 
     useEffect(() => {
@@ -54,12 +38,7 @@ const App = () => {
             .channel("any")
             .on("postgres_changes", { event: "*", schema: "public" }, () => {
                 readRows("ingredients").then((ingredients) => setIngredients(ingredients));
-                readRows(
-                    "recipes",
-                    `id, display_name, servings, page_number,
-                    recipes_ingredients (ingredients!recipes_ingredients_ingredient_id_fkey (display_name), id, ingredient_identifier, quantity, unit, recipes_macronutrients (kcal, carbohydrate, fat, protein)), 
-                    recipes_sources (source, author, thumbnail_url)`
-                ).then((recipes) => setRecipes(calculateMacronutrientTotals(recipes)));
+                readRows("recipes", recipesQuery).then((recipes) => setRecipes(calculateMacronutrientTotals(recipes)));
             })
             .subscribe();
     }, []);
@@ -83,7 +62,12 @@ const App = () => {
     } else {
         return (
             <div className={styles.wrapper}>
-                <SnapTabs ingredients={ingredients} setIngredients={setIngredients} recipes={recipes} setRecipes={setRecipes} />
+                <SnapTabs
+                    ingredients={ingredients}
+                    setIngredients={setIngredients}
+                    recipes={recipes}
+                    setRecipes={setRecipes}
+                />
             </div>
         );
     }
