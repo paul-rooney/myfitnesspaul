@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { Stack, Switcher } from "../../primitives";
 import { supabase } from "../../supabase";
 import { shuffleArray } from "../../utilities";
@@ -22,7 +22,12 @@ function getRandomCombinations(objects, range1, range2, n) {
         const newKcalSum = kcalSum + currentObject.kcal;
         const newProteinSum = proteinSum + currentObject.protein;
 
-        if (newKcalSum >= range1[0] && newKcalSum <= range1[1] && newProteinSum >= range2[0] && newProteinSum <= range2[1]) {
+        if (
+            newKcalSum >= range1[0] &&
+            newKcalSum <= range1[1] &&
+            newProteinSum >= range2[0] &&
+            newProteinSum <= range2[1]
+        ) {
             const combination = [...arr, currentObject];
             const combinationString = JSON.stringify(combination);
 
@@ -75,20 +80,25 @@ const mifflinStJeorEquation = (weight, height, age) => {
     return 10 * (weight / 2.205) + 6.25 * height - 5 * 32 + 5;
 };
 
+const initialState = {
+    minKcal: 1450,
+    maxKcal: 1550,
+    minProtein: 105,
+    maxProtein: 165,
+};
+
+const reducer = (state, action) => ({ ...state, [action.type]: action.details });
+
 const MealPlanner = ({ recipes }) => {
-    // TODO: Use useReducer here ⬇️
     const [weight, setWeight] = useState(null);
-    const [minKcal, setMinKcal] = useState(1450);
-    const [maxKcal, setMaxKcal] = useState(1550);
-    const [minProtein, setMinProtein] = useState(105);
-    const [maxProtein, setMaxProtein] = useState(165);
     const [mealPlan, setMealPlan] = useState([]);
+    const [state, dispatch] = useReducer(reducer, initialState);
 
     useEffect(() => {
         getWeight().then((weightValue) => setWeight(weightValue));
         // ⬆️ what is this doing?
-        setMinProtein(Math.round(weight * 0.7));
-        setMaxProtein(Math.round(weight * 1.1));
+        dispatch({ minProtein: weight * 0.7 });
+        dispatch({ maxProtein: weight * 1.1 });
     }, [weight]);
 
     const changeHandler = (event) => {
@@ -96,19 +106,19 @@ const MealPlanner = ({ recipes }) => {
 
         switch (id) {
             case "minKcal":
-                setMinKcal(value ?? 0);
+                dispatch({ type: "minKcal", details: value ?? 0 });
                 break;
 
             case "maxKcal":
-                setMaxKcal(value ?? 0);
+                dispatch({ type: "maxKcal", details: value ?? 0 });
                 break;
 
             case "minProtein":
-                setMinProtein(value ?? 0);
+                dispatch({ type: "minProtein", details: value ?? 0 });
                 break;
 
             case "maxProtein":
-                setMaxProtein(value ?? 0);
+                dispatch({ type: "maxProtein", details: value ?? 0 });
                 break;
 
             default:
@@ -187,22 +197,25 @@ const MealPlanner = ({ recipes }) => {
         }
     };
 
+    const geLockedMeals = () => {
+        const lockedMeals = mealPlan.reduce((acc, day, dayIndex) => {
+            day.forEach((meal, mealIndex) => {
+                if (meal.is_locked) {
+                    acc.push({ dayIndex, mealIndex });
+                }
+            });
+
+            return acc;
+        }, []);
+
+        return lockedMeals;
+    };
+
     const lockMeal = (dayIndex, mealIndex) => {
         const isLocked = mealPlan[dayIndex][mealIndex].is_locked ? false : true;
-        const newArr = [...mealPlan];
-
-        const updatedDay = newArr[dayIndex].map((meal, index) => {
-            if (index === mealIndex) {
-                return {
-                    ...meal,
-                    is_locked: isLocked,
-                };
-            }
-            return meal;
-        });
-
-        newArr[dayIndex] = updatedDay;
-        setMealPlan(newArr);
+        const newMealPlan = [...mealPlan];
+        newMealPlan[dayIndex][mealIndex].is_locked = isLocked;
+        setMealPlan(newMealPlan);
     };
 
     return (
@@ -212,21 +225,65 @@ const MealPlanner = ({ recipes }) => {
             <form onSubmit={submitHandler}>
                 <Stack space="var(--size-2)">
                     <Switcher threshold="280px" space="var(--size-1)" limit="2">
-                        <Input id="minKcal" label="Minimum kcal" type="number" step={1} value={minKcal} changeHandler={changeHandler} />
-                        <Input id="maxKcal" label="Maximum kcal" type="number" step={1} value={maxKcal} changeHandler={changeHandler} />
+                        <Input
+                            id="minKcal"
+                            label="Minimum kcal"
+                            type="number"
+                            step={1}
+                            value={state.minKcal}
+                            changeHandler={changeHandler}
+                        />
+                        <Input
+                            id="maxKcal"
+                            label="Maximum kcal"
+                            type="number"
+                            step={1}
+                            value={state.maxKcal}
+                            changeHandler={changeHandler}
+                        />
                     </Switcher>
                     <Switcher threshold="280px" space="var(--size-1)" limit="3">
-                        <Input id="minProtein" label="Minimum protein" type="number" step={1} value={minProtein} changeHandler={changeHandler} />
-                        <Input id="maxProtein" label="Maximum protein" type="number" step={1} value={maxProtein} changeHandler={changeHandler} />
+                        <Input
+                            id="minProtein"
+                            label="Minimum protein"
+                            type="number"
+                            step={1}
+                            value={state.minProtein}
+                            changeHandler={changeHandler}
+                        />
+                        <Input
+                            id="maxProtein"
+                            label="Maximum protein"
+                            type="number"
+                            step={1}
+                            value={state.maxProtein}
+                            changeHandler={changeHandler}
+                        />
                     </Switcher>
-                    <Input id="numDays" label="Number of days" type="number" min={1} max={14} step={1} defaultValue={7} />
+                    <Input
+                        id="numDays"
+                        label="Number of days"
+                        type="number"
+                        min={1}
+                        max={14}
+                        step={1}
+                        defaultValue={7}
+                    />
                     <Button variant="primary" fullWidth type="submit">
                         Generate meal plan
                     </Button>
                 </Stack>
             </form>
 
-            <MealPlan mealPlan={mealPlan} updateMealPlan={updateMealPlan} lockMeal={lockMeal} minKcal={minKcal} maxKcal={maxKcal} minProtein={minProtein} maxProtein={maxProtein} />
+            <MealPlan
+                mealPlan={mealPlan}
+                updateMealPlan={updateMealPlan}
+                lockMeal={lockMeal}
+                minKcal={state.minKcal}
+                maxKcal={state.maxKcal}
+                minProtein={state.minProtein}
+                maxProtein={state.maxProtein}
+            />
 
             {mealPlan.length > 1 && <ShoppingList mealPlan={mealPlan} />}
         </Stack>

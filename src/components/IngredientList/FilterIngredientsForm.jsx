@@ -4,6 +4,8 @@ import Input from "../Common/Input";
 
 const FilterIngredientsForm = ({ ingredients, setFilteredIngredients }) => {
     useEffect(() => {
+        if (!ingredients) return;
+        
         setFilteredIngredients(ingredients);
     }, [ingredients]);
 

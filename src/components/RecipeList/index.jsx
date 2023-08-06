@@ -5,7 +5,7 @@ import RecipeCard from "./RecipeCard/RecipeCard";
 import CreateRecipeDialog from "./CreateRecipeDialog";
 import CreateRecipesIngredientsDialog from "./CreateRecipesIngredientsDialog";
 import { sortAlphabetical, stripNonAlphanumeric } from "../../utilities";
-import FilterRecipesWidget from "./FilterRecipesWidget";
+import FilterRecipesForm from "./FilterRecipesForm";
 import UpdateRecipeDialog from "./UpdateRecipeDialog";
 import DeleteRecipeDialog from "./Dialogs/DeleteRecipeDialog";
 import useSessionStorage from "../../hooks/useSessionStorage";
@@ -30,12 +30,6 @@ const RecipeList = ({ ingredients, recipes }) => {
 
         readRows("recipes_sources").then((data) => setSources(data));
     }, []);
-
-    useEffect(() => {
-        if (!recipes) return;
-
-        setFilteredRecipes(recipes);
-    }, [recipes]);
 
     const clickHandler = (event) => {
         const { id, operation } = event.target.closest("button").dataset;
@@ -110,7 +104,7 @@ const RecipeList = ({ ingredients, recipes }) => {
         <Stack>
             <PrimaryHeading>Recipes</PrimaryHeading>
 
-            {/* <FilterRecipesWidget setFilteredRecipes={setFilteredRecipes} /> */}
+            <FilterRecipesForm recipes={recipes} setFilteredRecipes={setFilteredRecipes} />
 
             <Button variant="primary" fullWidth data-operation="create" clickHandler={clickHandler}>
                 <Icon space=".5ch" direction="ltr" icon="plus">
@@ -125,8 +119,8 @@ const RecipeList = ({ ingredients, recipes }) => {
                     filteredRecipes
                         .sort((a, b) => sortAlphabetical(a, b, "display_name"))
                         .slice(startIndex, endIndex)
-                        .map((recipe) => (
-                                <RecipeCard recipe={recipe} handleClick={clickHandler} role="listitem" key={recipe.id} />
+                        .map((recipe, index) => (
+                                <RecipeCard recipe={recipe} handleClick={clickHandler} role="listitem" key={`${recipe.id}-${index}`} />
                         ))
                 ) : (
                     <EmptyState>No recipes to display</EmptyState>
