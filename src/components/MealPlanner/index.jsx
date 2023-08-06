@@ -1,6 +1,6 @@
 import { useEffect, useReducer, useState } from "react";
 import { Stack, Switcher } from "../../primitives";
-import { supabase } from "../../supabase";
+import { readRows } from "../../supabase";
 import { shuffleArray } from "../../utilities";
 import Button from "../Common/Button";
 import PrimaryHeading from "../Common/PrimaryHeading";
@@ -53,22 +53,10 @@ function getRandomCombinations(objects, range1, range2, n) {
     return combinations.slice(0, n);
 }
 
-const read = async (table, columns = "*") => {
-    try {
-        const { data, error } = await supabase.from(table).select(columns);
-        if (error) {
-            throw new Error(error.message);
-        }
-        return data;
-    } catch (error) {
-        console.error("An error occurred: ", error);
-    }
-};
-
 const getWeight = async () => {
     const getMeanWeight = (arr) => arr.reduce((acc, value) => acc + value, 0) / arr.length;
 
-    const weightData = await read("users_weight");
+    const weightData = await readRows("users_weight");
     // const { weight } = weightData.pop();
     const weight = weightData.slice(-7).map((value) => value.weight);
     const meanWeight = getMeanWeight(weight);
@@ -76,23 +64,18 @@ const getWeight = async () => {
     return meanWeight;
 };
 
-const mifflinStJeorEquation = (weight, height, age) => {
-    return 10 * (weight / 2.205) + 6.25 * height - 5 * 32 + 5;
-};
-
-const initialState = {
-    minKcal: 1450,
-    maxKcal: 1550,
-    minProtein: 105,
-    maxProtein: 165,
-};
-
 const reducer = (state, action) => ({ ...state, [action.type]: action.details });
 
 const MealPlanner = ({ recipes }) => {
     const [weight, setWeight] = useState(null);
     const [mealPlan, setMealPlan] = useState([]);
-    const [state, dispatch] = useReducer(reducer, initialState);
+    const [state, dispatch] = useReducer(reducer, {
+        minKcal: 1450,
+        maxKcal: 1550,
+        minProtein: 105,
+        maxProtein: 165,
+        numDays: 7
+    });
 
     useEffect(() => {
         getWeight().then((weightValue) => setWeight(weightValue));
@@ -197,7 +180,7 @@ const MealPlanner = ({ recipes }) => {
         }
     };
 
-    const geLockedMeals = () => {
+    const getLockedMeals = () => {
         const lockedMeals = mealPlan.reduce((acc, day, dayIndex) => {
             day.forEach((meal, mealIndex) => {
                 if (meal.is_locked) {

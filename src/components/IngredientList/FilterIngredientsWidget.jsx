@@ -5,7 +5,7 @@ import Input from "../Common/Input";
 const FilterIngredientsForm = ({ ingredients, setFilteredIngredients }) => {
     useEffect(() => {
         if (!ingredients) return;
-        
+
         setFilteredIngredients(ingredients);
     }, [ingredients]);
 
@@ -13,7 +13,12 @@ const FilterIngredientsForm = ({ ingredients, setFilteredIngredients }) => {
         return debounce((event) => {
             const { value } = event.target;
 
-            setFilteredIngredients(ingredients.filter(({ identifier, display_name }) => (identifier ? identifier.includes(value.toLowerCase().trim()) || display_name.toLowerCase().includes(value.toLowerCase().trim()) : null)));
+            setFilteredIngredients(ingredients.filter(
+                ({ identifier, display_name }) => (
+                    identifier ? identifier.includes(value.toLowerCase().trim()) || 
+                    display_name.toLowerCase().includes(value.toLowerCase().trim()) : null
+                    )
+                ));
         }, 250);
     }, [ingredients]);
 

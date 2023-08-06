@@ -3,7 +3,7 @@ import { supabase, upsertRows } from "../../../supabase";
 import Button from "../../Common/Button";
 import Input from "../../Common/Input";
 
-const LogMealsForm = ({ date, recipes, state, dispatch }) => {
+const LogMealsForm = ({ date, ingredients, recipes, state, dispatch }) => {
     const clickHandler = async (event) => {
         const { data } = await supabase.auth.getSession();
         const { meal } = event.target.closest("button").dataset;
@@ -65,10 +65,15 @@ const LogMealsForm = ({ date, recipes, state, dispatch }) => {
 
     return (
         <form onSubmit={submitHandler}>
-            <datalist id="recipes_list">
+            <datalist id="recipes_ingredients_list">
                 {recipes.map((recipe) => (
                     <option key={recipe.id} value={recipe.id}>
                         {recipe.display_name}
+                    </option>
+                ))}
+                {ingredients.map((ingredient) => (
+                    <option key={ingredient.id} value={ingredient.id}>
+                        {ingredient.display_name}
                     </option>
                 ))}
             </datalist>
@@ -76,7 +81,7 @@ const LogMealsForm = ({ date, recipes, state, dispatch }) => {
                 <Input
                     id="breakfast"
                     label="Breakfast"
-                    list="recipes_list"
+                    list="recipes_ingredients_list"
                     placeholder={state.breakfast?.display_name}
                     variant="fancy"
                 >
@@ -89,7 +94,7 @@ const LogMealsForm = ({ date, recipes, state, dispatch }) => {
                 <Input
                     id="lunch"
                     label="Lunch"
-                    list="recipes_list"
+                    list="recipes_ingredients_list"
                     placeholder={state.lunch?.display_name}
                     variant="fancy"
                 >
@@ -102,11 +107,24 @@ const LogMealsForm = ({ date, recipes, state, dispatch }) => {
                 <Input
                     id="dinner"
                     label="Dinner"
-                    list="recipes_list"
+                    list="recipes_ingredients_list"
                     placeholder={state.dinner?.display_name}
                     variant="fancy"
                 >
                     <Button variant="secondary" data-meal="dinner" clickHandler={clickHandler}>
+                        <Icon space="0.5ch" direction="ltr" icon="plus">
+                            Add
+                        </Icon>
+                    </Button>
+                </Input>
+                <Input
+                    id="snacks"
+                    label="Snacks"
+                    list="recipes_ingredients_list"
+                    placeholder={state.snacks?.display_name}
+                    variant="fancy"
+                >
+                    <Button variant="secondary" data-meal="snacks" clickHandler={clickHandler}>
                         <Icon space="0.5ch" direction="ltr" icon="plus">
                             Add
                         </Icon>

@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { Icon, Stack } from "../../primitives";
 import { deleteRows, insertRows, readRows, updateRows } from "../../supabase";
-import RecipeCard from "./RecipeCard/RecipeCard";
+import RecipeCard from "./RecipeCard";
 import CreateRecipeDialog from "./CreateRecipeDialog";
 import CreateRecipesIngredientsDialog from "./CreateRecipesIngredientsDialog";
 import { sortAlphabetical, stripNonAlphanumeric } from "../../utilities";
-import FilterRecipesForm from "./FilterRecipesForm";
+import FilterRecipesForm from "./FilterRecipesWidget";
 import UpdateRecipeDialog from "./UpdateRecipeDialog";
 import DeleteRecipeDialog from "./Dialogs/DeleteRecipeDialog";
 import useSessionStorage from "../../hooks/useSessionStorage";
@@ -112,7 +112,7 @@ const RecipeList = ({ ingredients, recipes }) => {
                 </Icon>
             </Button>
 
-            <Paginator arrayToPaginate={recipes} itemsPerPage={10} setStartIndex={setStartIndex} setEndIndex={setEndIndex} />
+            <Paginator arrayToPaginate={filteredRecipes} itemsPerPage={10} setStartIndex={setStartIndex} setEndIndex={setEndIndex} />
 
             <Stack space="var(--size-1)" role="list">
                 {filteredRecipes.length > 0 ? (

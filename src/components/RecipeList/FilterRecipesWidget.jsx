@@ -27,7 +27,7 @@ const FilterRecipesWidget = ({ recipes, setFilteredRecipes }) => {
                 return;
             }
 
-            readRows(value).then((response) => {
+            readRows(value.trim()).then((response) => {
                 const recipeIDs = response.map((entry) => entry.recipes.id);
                 const filtered = recipes.filter((recipe) => recipeIDs.includes(recipe.id));
 

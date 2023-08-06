@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Icon, Stack } from "../../primitives";
 import { insertRows, updateRows, deleteRows } from "../../supabase";
-import FilterIngredientsForm from "./FilterIngredientsForm";
+import FilterIngredientsForm from "./FilterIngredientsWidget";
 import CreateIngredientDialog from "./CreateIngredientDialog";
 import UpdateIngredientDialog from "./UpdateIngredientDialog";
 import DeleteIngredientDialog from "./DeleteIngredientDialog";

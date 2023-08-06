@@ -54,13 +54,13 @@ const ShoppingList = ({ mealPlan }) => {
             <Button fullWidth clickHandler={generateShoppingList}>
                 Generate shopping list
             </Button>
-            <Stack space="var(--size-2)">
+            <Stack space="var(--size-2)" role="list">
                 {shoppingList.length > 0
                     ? shoppingList
                           .sort((a, b) => sortAlphabetical(a, b, 0))
                           .map(([, value], index) => {
                               return (
-                                  <Cluster justify="space-between" space="var(--size-3)" style={{ fontSize: "var(--font-size-0)" }} key={index}>
+                                  <Cluster justify="space-between" space="var(--size-3)" style={{ fontSize: "var(--font-size-0)" }} role="listitem" key={index}>
                                       <span>{value[0].ingredient_display_name}</span>
                                       <span>{value.id}</span>
                                       <span>

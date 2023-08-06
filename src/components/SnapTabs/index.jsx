@@ -11,7 +11,7 @@ const SnapTabs = ({ ingredients, setIngredients, recipes, setRecipes }) => {
             <div className={styles.tabs}>
                 <section className={`${styles.section} ${styles.scroll}`}>
                     <Box id="log" className={styles.article}>
-                        <Logbook recipes={recipes} />
+                        <Logbook ingredients={ingredients} recipes={recipes} />
                     </Box>
                     <Box id="mealPlanner" className={styles.article}>
                         <MealPlanner recipes={recipes} />
