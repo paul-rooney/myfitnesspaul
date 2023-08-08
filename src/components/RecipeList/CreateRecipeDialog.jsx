@@ -8,6 +8,7 @@ const CreateRecipeDialog = ({ sources, handleSubmit }) => (
             <Input id="display_name" label="Display name" required />
             <Input id="servings" label="Number of servings" type="number" required />
             <Input id="source" label="Source" list="sources_list" />
+            <Input id="page_number" label="Page number" type="number" step={1} min={1} />
             <datalist id="sources_list">
                 {sources &&
                     sources.map(({ id, source }) => (

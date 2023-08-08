@@ -72,7 +72,7 @@ Root
 }
 
 html {
-    --brand-hue: 200;
+    --brand-hue: 185;
     --brand-saturation: 100%;
     --brand-lightness: 50%;
 
@@ -95,6 +95,45 @@ html {
     --surface4-dark: hsl(var(--brand-hue) 5% 25%);
     --surface-shadow-dark: var(--brand-hue) 50% 3%;
     --shadow-strength-dark: 0.8;
+
+    /* New color theming */
+
+    --ruby-hue: 345;
+    --sand-hue: 42.3;
+    --frost-hue: 185;
+
+    --ruby-100: #fff7f9;
+    --ruby-200: #ffeaf0;
+    --ruby-300: #ffd3de;
+    --ruby-400: #faaabe;
+    --ruby-500: #ed6385;
+    /* ⬇️ Primary */
+    --ruby-600: #d5214e;
+    --ruby-700: #9f113c;
+    --ruby-800: #580b26;
+    --ruby-900: #050103;
+
+    --sand-100: #fff9eb;
+    --sand-200: #fce8b9;
+    /* ⬇️ Primary  */
+    --sand-300: #fad98a;
+    --sand-400: #d1ad62;
+    --sand-500: #a88545;
+    --sand-600: #80612f;
+    --sand-700: #57401e;
+    --sand-800: #2e2110;
+    --sand-900: #050402;
+
+    --frost-100: #f0feff;
+    --frost-200: #d5f8fb;
+    --frost-300: #baf1f6;
+    --frost-400: #a0e9ef;
+    --frost-500: #85dee6;
+    --frost-600: #68cdd7;
+    --frost-700: #47abb4;
+    /* ⬇️ Primary */
+    --frost-800: #1f6066;
+    --frost-900: #002f33;
 }
 body {
     font-family: "Plus Jakarta Sans";
@@ -114,8 +153,8 @@ h3,
 h4,
 h5,
 h6 {
-    font-family: "Plus Jakarta Sans";
-    font-weight: 300;
+    font-family: "Syne", "Plus Jakarta Sans";
+    font-weight: 700;
 }
 h1 {
 }

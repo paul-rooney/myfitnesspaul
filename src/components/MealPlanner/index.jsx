@@ -121,17 +121,7 @@ const MealPlanner = ({ recipes }) => {
     };
 
     const generateMealPlan = async (range1, range2, n) => {
-        // check if any meals have been locked in place
-        let lockedMeals = mealPlan
-            .map((day, dayIndex) => {
-                return day.map((meal) => {
-                    if (meal.is_locked) {
-                        return [dayIndex, day.indexOf(meal), meal];
-                    }
-                });
-            })
-            .flat()
-            .filter((meal) => meal !== undefined);
+        let lockedMeals = getLockedMeals();
 
         const numbers = recipes.map((recipe) => ({
             id: recipe.id,
@@ -196,15 +186,59 @@ const MealPlanner = ({ recipes }) => {
 
     const lockMeal = (dayIndex, mealIndex) => {
         const isLocked = mealPlan[dayIndex][mealIndex].is_locked ? false : true;
-        const newMealPlan = [...mealPlan];
+        // Create a copy rather than creating a reference to nested objects 
+        // that occurs when using the spread operator
+        const newMealPlan = JSON.parse(JSON.stringify(mealPlan));
         newMealPlan[dayIndex][mealIndex].is_locked = isLocked;
         setMealPlan(newMealPlan);
     };
+
+
+    function replaceFruitsExceptLocked(arrayOfArrays) {
+        const newArray = arrayOfArrays.map((fruitsArray) => {
+          const preservedFruitIndex = fruitsArray.findIndex((fruit) => fruit.is_locked);
+      
+          return fruitsArray.map((fruit, index) => {
+            if (index === preservedFruitIndex || fruit.is_locked) {
+              // Preserve the fruit with is_locked set to true
+              return fruit;
+            } else {
+              // Replace all other fruits with new data
+              return { total: Math.floor(Math.random() * 10) + 1, name: `NewFruit${index}` };
+            }
+          });
+        });
+      
+        console.log(newArray);
+        return newArray;
+      }
+      
+      // Sample array of arrays of fruits
+      const arrayOfArrays = [
+        [
+          { total: 5, name: 'Apple', is_locked: true }, // Preserve this fruit
+          { total: 3, name: 'Banana' },
+          { total: 2, name: 'Orange' },
+        ],
+        [
+          { total: 4, name: 'Grapes', is_locked: true }, // Preserve this fruit
+          { total: 6, name: 'Mango' },
+          { total: 1, name: 'Kiwi' },
+        ],
+        // Add more arrays of fruits here as needed
+      ];
+      
+    //   const result = replaceFruitsExceptLocked(arrayOfArrays);
+    //   console.log(result);
+      
 
     return (
         <Stack>
             <PrimaryHeading>Meal Planner</PrimaryHeading>
 
+            <p>{JSON.stringify(arrayOfArrays)}</p>
+            <Button clickHandler={() => replaceFruitsExceptLocked(arrayOfArrays)}>Fruit machine</Button>
+            
             <form onSubmit={submitHandler}>
                 <Stack space="var(--size-2)">
                     <Switcher threshold="280px" space="var(--size-1)" limit="2">

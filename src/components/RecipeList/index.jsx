@@ -62,7 +62,7 @@ const RecipeList = ({ ingredients, recipes }) => {
     const submitHandler = (event) => {
         const form = event.target;
         const { operation } = form.dataset;
-        const { id, display_name, servings, source } = form;
+        const { id, display_name, servings, source, page_number } = form;
         let dialog;
         let recipe = [
             {
@@ -70,6 +70,7 @@ const RecipeList = ({ ingredients, recipes }) => {
                 display_name: display_name.value.trim(),
                 servings: servings.value,
                 source: source.value !== "" ? source.value : null,
+                page_number: page_number.value !== "" ? page_number.value :  null,
             },
         ];
 

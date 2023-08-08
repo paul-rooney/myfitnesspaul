@@ -49,11 +49,22 @@ const ShoppingList = ({ mealPlan }) => {
         });
     };
 
+    const copyToClipboard = () => {
+        const shoppingListAsText = shoppingList.map(item => item[0].split(",")[0]).join(",");
+
+        navigator.clipboard.writeText(shoppingListAsText);
+    };
+
     return (
         <>
             <Button fullWidth clickHandler={generateShoppingList}>
                 Generate shopping list
             </Button>
+            {shoppingList.length > 0 ? (
+                <Button fullWidth clickHandler={copyToClipboard}>
+                    Copy to clipboard
+                </Button>
+            ) : null}
             <Stack space="var(--size-2)" role="list">
                 {shoppingList.length > 0
                     ? shoppingList
@@ -84,7 +95,7 @@ const ShoppingList = ({ mealPlan }) => {
                                                       break;
                                               }
 
-                                              return parseFloat(((acc + q) / item.servings).toFixed(2));
+                                              return acc + (q / item.servings);
                                           }, 0)}
                                           {value.map((item) => item.unit).every((currentValue) => ["g", "ml", "tsp", "tbsp"].includes(currentValue)) ? "g" : null}
                                       </span>

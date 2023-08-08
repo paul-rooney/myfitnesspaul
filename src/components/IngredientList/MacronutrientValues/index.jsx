@@ -13,19 +13,19 @@ const MacronutrientValues = ({ kcal, c = null, f = null, p = null, unit = null }
             {!!c && (
                 <Stack space="0">
                     <span className={styles.label}>Carbohydrate</span>
-                    <span className={c === primaryMacronutrient ? styles.highlight : ""}>{c}g</span>
+                    <span className={c === primaryMacronutrient ? styles.highlight : ""}>{c}</span>
                 </Stack>
             )}
             {!!f && (
                 <Stack space="0">
                     <span className={styles.label}>Fat</span>
-                    <span className={f === primaryMacronutrient ? styles.highlight : ""}>{f}g</span>
+                    <span className={f === primaryMacronutrient ? styles.highlight : ""}>{f}</span>
                 </Stack>
             )}
             {!!p && (
                 <Stack space="0">
                     <span className={styles.label}>Protein</span>
-                    <span className={p === primaryMacronutrient ? styles.highlight : ""}>{p}g</span>
+                    <span className={p === primaryMacronutrient ? styles.highlight : ""}>{p}</span>
                 </Stack>
             )}
             {unit && (

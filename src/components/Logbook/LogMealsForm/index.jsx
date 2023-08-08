@@ -45,11 +45,11 @@ const LogMealsForm = ({ date, ingredients, recipes, state, dispatch }) => {
 
     const submitHandler = async (event) => {
         event.preventDefault();
-        const [breakfast, lunch, dinner, snacks] = state;
+        const { breakfast, lunch, dinner, snacks } = state;
         const meals = [breakfast, lunch, dinner, snacks];
 
         for (const meal of meals) {
-            if (Object.keys(meal).length) {
+            if (meal && Object.keys(meal).length) {
                 const payload = {
                     id: meal?.id,
                     user_id: meal.user_id,
@@ -78,52 +78,28 @@ const LogMealsForm = ({ date, ingredients, recipes, state, dispatch }) => {
                 ))}
             </datalist>
             <Stack>
-                <Input
-                    id="breakfast"
-                    label="Breakfast"
-                    list="recipes_ingredients_list"
-                    placeholder={state.breakfast?.display_name}
-                    variant="fancy"
-                >
+                <Input id="breakfast" label="Breakfast" list="recipes_ingredients_list" placeholder={state.breakfast?.display_name} variant="fancy">
                     <Button variant="secondary" data-meal="breakfast" clickHandler={clickHandler}>
                         <Icon space="0.5ch" direction="ltr" icon="plus">
                             Add
                         </Icon>
                     </Button>
                 </Input>
-                <Input
-                    id="lunch"
-                    label="Lunch"
-                    list="recipes_ingredients_list"
-                    placeholder={state.lunch?.display_name}
-                    variant="fancy"
-                >
+                <Input id="lunch" label="Lunch" list="recipes_ingredients_list" placeholder={state.lunch?.display_name} variant="fancy">
                     <Button variant="secondary" data-meal="lunch" clickHandler={clickHandler}>
                         <Icon space="0.5ch" direction="ltr" icon="plus">
                             Add
                         </Icon>
                     </Button>
                 </Input>
-                <Input
-                    id="dinner"
-                    label="Dinner"
-                    list="recipes_ingredients_list"
-                    placeholder={state.dinner?.display_name}
-                    variant="fancy"
-                >
+                <Input id="dinner" label="Dinner" list="recipes_ingredients_list" placeholder={state.dinner?.display_name} variant="fancy">
                     <Button variant="secondary" data-meal="dinner" clickHandler={clickHandler}>
                         <Icon space="0.5ch" direction="ltr" icon="plus">
                             Add
                         </Icon>
                     </Button>
                 </Input>
-                <Input
-                    id="snacks"
-                    label="Snacks"
-                    list="recipes_ingredients_list"
-                    placeholder={state.snacks?.display_name}
-                    variant="fancy"
-                >
+                <Input id="snacks" label="Snacks" list="recipes_ingredients_list" placeholder={state.snacks?.display_name} variant="fancy">
                     <Button variant="secondary" data-meal="snacks" clickHandler={clickHandler}>
                         <Icon space="0.5ch" direction="ltr" icon="plus">
                             Add
