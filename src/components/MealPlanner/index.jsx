@@ -22,12 +22,7 @@ function getRandomCombinations(objects, range1, range2, n) {
         const newKcalSum = kcalSum + currentObject.kcal;
         const newProteinSum = proteinSum + currentObject.protein;
 
-        if (
-            newKcalSum >= range1[0] &&
-            newKcalSum <= range1[1] &&
-            newProteinSum >= range2[0] &&
-            newProteinSum <= range2[1]
-        ) {
+        if (newKcalSum >= range1[0] && newKcalSum <= range1[1] && newProteinSum >= range2[0] && newProteinSum <= range2[1]) {
             const combination = [...arr, currentObject];
             const combinationString = JSON.stringify(combination);
 
@@ -74,7 +69,7 @@ const MealPlanner = ({ recipes }) => {
         maxKcal: 1550,
         minProtein: 105,
         maxProtein: 165,
-        numDays: 7
+        numDays: 7,
     });
 
     useEffect(() => {
@@ -186,121 +181,76 @@ const MealPlanner = ({ recipes }) => {
 
     const lockMeal = (dayIndex, mealIndex) => {
         const isLocked = mealPlan[dayIndex][mealIndex].is_locked ? false : true;
-        // Create a copy rather than creating a reference to nested objects 
+        // Create a copy rather than creating a reference to nested objects
         // that occurs when using the spread operator
         const newMealPlan = JSON.parse(JSON.stringify(mealPlan));
         newMealPlan[dayIndex][mealIndex].is_locked = isLocked;
         setMealPlan(newMealPlan);
     };
 
+    function replaceMealsExceptLocked(mealPlan) {
+        const newArray = mealPlan.map((mealsArray) => {
+            const preservedMealIndex = mealsArray.findIndex((meal) => meal.is_locked);
 
-    function replaceFruitsExceptLocked(arrayOfArrays) {
-        const newArray = arrayOfArrays.map((fruitsArray) => {
-          const preservedFruitIndex = fruitsArray.findIndex((fruit) => fruit.is_locked);
-      
-          return fruitsArray.map((fruit, index) => {
-            if (index === preservedFruitIndex || fruit.is_locked) {
-              // Preserve the fruit with is_locked set to true
-              return fruit;
-            } else {
-              // Replace all other fruits with new data
-              return { total: Math.floor(Math.random() * 10) + 1, name: `NewFruit${index}` };
-            }
-          });
+            return mealsArray.map((meal, index) => {
+                if (index === preservedMealIndex || meal.is_locked) {
+                    // Preserve the meal with is_locked set to true
+                    return meal;
+                } else {
+                    // Replace all other meals with new data
+                    return { id: crypto.randomUUID(), protein: Math.floor(Math.random() * 10 + 1), kcal: Math.floor(Math.random() * 10) + 1, display_name: `NewMeal${index}` };
+                }
+            });
         });
-      
+
         console.log(newArray);
+        setMealPlan(newArray);
         return newArray;
-      }
-      
-      // Sample array of arrays of fruits
-      const arrayOfArrays = [
-        [
-          { total: 5, name: 'Apple', is_locked: true }, // Preserve this fruit
-          { total: 3, name: 'Banana' },
-          { total: 2, name: 'Orange' },
-        ],
-        [
-          { total: 4, name: 'Grapes', is_locked: true }, // Preserve this fruit
-          { total: 6, name: 'Mango' },
-          { total: 1, name: 'Kiwi' },
-        ],
-        // Add more arrays of fruits here as needed
-      ];
-      
-    //   const result = replaceFruitsExceptLocked(arrayOfArrays);
+    }
+
+    // Sample array of arrays of meals
+    // const mealPlan = [
+    //     [
+    //         { kcal: 596, display_name: "Sweet potato with chipotle butter chicken", is_locked: true }, // Preserve this meal
+    //         { kcal: 491, display_name: "Egg and mango chutney flatbreads" },
+    //         { kcal: 378, display_name: "Mango and passionfruit smoothie" },
+    //     ],
+    //     [
+    //         { kcal: 351, display_name: "Blueberry smoothie", is_locked: true }, // Preserve this meal
+    //         { kcal: 378, display_name: "One-pot chicken cordon bleu pasta" },
+    //         { kcal: 356, display_name: "Fats-me-up smoothie" },
+    //     ],
+    //     // Add more arrays of meals here as needed
+    // ];
+
+    //   const result = replaceMealsExceptLocked(mealPlan);
     //   console.log(result);
-      
 
     return (
         <Stack>
             <PrimaryHeading>Meal Planner</PrimaryHeading>
 
-            <p>{JSON.stringify(arrayOfArrays)}</p>
-            <Button clickHandler={() => replaceFruitsExceptLocked(arrayOfArrays)}>Fruit machine</Button>
-            
+            {/* <p>{JSON.stringify(mealPlan)}</p> */}
+            <Button clickHandler={() => replaceMealsExceptLocked(mealPlan)}>Fruit machine</Button>
+
             <form onSubmit={submitHandler}>
                 <Stack space="var(--size-2)">
                     <Switcher threshold="280px" space="var(--size-1)" limit="2">
-                        <Input
-                            id="minKcal"
-                            label="Minimum kcal"
-                            type="number"
-                            step={1}
-                            value={state.minKcal}
-                            changeHandler={changeHandler}
-                        />
-                        <Input
-                            id="maxKcal"
-                            label="Maximum kcal"
-                            type="number"
-                            step={1}
-                            value={state.maxKcal}
-                            changeHandler={changeHandler}
-                        />
+                        <Input id="minKcal" label="Minimum kcal" type="number" step={1} value={state.minKcal} changeHandler={changeHandler} />
+                        <Input id="maxKcal" label="Maximum kcal" type="number" step={1} value={state.maxKcal} changeHandler={changeHandler} />
                     </Switcher>
                     <Switcher threshold="280px" space="var(--size-1)" limit="3">
-                        <Input
-                            id="minProtein"
-                            label="Minimum protein"
-                            type="number"
-                            step={1}
-                            value={state.minProtein}
-                            changeHandler={changeHandler}
-                        />
-                        <Input
-                            id="maxProtein"
-                            label="Maximum protein"
-                            type="number"
-                            step={1}
-                            value={state.maxProtein}
-                            changeHandler={changeHandler}
-                        />
+                        <Input id="minProtein" label="Minimum protein" type="number" step={1} value={state.minProtein} changeHandler={changeHandler} />
+                        <Input id="maxProtein" label="Maximum protein" type="number" step={1} value={state.maxProtein} changeHandler={changeHandler} />
                     </Switcher>
-                    <Input
-                        id="numDays"
-                        label="Number of days"
-                        type="number"
-                        min={1}
-                        max={14}
-                        step={1}
-                        defaultValue={7}
-                    />
+                    <Input id="numDays" label="Number of days" type="number" min={1} max={14} step={1} defaultValue={7} />
                     <Button variant="primary" fullWidth type="submit">
                         Generate meal plan
                     </Button>
                 </Stack>
             </form>
 
-            <MealPlan
-                mealPlan={mealPlan}
-                updateMealPlan={updateMealPlan}
-                lockMeal={lockMeal}
-                minKcal={state.minKcal}
-                maxKcal={state.maxKcal}
-                minProtein={state.minProtein}
-                maxProtein={state.maxProtein}
-            />
+            <MealPlan mealPlan={mealPlan} updateMealPlan={updateMealPlan} lockMeal={lockMeal} minKcal={state.minKcal} maxKcal={state.maxKcal} minProtein={state.minProtein} maxProtein={state.maxProtein} />
 
             {mealPlan.length > 1 && <ShoppingList mealPlan={mealPlan} />}
         </Stack>

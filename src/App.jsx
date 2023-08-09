@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import useSessionStorage from "./hooks/useSessionStorage";
+import useLocalStorage from "./hooks/useLocalStorage";
 // import reactLogo from "./assets/react.svg";
 // import viteLogo from "/vite.svg";
 import "./App.css";
@@ -8,6 +9,8 @@ import { calculateMacronutrientTotals } from "./utilities";
 import SignInForm from "./components/SignInForm";
 import SnapTabs from "./components/SnapTabs";
 import styles from "./app.module.scss";
+import { Imposter } from "./primitives";
+import Button from "./components/Common/Button";
 
 const recipesQuery = `id, display_name, servings, page_number, rating, effort, recipes_ingredients (ingredients!recipes_ingredients_ingredient_id_fkey (display_name), id, ingredient_identifier, quantity, unit, recipes_macronutrients (kcal, carbohydrate, fat, protein)), recipes_sources (source, author, thumbnail_url)`;
 
@@ -15,6 +18,11 @@ const App = () => {
     const [session, setSession] = useState(null);
     const [ingredients, setIngredients] = useSessionStorage("ingredients", []);
     const [recipes, setRecipes] = useSessionStorage("recipes", []);
+    const [theme, setTheme] = useLocalStorage("theme", "dark");
+
+    useEffect(() => {
+        document.documentElement.setAttribute("color-scheme", theme);
+    }, [theme])
 
     useEffect(() => {
         supabase.auth.getSession().then(({ data: { session } }) => setSession(session));
@@ -62,6 +70,9 @@ const App = () => {
     } else {
         return (
             <div className={styles.wrapper}>
+                <Imposter fixed style={{ insetBlockStart: "0%", insetInlineStart: "100%", transform: "0", translate: "-100% 100%" }}>
+                    <Button clickHandler={() => setTheme(theme === "light" ? "dark" : "light")}>{theme === "light" ? "Dark" : "Light"}</Button>
+                </Imposter>
                 <SnapTabs
                     ingredients={ingredients}
                     setIngredients={setIngredients}
