@@ -8,10 +8,6 @@ html:has(dialog[open]) {
 }
 
 .dialog {
-    --surface1-light: hsl(var(--brand-hue) 25% 90% / 0.625);
-    --surface1-dark: hsl(var(--brand-hue) 10% 10%);
-    --surface1: var(--surface1-light);
-
     background-color: var(--surface1);
     backdrop-filter: blur(1px);
     border: var(--border-size-1) solid var(--surface2);

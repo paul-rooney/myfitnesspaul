@@ -1,10 +1,10 @@
 import { Fragment, useEffect, useState } from "react";
 import { deleteRows, insertRows, updateRows } from "../../supabase";
 import { Cluster, Icon, Stack } from "../../primitives";
-import Dialog from "../Dialog";
-import styles from "./recipe-list.module.scss";
+import Dialog from "../Common/Dialog";
 import Button from "../Common/Button";
 import Input from "../Common/Input";
+import styles from "./recipe-list.module.scss";
 
 const updateStarRating = (selector, dependency) => {
     const array = Array.from(document.querySelectorAll(selector));
@@ -126,8 +126,8 @@ const UpdateRecipeDialog = ({ recipe, ingredients }) => {
                         {recipe.recipes_sources.source}
                     </h3>
                 )}
-                <input id="id" hidden defaultValue={recipe.id} />
-                <input id="source" hidden defaultValue={recipe.source} />
+                <input id="id" hidden readOnly value={recipe.id} />
+                <input id="source" hidden readOnly value={recipe.source} />
                 {/* 
                 
                 TODO FIX this shit 

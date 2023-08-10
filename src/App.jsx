@@ -8,9 +8,8 @@ import { readRows, signInWithEmail, supabase } from "./supabase";
 import { calculateMacronutrientTotals } from "./utilities";
 import SignInForm from "./components/SignInForm";
 import SnapTabs from "./components/SnapTabs";
+import MenuBar from "./components/Common/MenuBar";
 import styles from "./app.module.scss";
-import { Imposter } from "./primitives";
-import Button from "./components/Common/Button";
 
 const recipesQuery = `id, display_name, servings, page_number, rating, effort, recipes_ingredients (ingredients!recipes_ingredients_ingredient_id_fkey (display_name), id, ingredient_identifier, quantity, unit, recipes_macronutrients (kcal, carbohydrate, fat, protein)), recipes_sources (source, author, thumbnail_url)`;
 
@@ -22,7 +21,7 @@ const App = () => {
 
     useEffect(() => {
         document.documentElement.setAttribute("color-scheme", theme);
-    }, [theme])
+    }, [theme]);
 
     useEffect(() => {
         supabase.auth.getSession().then(({ data: { session } }) => setSession(session));
@@ -69,17 +68,12 @@ const App = () => {
         return <SignInForm handleSubmit={submitHandler} />;
     } else {
         return (
-            <div className={styles.wrapper}>
-                <Imposter fixed style={{ insetBlockStart: "0%", insetInlineStart: "100%", transform: "0", translate: "-100% 100%" }}>
-                    <Button clickHandler={() => setTheme(theme === "light" ? "dark" : "light")}>{theme === "light" ? "Dark" : "Light"}</Button>
-                </Imposter>
-                <SnapTabs
-                    ingredients={ingredients}
-                    setIngredients={setIngredients}
-                    recipes={recipes}
-                    setRecipes={setRecipes}
-                />
-            </div>
+            <>
+                <div className={styles.wrapper}>
+                    <MenuBar theme={theme} setTheme={setTheme} />
+                    <SnapTabs ingredients={ingredients} setIngredients={setIngredients} recipes={recipes} setRecipes={setRecipes} />
+                </div>
+            </>
         );
     }
 };

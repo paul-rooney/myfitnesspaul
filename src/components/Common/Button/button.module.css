@@ -45,6 +45,12 @@
     }
 }
 
+[data-loading="true"] {
+    & svg {
+        animation: var(--animation-spin);
+    }
+}
+
 [disabled] {
     opacity: 0.625;
 }

@@ -7,7 +7,7 @@ import CreateRecipesIngredientsDialog from "./CreateRecipesIngredientsDialog";
 import { sortAlphabetical, stripNonAlphanumeric } from "../../utilities";
 import FilterRecipesForm from "./FilterRecipesWidget";
 import UpdateRecipeDialog from "./UpdateRecipeDialog";
-import DeleteRecipeDialog from "./Dialogs/DeleteRecipeDialog";
+import DeleteRecipeDialog from "./DeleteRecipeDialog";
 import useSessionStorage from "../../hooks/useSessionStorage";
 import Button from "../Common/Button";
 import PrimaryHeading from "../Common/PrimaryHeading";

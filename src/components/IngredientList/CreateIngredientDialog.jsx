@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Cluster, Stack } from "../../primitives";
 import Input from "../Common/Input";
-import Dialog from "../Dialog";
+import Dialog from "../Common/Dialog";
 import styles from "./ingredient-list.module.scss";
 
 const CreateIngredientDialog = ({ handleSubmit }) => {

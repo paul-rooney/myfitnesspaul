@@ -235,11 +235,11 @@ const MealPlanner = ({ recipes }) => {
 
             <form onSubmit={submitHandler}>
                 <Stack space="var(--size-2)">
-                    <Switcher threshold="280px" space="var(--size-1)" limit="2">
+                    <Switcher threshold="280px" space="var(--size-2)" limit="2">
                         <Input id="minKcal" label="Minimum kcal" type="number" step={1} value={state.minKcal} changeHandler={changeHandler} />
                         <Input id="maxKcal" label="Maximum kcal" type="number" step={1} value={state.maxKcal} changeHandler={changeHandler} />
                     </Switcher>
-                    <Switcher threshold="280px" space="var(--size-1)" limit="3">
+                    <Switcher threshold="280px" space="var(--size-2)" limit="3">
                         <Input id="minProtein" label="Minimum protein" type="number" step={1} value={state.minProtein} changeHandler={changeHandler} />
                         <Input id="maxProtein" label="Maximum protein" type="number" step={1} value={state.maxProtein} changeHandler={changeHandler} />
                     </Switcher>

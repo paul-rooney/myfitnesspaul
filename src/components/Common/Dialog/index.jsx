@@ -1,6 +1,6 @@
-import { Cluster } from "../../primitives";
-import Button from "../Common/Button";
-import SecondaryHeading from "../Common/SecondaryHeading";
+import { Cluster } from "../../../primitives";
+import Button from "../Button";
+import SecondaryHeading from "../SecondaryHeading";
 import styles from "./dialog.module.scss";
 
 const Dialog = ({ id, title, submitHandler, closeHandler, operation, children }) => {

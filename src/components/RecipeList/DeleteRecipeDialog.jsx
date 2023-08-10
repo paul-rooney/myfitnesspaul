@@ -1,6 +1,6 @@
-import { Stack } from "../../../primitives";
-import Input from "../../Common/Input";
-import Dialog from "../../Dialog";
+import { Stack } from "../../primitives";
+import Input from "../Common/Input";
+import Dialog from "../Common/Dialog";
 
 const DeleteRecipeDialog = ({ recipe, handleSubmit }) => (
     <Dialog id="deleteRecipeDialog" title="Delete recipe" operation="delete" submitHandler={handleSubmit}>
