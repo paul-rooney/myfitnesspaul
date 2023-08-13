@@ -30,8 +30,10 @@ const MealPlanOutline = ({ mealPlanOutline }) => {
                     </Button>
                 </Cluster>
 
+                <Cluster><Input label="Choose a recipe" type="text" /></Cluster>
+
                 {day.map((meal, mealIndex) =>
-                    !meal ? (
+                    meal ? (
                         <Cluster
                             justify="space-between"
                             align="baseline"
