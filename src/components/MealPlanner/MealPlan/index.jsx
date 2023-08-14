@@ -49,7 +49,7 @@ const MealPlan = ({ mealPlan, setMealPlan, updateMealPlan, lockMeal, minKcal, ma
                                           </Stack>
                                       </Cluster>
                                   </Stack>
-                                  <Button variant="round" clickHandler={() => updateMealPlan(dayIndex, [minKcal, maxKcal], [minProtein, maxProtein], 1)}>
+                                  <Button variant="round" clickHandler={() => updateMealPlan([minKcal, maxKcal], [minProtein, maxProtein], 1, dayIndex)}>
                                       <Icon label="Update" direction="ltr" icon="refresh-cw" />
                                   </Button>
                               </Cluster>
