@@ -2,7 +2,7 @@ import { createClient } from "@supabase/supabase-js";
 
 export const supabase = createClient("https://kdvwicccjdercqtrqemp.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtkdndpY2NjamRlcmNxdHJxZW1wIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODY2NTM2OTgsImV4cCI6MjAwMjIyOTY5OH0.84JOOirsgjuY0T7x-KBzvOkNFGgWt7g8NcQN6OSyv6I");
 
-export const signInWithEmail = async ({ email, password }) => {
+export const signInWithEmail = async ({ email, password }, setError) => {
     try {
         const { error } = await supabase.auth.signInWithPassword({
             email: email,
@@ -13,11 +13,11 @@ export const signInWithEmail = async ({ email, password }) => {
         }
     } catch (error) {
         console.error("An error occurred during sign-in: ", error);
-        throw error;
+        setError(error.message);
     }
 };
 
-export const signOut = async () => {
+export const signOut = async (setError) => {
     try {
         const { error } = await supabase.auth.signOut();
         if (error) {
@@ -25,7 +25,7 @@ export const signOut = async () => {
         }
     } catch (error) {
         console.error("An error occurred during sign-out: ", error);
-        throw error;
+        setError(error.message);
     }
 };
 
@@ -43,11 +43,19 @@ export const readRows = async (table, columns = "*") => {
 
 export const insertRows = async (table, values) => {
     if (!values) return;
-    const { data, error } = await supabase.from(table).insert(values).select();
-    return data ?? error;
+    try {
+        const { data, error } = await supabase.from(table).insert(values).select();
+        if (error) {
+            throw new Error(error.message);
+        }
+        return data;
+    } catch (error) {
+        console.error("An error occurred: ", error);
+    }
 };
 
 export const upsertRows = async (table, values, options = {}) => {
+    if (!values) return;
     try {
         const { data, error } = await supabase.from(table).upsert(values, options).select();
         if (error) {
@@ -61,12 +69,25 @@ export const upsertRows = async (table, values, options = {}) => {
 
 export const updateRows = async (table, values) => {
     if (!values) return;
-    const { data, error } = await supabase.from(table).update(values).eq("id", values.id).select();
-    return data ?? error;
+    try {
+        const { data, error } = await supabase.from(table).update(values).eq("id", values.id).select();
+        if (error) {
+            throw new Error(error.message);
+        }
+        return data;
+    } catch (error) {
+        console.error("An error occurred: ", error);
+    }
 };
 
 export const deleteRows = async (table, id) => {
     if (!id) return;
-    const { error } = await supabase.from(table).delete().eq("id", id);
-    return error;
+    try {
+        const { error } = await supabase.from(table).delete().eq("id", id);
+        if (error) {
+            throw new Error(error.message);
+        }
+    } catch (error) {
+        console.error("An error occurred: ", error);
+    }
 };

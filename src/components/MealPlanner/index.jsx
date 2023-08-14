@@ -7,7 +7,6 @@ import PrimaryHeading from "../Common/PrimaryHeading";
 import Input from "../Common/Input";
 import MealPlan from "./MealPlan";
 import ShoppingList from "./ShoppingList";
-import MealPlanOutline from "./MealPlanOutline";
 
 function getRandomCombinations(objects, range1, range2, n) {
     const shuffledObjects = shuffleArray(objects);
@@ -23,12 +22,7 @@ function getRandomCombinations(objects, range1, range2, n) {
         const newKcalSum = kcalSum + currentObject.kcal;
         const newProteinSum = proteinSum + currentObject.protein;
 
-        if (
-            newKcalSum >= range1[0] &&
-            newKcalSum <= range1[1] &&
-            newProteinSum >= range2[0] &&
-            newProteinSum <= range2[1]
-        ) {
+        if (newKcalSum >= range1[0] && newKcalSum <= range1[1] && newProteinSum >= range2[0] && newProteinSum <= range2[1]) {
             const combination = [...arr, currentObject];
             const combinationString = JSON.stringify(combination);
 
@@ -70,11 +64,11 @@ const reducer = (state, action) => ({ ...state, [action.type]: action.details })
 const MealPlanner = ({ recipes }) => {
     const [weight, setWeight] = useState(null);
     const [mealPlan, setMealPlan] = useState([]);
-    const [mealPlanOutline, setMealPlanOutline] = useState([]);
+    const [isManualSelection, setIsManualSelection] = useState(false);
     const [state, dispatch] = useReducer(reducer, {
         minKcal: 1450,
         maxKcal: 1550,
-        minProtein: 105,
+        minProtein: 120,
         maxProtein: 165,
         numDays: 7,
     });
@@ -127,6 +121,7 @@ const MealPlanner = ({ recipes }) => {
     };
 
     const generateMealPlan = async (range1, range2, n) => {
+        setIsManualSelection(false);
         let lockedMeals = getLockedMeals();
 
         const numbers = recipes.map((recipe) => ({
@@ -243,89 +238,48 @@ const MealPlanner = ({ recipes }) => {
     //   console.log(result);
 
     const buildMealPlanOutline = () => {
-        const days = [];
+        setIsManualSelection(true);
 
-        for (let i = 0; i < state.numDays; i++) {
-            days.push([]);
+        if (mealPlan.length < 1) {
+            const days = [];
+
+            for (let i = 0; i < state.numDays; i++) {
+                days.push([]);
+            }
+
+            setMealPlan(days);
         }
-
-        setMealPlanOutline(days);
     };
 
     return (
         <Stack>
             <PrimaryHeading>Meal Planner</PrimaryHeading>
 
-            {/* <p>{JSON.stringify(mealPlan)}</p> */}
-            <Button clickHandler={() => replaceMealsExceptLocked(mealPlan)}>Fruit machine</Button>
+            {/* <Button clickHandler={() => replaceMealsExceptLocked(mealPlan)}>Fruit machine</Button> */}
 
             <form onSubmit={submitHandler}>
                 <Stack space="var(--size-3)">
                     <Switcher threshold="280px" space="var(--size-2)" limit="2">
-                        <Input
-                            id="minKcal"
-                            label="Minimum kcal"
-                            type="number"
-                            step={1}
-                            value={state.minKcal}
-                            changeHandler={changeHandler}
-                        />
-                        <Input
-                            id="maxKcal"
-                            label="Maximum kcal"
-                            type="number"
-                            step={1}
-                            value={state.maxKcal}
-                            changeHandler={changeHandler}
-                        />
+                        <Input id="minKcal" label="Minimum kcal" type="number" step={1} value={state.minKcal} changeHandler={changeHandler} />
+                        <Input id="maxKcal" label="Maximum kcal" type="number" step={1} value={state.maxKcal} changeHandler={changeHandler} />
                     </Switcher>
                     <Switcher threshold="280px" space="var(--size-2)" limit="3">
-                        <Input
-                            id="minProtein"
-                            label="Minimum protein"
-                            type="number"
-                            step={1}
-                            value={state.minProtein}
-                            changeHandler={changeHandler}
-                        />
-                        <Input
-                            id="maxProtein"
-                            label="Maximum protein"
-                            type="number"
-                            step={1}
-                            value={state.maxProtein}
-                            changeHandler={changeHandler}
-                        />
+                        <Input id="minProtein" label="Minimum protein" type="number" step={1} value={state.minProtein} changeHandler={changeHandler} />
+                        <Input id="maxProtein" label="Maximum protein" type="number" step={1} value={state.maxProtein} changeHandler={changeHandler} />
                     </Switcher>
-                    <Input
-                        id="numDays"
-                        label="Number of days"
-                        type="number"
-                        min={1}
-                        max={14}
-                        step={1}
-                        value={state.numDays}
-                        changeHandler={changeHandler}
-                    />
-                    <Button variant="primary" fullWidth type="submit">
-                        Generate meal plan
-                    </Button>
-                    <Button variant="secondary" fullWidth clickHandler={buildMealPlanOutline}>
-                        I want to choose
-                    </Button>
+                    <Input id="numDays" label="Number of days" type="number" min={1} max={14} step={1} value={state.numDays} changeHandler={changeHandler} />
+                    <Switcher threshold="280px" space="var(--size-2)">
+                        <Button variant="primary" fullWidth type="submit">
+                            Generate meal plan
+                        </Button>
+                        <Button variant="secondary" fullWidth clickHandler={buildMealPlanOutline}>
+                            I want to choose
+                        </Button>
+                    </Switcher>
                 </Stack>
             </form>
 
-            <MealPlan
-                mealPlan={mealPlan}
-                updateMealPlan={updateMealPlan}
-                lockMeal={lockMeal}
-                minKcal={state.minKcal}
-                maxKcal={state.maxKcal}
-                minProtein={state.minProtein}
-                maxProtein={state.maxProtein}
-            />
-            <MealPlanOutline mealPlanOutline={mealPlanOutline} />
+            <MealPlan mealPlan={mealPlan} setMealPlan={setMealPlan} updateMealPlan={updateMealPlan} lockMeal={lockMeal} minKcal={state.minKcal} maxKcal={state.maxKcal} minProtein={state.minProtein} maxProtein={state.maxProtein} recipes={recipes} isManualSelection={isManualSelection} />
 
             {mealPlan.length > 1 && <ShoppingList mealPlan={mealPlan} />}
         </Stack>

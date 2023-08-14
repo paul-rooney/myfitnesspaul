@@ -15,6 +15,7 @@ const recipesQuery = `id, display_name, servings, page_number, rating, effort, r
 
 const App = () => {
     const [session, setSession] = useState(null);
+    const [signInError, setSignInError] = useState(null);
     const [ingredients, setIngredients] = useSessionStorage("ingredients", []);
     const [recipes, setRecipes] = useSessionStorage("recipes", []);
     const [theme, setTheme] = useLocalStorage("theme", "dark");
@@ -61,11 +62,11 @@ const App = () => {
             password: password.value,
         };
 
-        signInWithEmail(credentials);
+        signInWithEmail(credentials, setSignInError);
     };
 
     if (!session) {
-        return <SignInForm handleSubmit={submitHandler} />;
+        return <SignInForm handleSubmit={submitHandler} error={signInError} />;
     } else {
         return (
             <>
