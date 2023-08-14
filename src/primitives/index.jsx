@@ -100,6 +100,32 @@ export const Cluster = ({ justify = "flex-start", align = "flex-start", space = 
     );
 };
 
+export const Container = ({ name = null, children, ...attributes }) => {
+    const i = `container-${[name].join("-")}`;
+
+    if (!document.getElementById(i)) {
+        let style = document.createElement("style");
+
+        style.id = i;
+        style.innerHTML = `
+            [data-i="${i}"] {
+                container-type: inline-size;
+                ${name ? `container-name: ${name}` : ""}
+            }
+        `
+            .replace(/\s\s+/g, " ")
+            .trim();
+
+        document.head.appendChild(style);
+    }
+
+    return (
+        <div {...attributes} className={`container ${attributes.className ?? ""}`.trim()} data-i={i}>
+            {children}
+        </div>
+    );
+};
+
 export const Cover = ({ centered = "h1", space = "var(--size-3)", minBlockSize = "100vh", noPad = false, children, ...attributes }) => {
     const element = useRef(null);
 
