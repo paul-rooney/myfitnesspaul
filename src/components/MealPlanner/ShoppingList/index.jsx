@@ -3,6 +3,7 @@ import { Cluster, Stack } from "../../../primitives";
 import Button from "../../Common/Button";
 import { groupBy, sortAlphabetical } from "../../../utilities";
 import { supabase } from "../../../supabase";
+import useToast from "../../../hooks/useToast";
 
 const readRows = async (table, columns = "*", arr) => {
     try {
@@ -18,6 +19,7 @@ const readRows = async (table, columns = "*", arr) => {
 
 const ShoppingList = ({ mealPlan }) => {
     const [shoppingList, setShoppingList] = useState([]);
+    const showToast = useToast();
 
     const generateShoppingList = () => {
         let arr = mealPlan.flat().map((item) => item.id);
@@ -53,6 +55,7 @@ const ShoppingList = ({ mealPlan }) => {
         const shoppingListAsText = shoppingList.map(item => item[0].split(",")[0]).join(",");
 
         navigator.clipboard.writeText(shoppingListAsText);
+        showToast("Copied to clipboard")
     };
 
     return (

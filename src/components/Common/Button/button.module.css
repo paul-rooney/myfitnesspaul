@@ -1,6 +1,6 @@
 .button {
     background-color: var(--surface2);
-    block-size: var(--size-6);
+    block-size: var(--size-7);
     border: var(--border-size-1) solid var(--surface4);
     border-radius: var(--radius-1);
     box-shadow: var(--shadow-1);

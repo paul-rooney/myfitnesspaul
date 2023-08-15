@@ -3,9 +3,11 @@ import { Icon } from "../../../primitives";
 import { supabase, upsertRows } from "../../../supabase";
 import Button from "../../Common/Button";
 import Input from "../../Common/Input";
+import useToast from "../../../hooks/useToast";
 
 const LogWeightForm = ({ weight, setWeight }) => {
     const [isLoading, setIsLoading] = useState(false);
+    const showToast = useToast();
     // TODO: If date is in the past, require confirmation to enable form fields for update
 
     const changeHandler = (event) => {
@@ -27,7 +29,10 @@ const LogWeightForm = ({ weight, setWeight }) => {
             weight: weight.value,
         };
 
-        upsertRows("users_weight", payload, { ignoreDuplicates: false, onConflict: "date_entered" }).finally(() => setIsLoading(false));
+        upsertRows("users_weight", payload, { ignoreDuplicates: false, onConflict: "date_entered" }).finally(() => {
+            showToast("Weight logged successfully");
+            setIsLoading(false);
+        });
     };
 
     return (
