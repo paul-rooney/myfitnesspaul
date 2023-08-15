@@ -81,7 +81,7 @@ const getWeight = async () => {
 
 const reducer = (state, action) => ({ ...state, [action.type]: action.details });
 
-const MealPlanner = ({ recipes }) => {
+const MealPlanner = ({ recipes, showToast }) => {
     const [weight, setWeight] = useState(null);
     const [mealPlan, setMealPlan] = useState([]);
     const [isManualSelection, setIsManualSelection] = useState(false);
@@ -323,7 +323,7 @@ const MealPlanner = ({ recipes }) => {
                 isManualSelection={isManualSelection}
             />
 
-            {mealPlan.length > 1 && <ShoppingList mealPlan={mealPlan} />}
+            {mealPlan.length > 1 && <ShoppingList mealPlan={mealPlan} showToast={showToast} />}
         </Stack>
     );
 };

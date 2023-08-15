@@ -3,11 +3,9 @@ import { Icon } from "../../../primitives";
 import { supabase, upsertRows } from "../../../supabase";
 import Button from "../../Common/Button";
 import Input from "../../Common/Input";
-import useToast from "../../../hooks/useToast";
 
-const LogWeightForm = ({ weight, setWeight }) => {
+const LogWeightForm = ({ weight, setWeight, showToast }) => {
     const [isLoading, setIsLoading] = useState(false);
-    const showToast = useToast();
     // TODO: If date is in the past, require confirmation to enable form fields for update
 
     const changeHandler = (event) => {

@@ -17,9 +17,10 @@ const useToast = () => {
     const addToast = (toast) => {
         const { matches: motionOK } = window.matchMedia("prefers-reduced-motion: no-preference");
 
-        toaster.current.children.length 
-        // && motionOK
-        ? flipToast(toast) : toaster.current.appendChild(toast);
+        toaster.current.children.length
+            ? // && motionOK
+              flipToast(toast)
+            : toaster.current.appendChild(toast);
     };
 
     const flipToast = (toast) => {

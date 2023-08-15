@@ -3,7 +3,6 @@ import { Cluster, Stack } from "../../../primitives";
 import Button from "../../Common/Button";
 import { groupBy, sortAlphabetical } from "../../../utilities";
 import { supabase } from "../../../supabase";
-import useToast from "../../../hooks/useToast";
 
 const readRows = async (table, columns = "*", arr) => {
     try {
@@ -17,9 +16,8 @@ const readRows = async (table, columns = "*", arr) => {
     }
 };
 
-const ShoppingList = ({ mealPlan }) => {
+const ShoppingList = ({ mealPlan, showToast }) => {
     const [shoppingList, setShoppingList] = useState([]);
-    const showToast = useToast();
 
     const generateShoppingList = () => {
         let arr = mealPlan.flat().map((item) => item.id);

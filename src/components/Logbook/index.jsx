@@ -25,7 +25,7 @@ const reducer = (state, action) => ({
     [action.type]: action.details,
 });
 
-const Logbook = ({ recipes, ingredients }) => {
+const Logbook = ({ recipes, ingredients, showToast }) => {
     const [date, setDate] = useState(formatDateISO(new Date()));
     const [weight, setWeight] = useState(0);
     const [state, dispatch] = useReducer(reducer, {});
@@ -76,7 +76,7 @@ const Logbook = ({ recipes, ingredients }) => {
 
             <MacronutrientDisplay date={date} />
 
-            <LogWeightForm weight={weight} setWeight={setWeight} />
+            <LogWeightForm weight={weight} setWeight={setWeight} showToast={showToast} />
 
             <LogMealsForm date={date} ingredients={ingredients} recipes={recipes} state={state} dispatch={dispatch} />
         </Stack>
