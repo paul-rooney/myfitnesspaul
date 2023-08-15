@@ -32,12 +32,7 @@ function getRandomCombinations(objects, kcalRange, proteinRange, numDays) {
         const newProteinSum = proteinSum + currentObject.protein;
 
         // Check if the new combination satisfies the calorie and protein ranges.
-        if (
-            newKcalSum >= kcalRange[0] &&
-            newKcalSum <= kcalRange[1] &&
-            newProteinSum >= proteinRange[0] &&
-            newProteinSum <= proteinRange[1]
-        ) {
+        if (newKcalSum >= kcalRange[0] && newKcalSum <= kcalRange[1] && newProteinSum >= proteinRange[0] && newProteinSum <= proteinRange[1]) {
             // Create a new combination array and stringify it.
             const combination = [...arr, currentObject];
             const combinationString = JSON.stringify(combination);
@@ -186,6 +181,7 @@ const MealPlanner = ({ recipes, showToast }) => {
         const newMealPlan = JSON.parse(JSON.stringify(mealPlan));
         newMealPlan[dayIndex][mealIndex].is_locked = isLocked;
         setMealPlan(newMealPlan);
+        showToast("Meal locked in place")
     };
 
     function replaceMealsExceptLocked(mealPlan) {
@@ -254,51 +250,14 @@ const MealPlanner = ({ recipes, showToast }) => {
             <form onSubmit={submitHandler}>
                 <Stack space="var(--size-3)">
                     <Switcher threshold="280px" space="var(--size-2)" limit="2">
-                        <Input
-                            id="minKcal"
-                            label="Minimum kcal"
-                            type="number"
-                            step={1}
-                            value={state.minKcal}
-                            changeHandler={changeHandler}
-                        />
-                        <Input
-                            id="maxKcal"
-                            label="Maximum kcal"
-                            type="number"
-                            step={1}
-                            value={state.maxKcal}
-                            changeHandler={changeHandler}
-                        />
+                        <Input id="minKcal" label="Minimum kcal" type="number" step={1} value={state.minKcal} changeHandler={changeHandler} />
+                        <Input id="maxKcal" label="Maximum kcal" type="number" step={1} value={state.maxKcal} changeHandler={changeHandler} />
                     </Switcher>
                     <Switcher threshold="280px" space="var(--size-2)" limit="3">
-                        <Input
-                            id="minProtein"
-                            label="Minimum protein"
-                            type="number"
-                            step={1}
-                            value={state.minProtein}
-                            changeHandler={changeHandler}
-                        />
-                        <Input
-                            id="maxProtein"
-                            label="Maximum protein"
-                            type="number"
-                            step={1}
-                            value={state.maxProtein}
-                            changeHandler={changeHandler}
-                        />
+                        <Input id="minProtein" label="Minimum protein" type="number" step={1} value={state.minProtein} changeHandler={changeHandler} />
+                        <Input id="maxProtein" label="Maximum protein" type="number" step={1} value={state.maxProtein} changeHandler={changeHandler} />
                     </Switcher>
-                    <Input
-                        id="numDays"
-                        label="Number of days"
-                        type="number"
-                        min={1}
-                        max={14}
-                        step={1}
-                        value={state.numDays}
-                        changeHandler={changeHandler}
-                    />
+                    <Input id="numDays" label="Number of days" type="number" min={1} max={14} step={1} value={state.numDays} changeHandler={changeHandler} />
                     <Switcher threshold="280px" space="var(--size-2)">
                         <Button variant="primary" fullWidth type="submit">
                             Generate meal plan
@@ -310,18 +269,7 @@ const MealPlanner = ({ recipes, showToast }) => {
                 </Stack>
             </form>
 
-            <MealPlan
-                mealPlan={mealPlan}
-                setMealPlan={setMealPlan}
-                updateMealPlan={generateMealPlan}
-                lockMeal={lockMeal}
-                minKcal={state.minKcal}
-                maxKcal={state.maxKcal}
-                minProtein={state.minProtein}
-                maxProtein={state.maxProtein}
-                recipes={recipes}
-                isManualSelection={isManualSelection}
-            />
+            <MealPlan mealPlan={mealPlan} setMealPlan={setMealPlan} updateMealPlan={generateMealPlan} lockMeal={lockMeal} minKcal={state.minKcal} maxKcal={state.maxKcal} minProtein={state.minProtein} maxProtein={state.maxProtein} recipes={recipes} isManualSelection={isManualSelection} />
 
             {mealPlan.length > 1 && <ShoppingList mealPlan={mealPlan} showToast={showToast} />}
         </Stack>

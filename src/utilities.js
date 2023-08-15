@@ -20,7 +20,7 @@ export const sortAlphabetical = (a, b, key) => {
 
 export const stripNonAlphanumeric = (str) => str.replace(/[^a-zA-Z0-9\s]/g, "");
 
-export const formatDate = (date, locale) => new Intl.DateTimeFormat(locale, { weekday: "long", day: "numeric", month: "long" }).format(date);
+export const formatDate = (date, locale) => new Intl.DateTimeFormat(locale, { weekday: "short", day: "numeric", month: "long" }).format(date);
 
 export const formatDateISO = (date = Date.now()) => new Date(date).toISOString().slice(0, 10);
 

@@ -20,10 +20,10 @@ const SnapTabs = ({ ingredients, setIngredients, recipes, setRecipes }) => {
                         <MealPlanner recipes={recipes} showToast={showToast} />
                     </Box>
                     <Box id="recipes" className={styles.article}>
-                        <RecipeList ingredients={ingredients} setIngredients={setIngredients} recipes={recipes} setRecipes={setRecipes} />
+                        <RecipeList ingredients={ingredients} setIngredients={setIngredients} recipes={recipes} setRecipes={setRecipes} showToast={showToast} />
                     </Box>
                     <Box id="ingredients" className={styles.article}>
-                        <IngredientList ingredients={ingredients} setIngredients={setIngredients} />
+                        <IngredientList ingredients={ingredients} setIngredients={setIngredients} showToast={showToast} />
                     </Box>
                 </section>
             </div>

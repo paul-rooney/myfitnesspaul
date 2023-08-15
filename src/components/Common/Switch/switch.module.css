@@ -1,0 +1,88 @@
+.switch {
+    --track-size: calc(var(--thumb-size) * 2);
+    --track-padding: 2px;
+
+    --track-inactive: var(--surface4);
+    --track-active: var(--surface2);
+
+    --track-color-inactive: var(--track-inactive);
+    --track-color-active: var(--track-active);
+
+    --thumb-size: var(--size-4);
+    --thumb: var(--text2);
+    --thumb-highlight: hsl(0 0% 0% / 0.15);
+
+    --thumb-color: var(--thumb);
+    --thumb-color-highlight: var(--thumb-highlight);
+
+    display: flex;
+    align-items: center;
+    gap: 1ch;
+    justify-content: space-between;
+
+    color: var(--text1);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-0);
+    inline-size: fit-content;
+    letter-spacing: var(--font-letterspacing-1);
+    text-transform: uppercase;
+
+    cursor: pointer;
+    user-select: none;
+    touch-action: pan-y;
+
+    & input {
+        --thumb-position: 0%;
+
+        appearance: none;
+        border: none;
+        outline-offset: 5px;
+        box-sizing: content-box;
+
+        background: var(--track-color-inactive);
+        inline-size: var(--track-size);
+        block-size: var(--thumb-size);
+        padding: var(--track-padding);
+        border-radius: var(--track-size);
+
+        flex-shrink: 0;
+        display: grid;
+        align-items: center;
+        grid: [track] 1fr / [track] 1fr;
+    }
+
+    & input::before {
+        transform: translateX(var(--thumb-position));
+        background: var(--thumb-color);
+        border-radius: 50%;
+        content: "";
+        grid-area: track;
+        inline-size: var(--thumb-size);
+        block-size: var(--thumb-size);
+        box-shadow: 0 0 0 var(--highlight-size) var(--thumb-color-highlight);
+        transition: transform var(--thumb-transition-duration) ease, box-shadow 0.25s ease;
+    }
+
+    & input:not(:disabled):hover::before {
+        --highlight-size: 0.5rem;
+    }
+
+    & input:checked {
+        background: var(--track-color-active);
+        --thumb-position: calc(var(--track-size) - 100%);
+    }
+
+    & input:disabled {
+        cursor: not-allowed;
+        --thumb-color: transparent;
+    }
+
+    & input:disabled::before {
+        cursor: not-allowed;
+        box-shadow: inset 0 0 0 2px hsl(0 0% 100% / 0.5);
+    }
+
+    & input:indeterminate {
+        --thumb-position: calc((var(--track-size) / 2) - (var(--thumb-size) / 2));
+    }
+}

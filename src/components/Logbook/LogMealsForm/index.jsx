@@ -3,7 +3,7 @@ import { supabase, upsertRows } from "../../../supabase";
 import Button from "../../Common/Button";
 import Input from "../../Common/Input";
 
-const LogMealsForm = ({ date, ingredients, recipes, state, dispatch }) => {
+const LogMealsForm = ({ date, ingredients, recipes, state, dispatch, showToast }) => {
     const clickHandler = async (event) => {
         const { data } = await supabase.auth.getSession();
         const { meal } = event.target.closest("button").dataset;
@@ -59,6 +59,7 @@ const LogMealsForm = ({ date, ingredients, recipes, state, dispatch }) => {
                 };
 
                 await upsertRows("users_logs", payload, { ignoreDuplicates: false, onConflict: "meal_name_date" });
+                showToast(`${meal.meal_name} logged`);
             }
         }
     };

@@ -1,20 +1,25 @@
-const Switch = () => (
-    <>
-        <label htmlFor="switch-3" className="gui-switch">
-            Disabled
-            <input type="checkbox" role="switch" id="switch-3" disabled />
-        </label>
+import styles from "./switch.module.css";
 
-        <label htmlFor="switch-4" className="gui-switch">
-            Disabled (checked)
-            <input type="checkbox" role="switch" id="switch-4" disabled checked />
-        </label>
+const Switch = ({ id, label, changeHandler }) => {
+    const getStyle = (element, property) => {
+        return parseInt(window.getComputedStyle(element).getPropertyValue(property));
+    };
 
-        <label htmlFor="switch-vertical" className="gui-switch -vertical">
-            Vertical
-            <input type="checkbox" role="switch" id="switch-vertical" />
-        </label>
-    </>
-);
+    const getPseudoStyle = () => {
+        return parseInt(window.getComputedStyle(element, "::before").getPropertyValue(property));
+    };
+
+    // const dragging = (event) => {
+    //     if (!state.activethumb) return;
+
+    //     let {} = switches
+    // };
+
+    return (
+    <label htmlFor={id} className={styles.switch}>
+        {label}
+        <input id={id} data-switch type="checkbox" role="switch" onChange={changeHandler} />
+    </label>
+)};
 
 export default Switch;

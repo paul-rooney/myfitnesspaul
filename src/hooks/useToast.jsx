@@ -52,7 +52,7 @@ const useToast = () => {
     useEffect(() => {
         toaster.current = document.createElement("section");
         toaster.current.classList.add(styles.toaster);
-        document.body.appendChild(toaster.current);
+        document.body.insertAdjacentElement("afterbegin", toaster.current);
 
         return () => {
             document.body.removeChild(toaster.current);

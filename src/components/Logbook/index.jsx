@@ -78,7 +78,7 @@ const Logbook = ({ recipes, ingredients, showToast }) => {
 
             <LogWeightForm weight={weight} setWeight={setWeight} showToast={showToast} />
 
-            <LogMealsForm date={date} ingredients={ingredients} recipes={recipes} state={state} dispatch={dispatch} />
+            <LogMealsForm date={date} ingredients={ingredients} recipes={recipes} state={state} dispatch={dispatch} showToast={showToast} />
         </Stack>
     );
 };

@@ -6,7 +6,7 @@ import styles from "./recipe-list.module.scss";
 import Button from "../Common/Button";
 import Input from "../Common/Input";
 
-const CreateRecipesIngredientsDialog = ({ recipe, ingredients }) => {
+const CreateRecipesIngredientsDialog = ({ recipe, ingredients, showToast }) => {
     const [recipeIngredients, setRecipeIngredients] = useState([]);
     const [ingredientID, setIngredientID] = useState(null);
 
@@ -45,6 +45,7 @@ const CreateRecipesIngredientsDialog = ({ recipe, ingredients }) => {
         insertRows("recipes_ingredients", recipeIngredients)
             .catch((error) => console.error(error))
             .finally(() => {
+                showToast("Recipe ingredients added")
                 setRecipeIngredients([]);
             });
     };
@@ -54,6 +55,7 @@ const CreateRecipesIngredientsDialog = ({ recipe, ingredients }) => {
 
         if (returnValue === "close") {
             deleteRows("recipes", recipe.id);
+            showToast("Recipe was not added")
             setRecipeIngredients([]);
         }
     };

@@ -16,13 +16,13 @@
     background-color: var(--surface2);
     border: var(--border-size-1) solid var(--surface4);
     border-radius: var(--radius-2);
-    box-shadow: var(--shadow-6);
+    box-shadow: var(--shadow-3);
     font-size: var(--font-size-0);
     font-family: var(--font-mono);
     letter-spacing: var(--font-letterspacing-3);
     max-inline-size: min(var(--size-content-2), 90vw);
-    padding-block: var(--size-1);
-    padding-inline: var(--size-2);
+    padding-block: var(--size-relative-3);
+    padding-inline: var(--size-relative-4);
     text-align: center;
     text-transform: uppercase;
 

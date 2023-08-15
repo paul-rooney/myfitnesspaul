@@ -14,7 +14,7 @@ import PrimaryHeading from "../Common/PrimaryHeading";
 import Paginator from "../Common/Paginator";
 import EmptyState from "../Common/EmptyState";
 
-const RecipeList = ({ ingredients, recipes }) => {
+const RecipeList = ({ ingredients, recipes, showToast }) => {
     const [filteredRecipes, setFilteredRecipes] = useState([]);
     const [newRecipe, setNewRecipe] = useState({});
     const [recipeToUpdate, setRecipeToUpdate] = useState({});
@@ -81,16 +81,19 @@ const RecipeList = ({ ingredients, recipes }) => {
                     dialog = document.getElementById("createRecipesIngredientsDialog");
                     dialog.showModal();
                 });
+                showToast("Recipe added");
                 break;
 
             case "update":
                 recipe.id = id.value;
                 updateRows("recipes", recipe);
+                showToast("Recipe updated");
                 setRecipeToUpdate({});
                 break;
 
             case "delete":
                 deleteRows("recipes", id.value);
+                showToast("Recipe deleted");
                 setRecipeToDelete({});
                 break;
 
@@ -129,7 +132,7 @@ const RecipeList = ({ ingredients, recipes }) => {
             </Stack>
 
             <CreateRecipeDialog sources={sources} handleSubmit={submitHandler} />
-            <CreateRecipesIngredientsDialog ingredients={ingredients} recipe={newRecipe} />
+            <CreateRecipesIngredientsDialog ingredients={ingredients} recipe={newRecipe} showToast={showToast} />
             <UpdateRecipeDialog recipe={recipeToUpdate} ingredients={ingredients} />
             <DeleteRecipeDialog recipe={recipeToDelete} handleSubmit={submitHandler} />
         </Stack>
