@@ -98,8 +98,8 @@ html:has(dialog[open]) {
 
 .dialog [data-operation="delete"] .header {
     background-color: var(--red-9) !important;
-    
-    h3 {
+
+    & h3 {
         color: var(--red-1) !important;
     }
 

@@ -15,6 +15,17 @@ const LogMealsForm = ({ date, ingredients, recipes, state, dispatch, showToast }
             recipe_id: input.value,
         };
 
+        // TODO: allow explode recipe into a JSON object
+        const [recipe] = recipes.filter((recipe) => recipe.id === input.value);
+        
+        const snackEntry = {
+            user_id: data.session.user.id,
+            meal_name: null,
+            meal_date: date,
+            recipe_id: input.value,
+            meal_ingredients: [recipe],
+        };
+
         switch (meal) {
             case "breakfast":
                 entry.meal_name = "breakfast";
@@ -32,8 +43,8 @@ const LogMealsForm = ({ date, ingredients, recipes, state, dispatch, showToast }
                 break;
 
             case "snacks":
-                entry.meal_name = "snacks";
-                dispatch({ type: "snacks", details: entry });
+                snackEntry.meal_name = "snacks";
+                dispatch({ type: "snacks", details: snackEntry });
                 break;
 
             default:
@@ -56,6 +67,7 @@ const LogMealsForm = ({ date, ingredients, recipes, state, dispatch, showToast }
                     meal_name: meal.meal_name,
                     meal_date: date,
                     recipe_id: meal.recipe_id,
+                    meal_ingredients: meal?.meal_ingredients,
                 };
 
                 await upsertRows("users_logs", payload, { ignoreDuplicates: false, onConflict: "meal_name_date" });
@@ -100,13 +112,27 @@ const LogMealsForm = ({ date, ingredients, recipes, state, dispatch, showToast }
                         </Icon>
                     </Button>
                 </Input>
-                <Input id="snacks" label="Snacks" list="recipes_ingredients_list" placeholder={state.snacks?.display_name} variant="fancy">
-                    <Button variant="secondary" data-meal="snacks" clickHandler={clickHandler}>
-                        <Icon space="0.5ch" direction="ltr" icon="plus">
-                            Add
-                        </Icon>
-                    </Button>
-                </Input>
+                <Stack>
+                    <Input id="snacks" label="Snacks" list="recipes_ingredients_list" placeholder={state.snacks?.display_name} variant="fancy">
+                        <Button variant="secondary" data-meal="snacks" clickHandler={clickHandler}>
+                            <Icon space="0.5ch" direction="ltr" icon="plus">
+                                Add
+                            </Icon>
+                        </Button>
+                    </Input>
+                    {/* {JSON.stringify(state.snacks)} */}
+                    {state.snacks &&
+                        state.snacks.recipe_ids &&
+                        state.snacks?.recipe_ids[0]?.recipes_ingredients.map((ingredient) => (
+                            <Cluster space="var(--size-1)" key={ingredient.id}>
+                                <span style={{ fontSize: "var(--font-size-0)" }}>{ingredient?.ingredients?.display_name}</span>
+                                <span style={{ fontSize: "var(--font-size-0)" }}>
+                                    {ingredient?.quantity}
+                                    {ingredient?.unit}
+                                </span>
+                            </Cluster>
+                        ))}
+                </Stack>
                 <Cluster justify="end">
                     <Button variant="primary" fullWidth type="submit">
                         <Icon space="1ch" direction="ltr" icon="check">

@@ -1,7 +1,7 @@
 import { Cluster } from "../../../primitives";
 import Button from "../Button";
 import SecondaryHeading from "../SecondaryHeading";
-import styles from "./dialog.module.scss";
+import styles from "./dialog.module.css";
 
 const Dialog = ({ id, title, submitHandler, closeHandler, operation, children }) => {
     const clickHandler = (event) => {

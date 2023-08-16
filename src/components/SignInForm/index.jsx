@@ -4,7 +4,7 @@ import Card from "../Common/Card";
 import Input from "../Common/Input";
 import ErrorMessage from "../Common/ErrorMessage";
 import SecondaryHeading from "../Common/SecondaryHeading";
-import styles from "./sign-in-form.module.scss";
+import styles from "./sign-in-form.module.css";
 
 const SignInForm = ({ handleSubmit, error }) => (
     <Center>

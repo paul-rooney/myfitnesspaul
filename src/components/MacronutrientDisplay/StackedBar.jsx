@@ -1,4 +1,4 @@
-import styles from "./stacked-bar.module.scss";
+import styles from "./stacked-bar.module.css";
 
 const StackedBar = ({ kcal, c, f, p }) => {
     const cWidth = Math.ceil(((c * 4) / kcal) * 100);

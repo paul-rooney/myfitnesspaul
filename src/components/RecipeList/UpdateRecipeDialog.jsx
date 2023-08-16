@@ -4,7 +4,7 @@ import { Cluster, Icon, Stack } from "../../primitives";
 import Dialog from "../Common/Dialog";
 import Button from "../Common/Button";
 import Input from "../Common/Input";
-import styles from "./recipe-list.module.scss";
+import styles from "./recipe-list.module.css";
 
 const updateStarRating = (selector, dependency) => {
     const array = Array.from(document.querySelectorAll(selector));

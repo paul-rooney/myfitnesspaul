@@ -43,7 +43,7 @@ const Logbook = ({ recipes, ingredients, showToast }) => {
 
             if (!data.length) return;
 
-            data.map(({ id, user_id, meal_name, meal_date, recipe_id, recipes }) => {
+            data.map(({ id, user_id, meal_name, meal_date, recipe_id, meal_ingredients, recipes }) => {
                 const entry = {
                     id: id,
                     user_id: user_id,
@@ -51,6 +51,7 @@ const Logbook = ({ recipes, ingredients, showToast }) => {
                     meal_date: meal_date,
                     recipe_id: recipe_id,
                     display_name: recipes.display_name,
+                    meal_ingredients: meal_ingredients
                 };
 
                 if (meal_name === "breakfast") {
@@ -69,15 +70,9 @@ const Logbook = ({ recipes, ingredients, showToast }) => {
     return (
         <Stack>
             <PrimaryHeading>Log</PrimaryHeading>
-
-            {/* <WeightDisplay /> */}
-
             <DateSelector date={date} setDate={setDate} />
-
             <MacronutrientDisplay date={date} />
-
             <LogWeightForm weight={weight} setWeight={setWeight} showToast={showToast} />
-
             <LogMealsForm date={date} ingredients={ingredients} recipes={recipes} state={state} dispatch={dispatch} showToast={showToast} />
         </Stack>
     );

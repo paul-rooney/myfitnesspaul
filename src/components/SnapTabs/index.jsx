@@ -3,7 +3,7 @@ import Logbook from "../Logbook";
 import MealPlanner from "../MealPlanner";
 import RecipeList from "../RecipeList";
 import IngredientList from "../IngredientList";
-import styles from "./snap-tabs.module.scss";
+import styles from "./snap-tabs.module.css";
 import useToast from "../../hooks/useToast";
 
 const SnapTabs = ({ ingredients, setIngredients, recipes, setRecipes }) => {

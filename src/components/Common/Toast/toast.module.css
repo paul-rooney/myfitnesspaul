@@ -16,7 +16,7 @@
     background-color: var(--surface2);
     border: var(--border-size-1) solid var(--surface4);
     border-radius: var(--radius-2);
-    box-shadow: var(--shadow-3);
+    box-shadow: var(--shadow-2);
     font-size: var(--font-size-0);
     font-family: var(--font-mono);
     letter-spacing: var(--font-letterspacing-3);

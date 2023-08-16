@@ -2,7 +2,7 @@ import { useState } from "react";
 import { deleteRows, insertRows } from "../../supabase";
 import { Icon, Stack } from "../../primitives";
 import Dialog from "../Common/Dialog";
-import styles from "./recipe-list.module.scss";
+import styles from "./recipe-list.module.css";
 import Button from "../Common/Button";
 import Input from "../Common/Input";
 

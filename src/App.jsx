@@ -9,7 +9,7 @@ import { calculateMacronutrientTotals } from "./utilities";
 import SignInForm from "./components/SignInForm";
 import SnapTabs from "./components/SnapTabs";
 import MenuBar from "./components/Common/MenuBar";
-import styles from "./app.module.scss";
+import styles from "./app.module.css";
 
 const recipesQuery = `id, display_name, servings, page_number, rating, effort, recipes_ingredients (ingredients!recipes_ingredients_ingredient_id_fkey (display_name), id, ingredient_identifier, quantity, unit, recipes_macronutrients (kcal, carbohydrate, fat, protein)), recipes_sources (source, author, thumbnail_url)`;
 

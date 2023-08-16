@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useState } from "react";
 import { readRows } from "../../supabase";
-import styles from "./line-graph.module.scss";
+import styles from "./line-graph.module.css";
 
 const WeightDisplay = () => {
     const [weightValues, setWeightValues] = useState([]);
