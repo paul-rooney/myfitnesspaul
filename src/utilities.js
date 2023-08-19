@@ -53,3 +53,7 @@ export const calculateMacronutrientTotals = (recipes) => {
         total_protein: Math.round(item.recipes_ingredients.reduce((acc, ingredient) => ingredient.recipes_macronutrients.protein + acc, 0) / item.servings),
     }));
 };
+
+export const vibrate = (duration) => {
+    window.navigator.vibrate(duration);
+};

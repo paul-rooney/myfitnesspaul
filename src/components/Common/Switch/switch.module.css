@@ -15,6 +15,8 @@
     --thumb-color: var(--thumb);
     --thumb-color-highlight: var(--thumb-highlight);
 
+    --isLTR: 1;
+
     display: flex;
     align-items: center;
     gap: 1ch;
@@ -69,7 +71,7 @@
 
     & input:checked {
         background: var(--track-color-active);
-        --thumb-position: calc(var(--track-size) - 100%);
+        --thumb-position: calc((var(--track-size) - 100%) * var(--isLTR));
     }
 
     & input:disabled {
@@ -83,6 +85,18 @@
     }
 
     & input:indeterminate {
-        --thumb-position: calc((var(--track-size) / 2) - (var(--thumb-size) / 2));
+        --thumb-position: calc(((var(--track-size) / 2) - (var(--thumb-size) / 2)) * var(--isLTR));
     }
+
+    &[data-variant="vertical"] {
+        min-block-size: calc(var(--track-size) + calc(var(--track-padding) * 2));
+
+        & > input {
+            transform: rotate(calc(90deg * var(--isLTR) * -1));
+        }
+    }
+}
+
+.switch:dir(rtl) {
+    --isLTR: -1;
 }

@@ -40,6 +40,12 @@
         box-shadow: var(--shadow-1);
     }
 
+    &[data-variant="small"] {
+        block-size: var(--size-5);
+        font-size: var(--font-size-0);
+        letter-spacing: var(--font-letterspacing-2);
+    }
+
     &[data-full-width] {
         inline-size: 100%;
     }
