@@ -1,13 +1,6 @@
 import { useEffect, useRef, useState } from "react";
+import { getPseudoStyle, getStyle } from "../../../utilities";
 import styles from "./switch.module.css";
-
-const getStyle = (element, property) => {
-    return parseInt(window.getComputedStyle(element).getPropertyValue(property));
-};
-
-const getPseudoStyle = (element, property) => {
-    return parseInt(window.getComputedStyle(element, "::before").getPropertyValue(property));
-};
 
 const Switch = ({ id, label, variant = "default", changeHandler }) => {
     const [recentlyDragged, setRecentlyDragged] = useState(false);
@@ -134,12 +127,10 @@ const Switch = ({ id, label, variant = "default", changeHandler }) => {
     };
 
     return (
-        <div>
-            <label htmlFor={id} data-variant={variant} className={styles.switch} data-switch ref={element}>
-                {label}
-                <input id={id} type="checkbox" role="switch" />
-            </label>
-        </div>
+        <label htmlFor={id} data-variant={variant} className={styles.switch} data-switch ref={element}>
+            <span>{label}</span>
+            <input id={id} type="checkbox" role="switch" />
+        </label>
     );
 };
 

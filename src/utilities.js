@@ -57,3 +57,11 @@ export const calculateMacronutrientTotals = (recipes) => {
 export const vibrate = (duration) => {
     window.navigator.vibrate(duration);
 };
+
+export const getStyle = (element, property) => {
+    return parseInt(window.getComputedStyle(element).getPropertyValue(property));
+};
+
+export const getPseudoStyle = (element, property) => {
+    return parseInt(window.getComputedStyle(element, "::before").getPropertyValue(property));
+};

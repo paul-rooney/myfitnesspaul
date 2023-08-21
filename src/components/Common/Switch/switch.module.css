@@ -95,6 +95,11 @@
             transform: rotate(calc(90deg * var(--isLTR) * -1));
         }
     }
+
+    &[data-variant="compact"] {
+        --track-padding: 1px;
+        --thumb-size: var(--size-3);
+    }
 }
 
 .switch:dir(rtl) {
