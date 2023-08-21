@@ -78,7 +78,7 @@ const Switch = ({ id, label, variant = "default", changeHandler }) => {
     };
 
     const dragEnd = (event) => {
-        const label = element.current.querySelector("input");
+        const checkbox = element.current.querySelector("input");
 
         const checked = determineChecked();
         checkbox.checked = checked;
