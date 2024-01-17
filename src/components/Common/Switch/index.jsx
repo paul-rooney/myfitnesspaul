@@ -96,8 +96,8 @@ const Switch = ({ id, label, variant = "default", changeHandler }) => {
         }, 300);
     };
 
-    const labelClick = () => {
-        preventBubbles();
+    const labelClick = (event) => {
+        preventBubbles(event);
 
         const checkbox = element.current.querySelector("input");
 
