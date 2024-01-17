@@ -374,7 +374,7 @@ export const Reel = ({ itemWidth = "auto", height = "auto", space = "var(--size-
     }
 
     return (
-        <div {...attributes} className={`${isOverflowing ? "reel overflowing" : "reel"} ${attributes.className}`.trim()} data-i={i} ref={element}>
+        <div {...attributes} className={`${isOverflowing ? "reel overflowing" : "reel"} ${attributes.className ?? ""}`.trim()} data-i={i} ref={element}>
             {children}
         </div>
     );

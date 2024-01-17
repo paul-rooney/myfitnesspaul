@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from "react";
-import { supabase } from "../../supabase";
+import { readRows, supabase } from "../../supabase";
 import { debounce } from "../../utilities";
 import Input from "../Common/Input";
 
@@ -8,6 +8,22 @@ const FilterRecipesWidget = ({ recipes, setFilteredRecipes }) => {
         if (!recipes) return;
 
         setFilteredRecipes(recipes);
+    }, [recipes]);
+
+    const searchKcalTotal = useMemo(() => {
+        return debounce((event) => {
+            const { value } = event.target;
+
+            setFilteredRecipes(recipes.filter(({ total_kcal }) => total_kcal <= value));
+        }, 250);
+    }, [recipes]);
+
+    const searchProteinTotal = useMemo(() => {
+        return debounce((event) => {
+            const { value } = event.target;
+
+            setFilteredRecipes(recipes.filter(({ total_protein }) => total_protein <= value));
+        }, 250);
     }, [recipes]);
 
     const searchRecipes = useMemo(() => {
@@ -62,6 +78,20 @@ const FilterRecipesWidget = ({ recipes, setFilteredRecipes }) => {
                 changeHandler={searchRecipes}
             />
             <Input id="recipes_search" label="Find recipes with&hellip;" type="search" changeHandler={changeHandler} />
+            <Input
+                id="recipes_search_kcal"
+                label="Find recipes with kcal or less"
+                type="number"
+                step={10}
+                changeHandler={searchKcalTotal}
+            />
+            <Input
+                id="recipes_search_protein"
+                label="Find recipes with protein or less"
+                type="number"
+                step={10}
+                changeHandler={searchProteinTotal}
+            />
         </>
     );
 };
