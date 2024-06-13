@@ -1,2 +1,3 @@
-# nutrimentor
+# MyFitnessPaul
+## Meal planning made simple
  
